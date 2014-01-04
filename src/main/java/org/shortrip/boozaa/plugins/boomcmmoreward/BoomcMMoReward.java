@@ -127,37 +127,40 @@ public class BoomcMMoReward extends JavaPlugin {
     
     private void hookEconomy() throws HookException{
     	try{
-    	if (getServer().getPluginManager().getPlugin("Vault") == null) {
-    		Log.warning("Vault seems not here, you can't use money rewards");
-    		return;
-        }
-    	
-    	RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(Economy.class);
-        if (economyProvider != null) {
-        	econ = economyProvider.getProvider();
-        	Log.info("Economy providing by Vault");
-        }else{
-        	Log.warning("Can't hooked Economy with Vault");
-        }   
+	    	if (getServer().getPluginManager().getPlugin("Vault") == null) {
+	    		Log.warning("Vault seems not here, you can't use money rewards");
+	    		return;
+	        }
+	    	
+	    	RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(Economy.class);
+	        if (economyProvider != null) {
+	        	econ = economyProvider.getProvider();
+	        	Log.info("Economy providing by Vault");
+	        }else{
+	        	Log.warning("Can't hooked Economy with Vault");
+	        }   
     	}catch( Exception ex ){
     		throw new HookException("Exception on hookEconomy()", ex);
     	}
     	
     }
     
-    private void hookPermissions(){
-    	
-    	if (getServer().getPluginManager().getPlugin("Vault") == null) {
-    		Log.warning("Vault seems not here, you can't use permission rewards");
-    		return;
-        }
-    	RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(Permission.class);
-        if (permissionProvider != null) {
-        	perms = permissionProvider.getProvider();
-        	Log.info("Permissions providing by Vault");
-        }else{
-        	Log.warning("Can't hooked Permissions with Vault");        	
-        }   
+    private void hookPermissions() throws HookException{
+    	try{
+	    	if (getServer().getPluginManager().getPlugin("Vault") == null) {
+	    		Log.warning("Vault seems not here, you can't use permission rewards");
+	    		return;
+	        }
+	    	RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(Permission.class);
+	        if (permissionProvider != null) {
+	        	perms = permissionProvider.getProvider();
+	        	Log.info("Permissions providing by Vault");
+	        }else{
+	        	Log.warning("Can't hooked Permissions with Vault");        	
+	        }     
+    	}catch( Exception ex ){
+    		throw new HookException("Exception on hookEconomy()", ex);
+    	}
         
     }
     
