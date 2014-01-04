@@ -81,14 +81,17 @@ public class BoomcMMoReward extends JavaPlugin {
 			
 			
 		} catch (CommandNullException e) {
+			// FATAL -> unload plugin
 			Log.warning("A fatal problem occured on CommandsExecutor");
 	 		Log.warning("Please send your errors.txt content on Boo mcMMO Reward dev.bukkit pages");			
 			Log.severe("onEnable() fatal error: CommandNullException", e);
 		} catch (DatabaseException e) {
+			// FATAL -> unload plugin
 			Log.warning("A fatal problem occured on Database");
 	 		Log.warning("Please send your errors.txt content on Boo mcMMO Reward dev.bukkit pages");
 			Log.severe("onEnable() fatal error: DatabaseException", e);
 		} catch (OnConfigCreationException e) {
+			// FATAL -> unload plugin
 			Log.warning("A fatal problem occured on config or folder handling");
 	 		Log.warning("Please send your errors.txt content on Boo mcMMO Reward dev.bukkit pages");
 			Log.severe("onEnable() fatal error: OnConfigCreationException", e);
@@ -113,6 +116,10 @@ public class BoomcMMoReward extends JavaPlugin {
     }
 
     
+    /**
+     * Hook econmy aspects with Vault
+     * @throws HookException
+     */
     private void hookEconomy() throws HookException{
     	try{
 	    	if (getServer().getPluginManager().getPlugin("Vault") == null) {
@@ -133,6 +140,10 @@ public class BoomcMMoReward extends JavaPlugin {
     	
     }
     
+    /**
+     * Hook permissions aspects with Vault
+     * @throws HookException
+     */
     private void hookPermissions() throws HookException{
     	try{
 	    	if (getServer().getPluginManager().getPlugin("Vault") == null) {
@@ -153,6 +164,10 @@ public class BoomcMMoReward extends JavaPlugin {
     }
     
     
+    /**
+     * Take database settings from config.yml and initialize it
+     * @throws DatabaseException
+     */
     private void setupDatabase() throws DatabaseException{
     	// Database type depending on choice in config.yml
         if( config.getString("database.type").equalsIgnoreCase("sqlite")  ) {            	
@@ -184,6 +199,10 @@ public class BoomcMMoReward extends JavaPlugin {
     
 
     
+    /**
+     * Create config.yml and folder structure
+     * @throws OnConfigCreationException
+     */
     private void loadMainConfig() throws OnConfigCreationException {
 		// Creation ou chargement config principale
     	makeConfig();
@@ -193,6 +212,10 @@ public class BoomcMMoReward extends JavaPlugin {
 
     
     
+    /**
+     * Create and/or load config.yml dynamically
+     * @throws OnConfigCreationException
+     */
     private void makeConfig() throws OnConfigCreationException{
     	try{
 	    	Boolean mustBackup = false;
@@ -300,6 +323,10 @@ public class BoomcMMoReward extends JavaPlugin {
     }
 
     
+    /**
+     * Create folder's structure if not exists
+     * @throws OnConfigCreationException
+     */
     private void makeFolders() throws OnConfigCreationException{
     	try{
 	    	// Dossier REWARD
@@ -353,7 +380,7 @@ public class BoomcMMoReward extends JavaPlugin {
 
 
     
-
+	
 	public class OnConfigCreationException extends Exception {
 		private static final long serialVersionUID = 1L;
 		private Throwable throwable;
