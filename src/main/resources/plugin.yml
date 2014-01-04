@@ -1,0 +1,13 @@
+author: boozaa
+database: false
+description: "Actions lors de lvl up McMMO"
+main: org.shortrip.boozaa.plugins.boomcmmoreward.BoomcMMoReward
+name: BoomcMMoReward
+startup: postworld
+version: '2.0.3b'
+depend: [mcMMO]
+softDepend: [Vault]
+commands:
+  boomcmmoreward:
+    description: Console commands Boo.
+    usage: /boomcmmoreward
