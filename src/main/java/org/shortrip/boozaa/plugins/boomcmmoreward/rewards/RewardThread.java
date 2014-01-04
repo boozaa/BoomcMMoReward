@@ -7,6 +7,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.shortrip.boozaa.plugins.boomcmmoreward.BoomcMMoReward;
 import org.shortrip.boozaa.plugins.boomcmmoreward.Log;
+import org.shortrip.boozaa.plugins.boomcmmoreward.persistence.Database.DatabaseException;
 import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.classes.Commands;
 import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.classes.Group;
 import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.classes.Items;
@@ -146,9 +147,13 @@ public class RewardThread implements Runnable  {
 				        if( historyGroups != null ){history.setGroupsFromList(historyGroups);}
 				        if( historyItems != null ){history.setItemsFromList(historyItems);}
 				        if( historyCommands != null ){history.setCommandsFromList(historyCommands);}
-						BoomcMMoReward.getDB().addHistory(history);
-						Log.debug("---History saved in database");
-																	
+						try {
+							BoomcMMoReward.getDB().addHistory(history);
+							Log.debug("---History saved in database");
+						} catch (DatabaseException e) {
+							Log.warning("A problem occured on Database, this reward might not be saved");
+						}
+																							
 					}
 										
 				}
