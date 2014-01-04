@@ -27,7 +27,7 @@ public class Const {
 	public final static String MONEY_LOTTERY = "lotteryMoney";
 	public final static String MONEY_LOTTERY_AMOUNT = "lotteryMoney.amount";
 	public final static String MONEY_LOTTERY_SENDER = "lotteryMoney.sender";
-	public final static String ITEM = "item.item";
+	public final static String ITEM = "item";
 	public final static String MESSAGE = "message";
 	public final static String MP = "mp";
 	public final static String BROADCAST = "broadcast";

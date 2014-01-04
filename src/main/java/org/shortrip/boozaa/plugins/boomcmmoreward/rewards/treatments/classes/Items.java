@@ -37,7 +37,7 @@ public class Items extends AbstractReward {
 		
 		
 		//Items
-		if( confSection.get(Const.ITEM) != null ) {
+		if( confSection.get(Const.ITEM + ".item") != null ) {
 			Log.debug("---Items node found on reward file ... processing" );
 			giveItems();
 			// Si il y a section message on la traite
@@ -85,7 +85,7 @@ public class Items extends AbstractReward {
 		
 		ItemStack item;
 		
-		List<String> newItems = confSection.getStringList(Const.ITEM);    	
+		List<String> newItems = confSection.getStringList(Const.ITEM + ".item");    	
     	for( String p : newItems) {
     		
     		item = processItem(p);    		
