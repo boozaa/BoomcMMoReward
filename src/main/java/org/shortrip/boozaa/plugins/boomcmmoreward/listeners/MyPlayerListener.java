@@ -1,15 +1,10 @@
 package org.shortrip.boozaa.plugins.boomcmmoreward.listeners;
 
-import java.util.logging.Level;
-
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.Plugin;
 import org.shortrip.boozaa.plugins.boomcmmoreward.BoomcMMoReward;
-import org.shortrip.boozaa.plugins.boomcmmoreward.PendingItems;
 
 
 public class MyPlayerListener implements Listener {
