@@ -11,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.shortrip.boozaa.plugins.boomcmmoreward.BoomcMMoReward;
-import org.shortrip.boozaa.plugins.boomcmmoreward.BukkitSyncTaskLauncher;
+import org.shortrip.boozaa.plugins.boomcmmoreward.BukkitTasksLauncher;
 import org.shortrip.boozaa.plugins.boomcmmoreward.exceptions.GroupException;
 import org.shortrip.boozaa.plugins.boomcmmoreward.exceptions.MoneyException;
 import org.shortrip.boozaa.plugins.boomcmmoreward.exceptions.PermissionException;
@@ -192,7 +192,7 @@ public class cReward {
 	public Boolean giveItem(final ItemStack item){
 		
 		// Synchrone task with bukkit
-		BukkitSyncTaskLauncher.launch(
+		BukkitTasksLauncher.launch(
 				new Runnable() {					
 					
 					@Override
@@ -312,7 +312,7 @@ public class cReward {
 		try{			
 			
 			// Synchrone task with bukkit
-			BukkitSyncTaskLauncher.launch(
+			BukkitTasksLauncher.launch(
 					new Runnable() {					
 						@Override
 						public void run() {						
@@ -416,7 +416,7 @@ public class cReward {
 	 */
 	public void sendMP(final List<String> messages){
 		// Synchrone task with bukkit
-		BukkitSyncTaskLauncher.launch(
+		BukkitTasksLauncher.launch(
 				new Runnable() {					
 					@Override
 					public void run() {						
@@ -431,7 +431,7 @@ public class cReward {
 	
 	public void sendBroadcast(final List<String> messages){
 		// Synchrone task with bukkit
-		BukkitSyncTaskLauncher.launch(
+		BukkitTasksLauncher.launch(
 				new Runnable() {					
 					@Override
 					public void run() {						
@@ -445,7 +445,7 @@ public class cReward {
 
 	public void sendLog(final List<String> messages){
 		// Synchrone task with bukkit
-		BukkitSyncTaskLauncher.launch(
+		BukkitTasksLauncher.launch(
 				new Runnable() {					
 					@Override
 					public void run() {						
@@ -460,7 +460,7 @@ public class cReward {
 	
 	public void sendCommands(final List<String> commands){
 		// Synchrone task with bukkit
-		BukkitSyncTaskLauncher.launch(
+		BukkitTasksLauncher.launch(
 				new Runnable() {					
 					@Override
 					public void run() {						
