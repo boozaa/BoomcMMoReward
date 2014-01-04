@@ -28,7 +28,6 @@ public class Money extends AbstractReward {
 		listMoney = new ArrayList<Double>();
 
 		this.reward = reward;
-		this.reward.addReplacementVariable("%amount%", listMoney);
 		
 		
 		// money

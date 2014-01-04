@@ -25,7 +25,7 @@ public class Perm extends AbstractReward {
 	public List<String> proceedRewards(cReward reward, ConfigurationSection confSection, Messages cmess) throws RewardPermException{
 
 		this.reward = reward;
-		this.reward.addReplacementVariable("%perms%", listPerms);
+		
 		
 		if( confSection.get(Const.PERM) != null ) {
 			

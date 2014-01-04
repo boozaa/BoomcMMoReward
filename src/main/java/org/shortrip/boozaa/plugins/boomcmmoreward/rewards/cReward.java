@@ -1,6 +1,5 @@
 package org.shortrip.boozaa.plugins.boomcmmoreward.rewards;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +34,7 @@ public class cReward {
 	private Boolean hasConditions 	= false;
 	private Boolean hasRewards 		= false;
 
-	private Map<String, List<?>> replacementMap = new LinkedHashMap<String, List<?>>();
+	private Map<String, List<String>> replacementMap = new LinkedHashMap<String, List<String>>();
 	
 	
 	
@@ -229,10 +228,10 @@ public class cReward {
 	}
 	
 	
-	public void addPendingItem( Items citems ){
+	public void addPendingItem( ItemStack citems ){
 		
 		// Ici on recoit un item qui ne peut pas être placé dans l'inventaire du joueur
-		player.setMetadata("BoomcMMoRewardItem", new FixedMetadataValue(BoomcMMoReward.getInstance(), citems));
+		BoomcMMoReward.getPendingCache().addItemStack(player.getName(), citems);
 		
 	}
 	
@@ -397,7 +396,7 @@ public class cReward {
 	}
 	
 	
-	public void addReplacementVariable( String variable, List<?> replace ){
+	public void addReplacementVariable( String variable, List<String> replace ){
 		this.replacementMap.put(variable, replace);
 	}
 	
@@ -408,11 +407,11 @@ public class cReward {
 		message = msg.replace("&", "§");
 		
 		// Replace des pseudo variables
-		for( Entry<String, List<?>> entry : this.replacementMap.entrySet() ){
+		for( Entry<String, List<String>> entry : this.replacementMap.entrySet() ){
 			String variable = entry.getKey();
-			List<?> replacements = entry.getValue();
-			for( Object o : replacements ){
-				message = message.replace(variable, String.valueOf(o) );
+			List<String> replacements = entry.getValue();
+			for( String o : replacements ){
+				message = message.replace(variable, o );
 			}			
 		}
 		

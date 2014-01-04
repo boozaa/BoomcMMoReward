@@ -90,11 +90,6 @@ public class RewardThread implements Runnable  {
 						
 						// On donne money si demandé
 						historyMoney = cmoney.proceedRewards( reward, rewardsSection, cmess );
-						if( historyMoney.isEmpty() == false ){
-							if( rewardsSection.get(Const.MONEY + "." + Const.MESSAGE) != null ) {
-								reward.processMessage(rewardsSection, Const.MONEY + "." + Const.MESSAGE);
-							}
-						}
 						
 						// On donne perms si demandé
 						historyPerms = cperm.proceedRewards( reward, rewardsSection, cmess );

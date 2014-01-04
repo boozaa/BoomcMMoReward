@@ -35,18 +35,11 @@ public class Items extends AbstractReward {
 				
 		listItems = new ArrayList<String>();
 
-		this.reward = reward;
-		this.reward.addReplacementVariable("%items%", listItems);
-		
 		
 		//Items
-		if( confSection.get(Const.ITEM + ".item") != null ) {
+		if( confSection.get(Const.ITEM) != null ) {
 			Log.debug("---Items node found on reward file ... processing" );
 			giveItems();
-			// Si il y a section message on la traite
-			if( confSection.get(Const.ITEM + "." + Const.MESSAGE) != null ) {
-				cmess.proceedRewards(reward, confSection.getConfigurationSection(Const.ITEM));					
-			}
 		}
 		
 		// LotteryItems
@@ -88,23 +81,20 @@ public class Items extends AbstractReward {
 		
 		ItemStack item;
 		
-		List<String> newItems = confSection.getStringList(Const.ITEM + ".item");    	
+		List<String> newItems = confSection.getStringList(Const.ITEM);    	
     	for( String p : newItems) {
     		
     		item = processItem(p);    		
-    		
+    		Log.debug("-Giving item : " + p); 
     		Boolean success = reward.giveItem(item);
-    		if( !success ){
+    		if( success == false ){
     			// On place en pending
     			this.isPending = true;
-    			reward.addPendingItem(this);
-    			break;
+    			reward.addPendingItem(item);    			
+    		}else{
+    			// On stocke en db
+    			listItems.add(item.toString());
     		}
-    		
-    		
-    		Log.debug("-Giving item : " + p); 
-    		// On stocke en db
-    		listItems.add(item.toString());
     		
     	}
     	
@@ -145,7 +135,7 @@ public class Items extends AbstractReward {
 	    			if( !success ){
 	        			// On place en pending
 	        			this.isPending = true;
-	        			reward.addPendingItem(this);
+	        			reward.addPendingItem(item);
 	        			return;
 	        		}
 	    			
@@ -217,7 +207,7 @@ public class Items extends AbstractReward {
 		if( !success ){
 			// On place en pending
 			this.isPending = true;
-			reward.addPendingItem(this);
+			reward.addPendingItem(item);
 			return;
 		}
 		
@@ -257,7 +247,7 @@ public class Items extends AbstractReward {
 						if( !success ){
 			    			// On place en pending
 			    			this.isPending = true;
-			    			reward.addPendingItem(this);
+			    			reward.addPendingItem(item);
 			    			return;
 			    		}
 						
