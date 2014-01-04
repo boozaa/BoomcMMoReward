@@ -1,6 +1,11 @@
 package org.shortrip.boozaa.plugins.boomcmmoreward.rewards;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -30,6 +35,9 @@ public class cReward {
 	private Boolean hasConditions 	= false;
 	private Boolean hasRewards 		= false;
 
+	private Map<String, List<?>> replacementMap = new LinkedHashMap<String, List<?>>();
+	
+	
 	
 	public cReward(String name, Configuration conf, Player player, SkillType skill, int playerPower, int skillLevelNow) {
 		
@@ -389,12 +397,26 @@ public class cReward {
 	}
 	
 	
+	public void addReplacementVariable( String variable, List<?> replace ){
+		this.replacementMap.put(variable, replace);
+	}
+	
 	private String variableReplace(String msg){
 		
 		String message = "";		
 		// Replace pour les codes couleurs
 		message = msg.replace("&", "§");
+		
 		// Replace des pseudo variables
+		for( Entry<String, List<?>> entry : this.replacementMap.entrySet() ){
+			String variable = entry.getKey();
+			List<?> replacements = entry.getValue();
+			for( Object o : replacements ){
+				message = message.replace(variable, String.valueOf(o) );
+			}			
+		}
+		
+		// Variables de ce cReward
 		message = message.replace("%player%", player.getName());		
 		message = message.replace("%power%", Integer.toString(playerPower) );
 		message = message.replace("%skillName%", skill.name() );
@@ -402,7 +424,8 @@ public class cReward {
 		message = message.replace("%XLoc%", Integer.toString(player.getLocation().getBlockX()) );
 		message = message.replace("%YLoc%", Integer.toString(player.getLocation().getBlockY()) );
 		message = message.replace("%ZLoc%", Integer.toString(player.getLocation().getBlockZ()) );		
-		message = message.replace("%worldName%", player.getWorld().getName());		
+		message = message.replace("%worldName%", player.getWorld().getName());
+		
 		return message;
 		
 	}

@@ -12,6 +12,7 @@ import org.shortrip.boozaa.plugins.boomcmmoreward.utils.Const;
 public class Group extends AbstractReward {
 
 	private List<String> listGroups = new ArrayList<String>();
+	private cReward reward;
 	
 	
 	public Group() {
@@ -21,11 +22,15 @@ public class Group extends AbstractReward {
 	
 	public List<String> proceedRewards(cReward reward, ConfigurationSection confSection, Messages cmess) throws RewardGroupException{
 		
+		
 		if( confSection.get(Const.GROUP) != null ) {
 			
 			Log.debug("---Groups node found on reward file ... processing" );
 			
 			listGroups = new ArrayList<String>();
+
+			this.reward = reward;
+			this.reward.addReplacementVariable("%groups%", listGroups);
 			
 			
 			try {

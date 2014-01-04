@@ -14,6 +14,7 @@ import org.shortrip.boozaa.plugins.boomcmmoreward.utils.Const;
 public class Commands extends AbstractReward {
 
 	private List<String> list = new ArrayList<String>();
+	private cReward reward;
 	
 	
 	public Commands() {
@@ -25,13 +26,16 @@ public class Commands extends AbstractReward {
 	
 
 	public List<String> proceedRewards(cReward reward, ConfigurationSection confSection, Messages cmess) throws RewardCommandException{
-		
+
 		if( confSection.get(Const.COMMAND) != null ) {
 			
 			Log.debug("---Commands node found on reward file ... processing" );
 			
 			listCommands = new ArrayList<String>();
 			list = new ArrayList<String>();
+
+			this.reward = reward;
+			this.reward.addReplacementVariable("%commands%", listCommands);
 			
 			try {
 				

@@ -25,9 +25,10 @@ public class Money extends AbstractReward {
 	
 	public List<Double> proceedRewards(cReward reward, ConfigurationSection confSection, Messages cmess) throws RewardMoneyException{
 		
-		this.reward = reward;
-		
 		listMoney = new ArrayList<Double>();
+
+		this.reward = reward;
+		this.reward.addReplacementVariable("%amount%", listMoney);
 		
 		
 		// money

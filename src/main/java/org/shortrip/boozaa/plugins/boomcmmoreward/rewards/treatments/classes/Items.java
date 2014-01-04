@@ -30,10 +30,13 @@ public class Items extends AbstractReward {
 	
 	public List<String> proceedRewards(cReward reward, ConfigurationSection confSection, Messages cmess) throws RewardItemException{
 		
-		this.reward = reward;
+		
 		this.confSection = confSection;
 				
 		listItems = new ArrayList<String>();
+
+		this.reward = reward;
+		this.reward.addReplacementVariable("%items%", listItems);
 		
 		
 		//Items
