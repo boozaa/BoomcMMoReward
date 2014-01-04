@@ -14,8 +14,13 @@ import org.bukkit.inventory.ItemStack;
 */
 public class Cache {
 
-	private HashMap<String, List<ItemStack>> store = new HashMap<String, List<ItemStack>>();
+	private HashMap<String, List<ItemStack>> store;
 
+	
+	public Cache(){
+		store = new HashMap<String, List<ItemStack>>();
+	}
+	
 		
 	public void addItemStack(String playername, ItemStack stack) {
 		
@@ -64,11 +69,12 @@ public class Cache {
 	}
 
 
-	/**
-	 * 
-	 */
 	public void erase(){
 		this.store.clear();
 	}
+	
+	
+	
+	
 	
 }

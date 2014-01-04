@@ -15,6 +15,7 @@ import org.shortrip.boozaa.plugins.boomcmmoreward.listeners.McMMOListener;
 import org.shortrip.boozaa.plugins.boomcmmoreward.listeners.MyPlayerListener;
 import org.shortrip.boozaa.plugins.boomcmmoreward.persistence.Cache;
 import org.shortrip.boozaa.plugins.boomcmmoreward.persistence.Database;
+import org.shortrip.boozaa.plugins.boomcmmoreward.persistence.Database.DatabaseException;
 import org.shortrip.boozaa.plugins.boomcmmoreward.utils.Configuration;
 import org.shortrip.boozaa.plugins.boomcmmoreward.utils.ModifyRewardFiles;
 import com.gmail.nossr50.datatypes.skills.AbilityType;
@@ -66,9 +67,7 @@ public class BoomcMMoReward extends JavaPlugin {
             getServer().getPluginManager().registerEvents(new McMMOListener(this), this);  
             getServer().getPluginManager().registerEvents(new MyPlayerListener(this), this);       
             
-            // Chargement ou creation database
-            Log.info("Connecting to database");
-                    
+                                
             // Choix selon fichier config
             if( config.getString("database.type").equalsIgnoreCase("sqlite")  ) {            	
             	database = new Database(new File(this.getDataFolder() + File.separator + "BoomcMMoReward.db")); 	
@@ -80,6 +79,8 @@ public class BoomcMMoReward extends JavaPlugin {
     					        		config.getString("database.mysql.pass") );            	
             }
             database.initialise();
+                    
+            Log.info("Database ready");
             
             // Pending Cache
             pendingCache = new Cache();
@@ -92,8 +93,13 @@ public class BoomcMMoReward extends JavaPlugin {
 			
 			
 		} catch (CommandNullException e) {
-			// SEVERE -> disable plugin
+			Log.warning("A problem occured on CommandsExecutor");
+	 		Log.warning("Please send your errors.txt content on Boo mcMMO Reward dev.bukkit pages");			
 			Log.severe("onCommand() fatal error: CommandNullException", e);
+		} catch (DatabaseException e) {
+			Log.warning("A problem occured on Database");
+	 		Log.warning("Please send your errors.txt content on Boo mcMMO Reward dev.bukkit pages");
+			Log.severe("onCommand() fatal error: DatabaseException", e);
 		}
         
         

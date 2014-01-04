@@ -1,7 +1,6 @@
 package org.shortrip.boozaa.plugins.boomcmmoreward.persistence;
 
 import java.io.File;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -42,8 +41,9 @@ public class Database extends SQLOperations {
 	/**
 	 * Reopens the SQL connection if it is closed. This is invoked upon every
 	 * query.
+	 * @throws DatabaseException 
 	 */
-	public void refreshConnection() {
+	public void refreshConnection() throws DatabaseException {
 		if (connection == null) {
 			initialise();
 		}
@@ -66,9 +66,11 @@ public class Database extends SQLOperations {
 	 * 
 	 * @return
 	 */
-	public boolean initialise() {
-		if (schema == SQLTYPE.MySQL) {
-			try {
+	public boolean initialise() throws DatabaseException {
+		
+		try {
+			if (schema == SQLTYPE.MySQL) {
+				
 				Class.forName("com.mysql.jdbc.Driver");
 				connection = DriverManager.getConnection("jdbc:mysql://" + host + "/" + database, username, password);
 				
@@ -76,20 +78,12 @@ public class Database extends SQLOperations {
 				makeTables();
 				
 				return true;
-			} catch (ClassNotFoundException ex) {
-				ex.printStackTrace();
-			} catch (SQLException ex) {
-				ex.printStackTrace();
-			}
-		} else {
-			if (!databaseFile.exists()) {
-				try {
-					databaseFile.createNewFile();
-				} catch (IOException e) {
-					e.printStackTrace();
+							
+			} else {
+			
+				if (!databaseFile.exists()) {				
+						databaseFile.createNewFile();
 				}
-			}
-			try {
 				Class.forName("org.sqlite.JDBC");
 				connection = DriverManager.getConnection("jdbc:sqlite:" + this.databaseFile.getAbsolutePath());
 				
@@ -97,17 +91,12 @@ public class Database extends SQLOperations {
 				makeTables();
 				
 				return true;
-			} catch (SQLException ex) {
-				ex.printStackTrace();
-			} catch (ClassNotFoundException ex) {
-				ex.printStackTrace();
+								
 			}
+		} catch (Exception ex) {
+			throw new DatabaseException("", ex);
 		}
 		
-		
-		
-		
-		return false;
 	}
 
 	/**
@@ -116,9 +105,13 @@ public class Database extends SQLOperations {
 	 * 
 	 * @param query
 	 */
-	public void standardQuery(String query) throws SQLException {
+	public void standardQuery(String query) throws DatabaseException {
 		this.refreshConnection();
-		super.standardQuery(query, this.connection);
+		try{
+			super.standardQuery(query, this.connection);
+		} catch (Exception ex) {
+			throw new DatabaseException("", ex);
+		}
 	}
 
 	/**
@@ -127,9 +120,13 @@ public class Database extends SQLOperations {
 	 * @return Whether or not a result has been found in the query.
 	 * @throws SQLException
 	 */
-	public boolean existanceQuery(String query) throws SQLException {
+	public boolean existanceQuery(String query) throws DatabaseException {
 		this.refreshConnection();
-		return super.sqlQuery(query, this.connection).next();
+		try{
+			return super.sqlQuery(query, this.connection).next();
+		} catch (Exception ex) {
+			throw new DatabaseException("", ex);
+		}
 	}
 
 	/**
@@ -142,9 +139,13 @@ public class Database extends SQLOperations {
 	 * @param query
 	 * @return ResultSet
 	 */
-	public ResultSet sqlQuery(String query) throws SQLException {
+	public ResultSet sqlQuery(String query) throws DatabaseException {
 		this.refreshConnection();
-		return super.sqlQuery(query, this.connection);
+		try{
+			return super.sqlQuery(query, this.connection);
+		} catch (Exception ex) {
+			throw new DatabaseException("", ex);
+		}
 	}
 
 	/**
@@ -153,9 +154,13 @@ public class Database extends SQLOperations {
 	 * @param table
 	 * @return
 	 */
-	public boolean doesTableExist(String table) throws SQLException {
+	public boolean doesTableExist(String table) throws DatabaseException {
 		this.refreshConnection();
-		return super.checkTable(table, this.connection);
+		try{
+			return super.checkTable(table, this.connection);
+		} catch (Exception ex) {
+			throw new DatabaseException("", ex);
+		}
 	}
 	
 	
@@ -164,48 +169,41 @@ public class Database extends SQLOperations {
 	 * Check if table history exists
 	 * If not create it
 	 */
-	private void makeTables(){
+	private void makeTables() throws DatabaseException{
 		
-		try {
+		if(!this.doesTableExist("historyTable")){
 			
-			if(!this.doesTableExist("historyTable")){
-				
-			    Log.info("Table 'historyTable' does not exist! Creating table...");
-			    
-			    if( BoomcMMoReward.getYmlConf().getString("database.type").equalsIgnoreCase("sqlite")){
-			    	
-			    	this.standardQuery("CREATE TABLE historyTable ('id' INTEGER PRIMARY KEY, " +
-							"'reward_name' VARCHAR(50), " +
-							"'player_name' VARCHAR(50), " +
-							"'amount' VARCHAR(50), " +
-							"'perms' VARCHAR(255), " +
-							"'groups' VARCHAR(255), " +
-							"'items' VARCHAR(255), " +
-							"'commands' VARCHAR(255), " +
-							"'timespan' VARCHAR(255)  );");
-			    	
-			    }else if( BoomcMMoReward.getYmlConf().getString("database.type").equalsIgnoreCase("mysql")  ){
-			    	
-			    	this.standardQuery("CREATE TABLE historyTable (id INTEGER PRIMARY KEY AUTO_INCREMENT, " +
-							"reward_name VARCHAR(50) NOT NULL, " +
-							"player_name VARCHAR(50) NOT NULL, " +
-							"amount VARCHAR(50), " +
-							"perms VARCHAR(255), " +
-							"groups VARCHAR(255), " +
-							"items VARCHAR(255), " +
-							"commands VARCHAR(255), " +
-							"timespan VARCHAR(255) NOT NULL  );");
-			    	
-			    }
-			    				
-			    Log.info("Table 'historyTable' created");
-			}
-		
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		    Log.info("Table 'historyTable' does not exist! Creating table...");
+		    
+		    if( BoomcMMoReward.getYmlConf().getString("database.type").equalsIgnoreCase("sqlite")){
+		    	
+		    	this.standardQuery("CREATE TABLE historyTable ('id' INTEGER PRIMARY KEY, " +
+						"'reward_name' VARCHAR(50), " +
+						"'player_name' VARCHAR(50), " +
+						"'amount' VARCHAR(50), " +
+						"'perms' VARCHAR(255), " +
+						"'groups' VARCHAR(255), " +
+						"'items' VARCHAR(255), " +
+						"'commands' VARCHAR(255), " +
+						"'timespan' VARCHAR(255)  );");
+		    	
+		    }else if( BoomcMMoReward.getYmlConf().getString("database.type").equalsIgnoreCase("mysql")  ){
+		    	
+		    	this.standardQuery("CREATE TABLE historyTable (id INTEGER PRIMARY KEY AUTO_INCREMENT, " +
+						"reward_name VARCHAR(50) NOT NULL, " +
+						"player_name VARCHAR(50) NOT NULL, " +
+						"amount VARCHAR(50), " +
+						"perms VARCHAR(255), " +
+						"groups VARCHAR(255), " +
+						"items VARCHAR(255), " +
+						"commands VARCHAR(255), " +
+						"timespan VARCHAR(255) NOT NULL  );");
+		    	
+		    }
+		    				
+		    Log.info("Table 'historyTable' created");
 		}
-		
+				
 	}
 	
 	
@@ -213,58 +211,48 @@ public class Database extends SQLOperations {
 	
 	
 	
-	public void addHistory(HistoryTable historytable){
+	public void addHistory(HistoryTable historytable) throws DatabaseException{
 		
-		try {
+		if( BoomcMMoReward.getYmlConf().getString("database.type").equalsIgnoreCase("sqlite")){
 			
-			if( BoomcMMoReward.getYmlConf().getString("database.type").equalsIgnoreCase("sqlite")){
-				
-				standardQuery("INSERT INTO historyTable ('reward_name', 'player_name', 'amount', 'perms', 'groups', 'items', 'commands', 'timespan' ) values (" +
-						"'" + historytable.getRewardName() + "', " +
-						"'" + historytable.getPlayerName() + "', " +
-						"'" + historytable.getAmount() + "', " +
-						"'" + historytable.getPerms() + "', " +
-						"'" + historytable.getGroups() + "', " +
-						"'" + historytable.getItems() + "', " +
-						"'" + historytable.getCommands() + "', " +
-						"'" + historytable.getTimespan() +
-						"');");
-				
-			}else if( BoomcMMoReward.getYmlConf().getString("database.type").equalsIgnoreCase("mysql")  ){
-				
-				standardQuery("INSERT INTO historyTable (reward_name, player_name, amount, perms, groups, items, commands, timespan ) values (" +
-						"'" + historytable.getRewardName() + "', " +
-						"'" + historytable.getPlayerName() + "', " +
-						"'" + historytable.getAmount() + "', " +
-						"'" + historytable.getPerms() + "', " +
-						"'" + historytable.getGroups() + "', " +
-						"'" + historytable.getItems() + "', " +
-						"'" + historytable.getCommands() + "', " +
-						"'" + historytable.getTimespan() +
-						"');");
-				
-			}
+			standardQuery("INSERT INTO historyTable ('reward_name', 'player_name', 'amount', 'perms', 'groups', 'items', 'commands', 'timespan' ) values (" +
+					"'" + historytable.getRewardName() + "', " +
+					"'" + historytable.getPlayerName() + "', " +
+					"'" + historytable.getAmount() + "', " +
+					"'" + historytable.getPerms() + "', " +
+					"'" + historytable.getGroups() + "', " +
+					"'" + historytable.getItems() + "', " +
+					"'" + historytable.getCommands() + "', " +
+					"'" + historytable.getTimespan() +
+					"');");
 			
+		}else if( BoomcMMoReward.getYmlConf().getString("database.type").equalsIgnoreCase("mysql")  ){
 			
+			standardQuery("INSERT INTO historyTable (reward_name, player_name, amount, perms, groups, items, commands, timespan ) values (" +
+					"'" + historytable.getRewardName() + "', " +
+					"'" + historytable.getPlayerName() + "', " +
+					"'" + historytable.getAmount() + "', " +
+					"'" + historytable.getPerms() + "', " +
+					"'" + historytable.getGroups() + "', " +
+					"'" + historytable.getItems() + "', " +
+					"'" + historytable.getCommands() + "', " +
+					"'" + historytable.getTimespan() +
+					"');");
 			
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		
 	}
 	
 	
-	public List<HistoryTable> findhistory( String playername ){
+	public List<HistoryTable> findhistory( String playername ) throws DatabaseException{
 		
 		List<HistoryTable> results = new ArrayList<HistoryTable>();
 		
 		ResultSet set;
+			
+		set = this.sqlQuery("SELECT * FROM historyTable where player_name='" + playername + "'");
+		
 		try {
-			
-			set = this.sqlQuery("SELECT * FROM historyTable where player_name='" + playername + "'");
-			
 			while(set.next()){
 				HistoryTable history = new HistoryTable();
 				history.setAmount(Double.parseDouble(set.getString("amount")));
@@ -278,14 +266,31 @@ public class Database extends SQLOperations {
 				history.setTimespan(Long.parseLong(set.getString("timespan")));
 				results.add(history);
 			}
-			set.close(); //We are done with the ResultSet so lets close it.			
+			set.close(); //We are done with the ResultSet so lets close it.	
 			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} catch (Exception e) {
+			throw new DatabaseException("", e);
+		}		
 		
 		return results;
 	}
+	
+	
+
+	public class DatabaseException extends Exception {
+		private static final long serialVersionUID = 1L;
+		private Throwable throwable;
+		public DatabaseException(String message, Throwable t) {
+	        super(message);
+	        this.throwable = t;
+	    }	
+		public Throwable get_Throwable(){
+			return this.throwable;
+		}
+	}
+	
+	
+	
+	
 	
 }
