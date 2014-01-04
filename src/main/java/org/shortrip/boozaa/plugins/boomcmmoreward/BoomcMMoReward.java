@@ -60,27 +60,15 @@ public class BoomcMMoReward extends JavaPlugin {
         	// Permissions
         	this.hookPermissions(); 
         	
-        	// On charge la config initiale
+        	// Config from config.yml
             this.loadMainConfig();
             
-        	// Les listeners
+        	// All listeners
             getServer().getPluginManager().registerEvents(new McMMOListener(this), this);  
             getServer().getPluginManager().registerEvents(new MyPlayerListener(this), this);       
             
-                                
-            // Choix selon fichier config
-            if( config.getString("database.type").equalsIgnoreCase("sqlite")  ) {            	
-            	database = new Database(new File(this.getDataFolder() + File.separator + "BoomcMMoReward.db")); 	
-            }else if( config.getString("database.type").equalsIgnoreCase("mysql")  ){            	
-            	// Database(String host, String database, String username, String password)
-            	database = new Database(config.getString("database.mysql.server"),
-            							config.getString("database.mysql.base"),
-    					        		config.getString("database.mysql.user"),
-    					        		config.getString("database.mysql.pass") );            	
-            }
-            database.initialise();
-                    
-            Log.info("Database ready");
+            // Make database connection with settings in config.yml
+            setupDatabase();
             
             // Pending Cache
             pendingCache = new Cache();
@@ -88,7 +76,7 @@ public class BoomcMMoReward extends JavaPlugin {
             // Commands executor
 			commandExecutor = new CommandsExecutor(this);
 			
-			// Singleton
+			// Singleton for this instance
 			_instance = this;
 			
 			
@@ -165,6 +153,21 @@ public class BoomcMMoReward extends JavaPlugin {
     }
     
     
+    private void setupDatabase() throws DatabaseException{
+    	// Database type depending on choice in config.yml
+        if( config.getString("database.type").equalsIgnoreCase("sqlite")  ) {            	
+        	database = new Database(new File(this.getDataFolder() + File.separator + "BoomcMMoReward.db")); 	
+        }else if( config.getString("database.type").equalsIgnoreCase("mysql")  ){            	
+        	// Database(String host, String database, String username, String password)
+        	database = new Database(config.getString("database.mysql.server"),
+        							config.getString("database.mysql.base"),
+					        		config.getString("database.mysql.user"),
+					        		config.getString("database.mysql.pass") );            	
+        }
+        
+        database.initialise();                    
+        Log.info("Database ready");
+    }
     
     
     @Override
