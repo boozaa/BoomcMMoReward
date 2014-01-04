@@ -212,88 +212,12 @@ public class cReward {
 						 }
 						
 					}
-					/*
-					@Override
-					public void run() {						
-						PlayerInventory inv = player.getInventory();		
-						
-						 int count = 0;
-						 for (ItemStack i : inv.getContents()) {
-							 if (i == null) {
-								 count++;
-							 } else if (i.getType() == Material.AIR) {
-								 count++;
-							 }
-						 }
-						 if (count == 0) {
-							 
-							 player.sendMessage("Store item because your inventory is full " + item.toString());
-							 PendingItems.addPendingItemToPlayer(player, item);							
-							 //player.getWorld().dropItemNaturally(player.getEyeLocation(), item);
-							 
-						 } else {
-							 inv.addItem(item);
-						 }
-											
-					}	
-					*/
+					
 				}
 		);		
 
 		return true;
 		
-		
-		/*
-		// Si inventory full
-		
-		// Si l'inventaire contient deja un itemstack de ce typeId
-		if( inv.contains(item)){
-			// On vérifie si y a de la place pour le stacker
-			int maxsize = item.getMaxStackSize();
-			int itemsize = item.getAmount();
-			
-			Iterator<ItemStack> itr = inv.iterator();
-			while(itr.hasNext()) {
-				
-				ItemStack slot = itr.next();
-				
-				// Si on trouve un slot avec item de même type
-				if( slot.getTypeId() == item.getTypeId() ){
-									
-					int slotsize = itr.next().getAmount();
-					// Si le contenu du slot + les items à ajouter ne dépasse pas le max stack
-					if( (slotsize + itemsize) <= maxsize ){
-						// On ajoute ces items au stack deja présent
-						slot.setAmount(slotsize + itemsize);
-						return true;
-					}
-					// Autrement on doit ajouter et mettre le reste dans un autre slot
-					int libredansslot = maxsize - slotsize;
-					slot.setAmount(maxsize);
-					// Là le slot est full on doit mettre le reste dans un autre slot
-					int restant = itemsize - libredansslot;
-					// On fixe la nouvelle quantité à stocker
-					item.setAmount(restant);
-					// Si il y a un slot de libre					
-					if( inv.firstEmpty() != -1 ){
-						// On ajoute les items restant ici
-						inv.addItem(item);
-						return true;
-					}else{
-						// Ici on a plus de slot disponible
-						FixedMetadataValue metadata = new FixedMetadataValue(BoomcMMoReward.getInstance(), item);
-						// On accroche la metadata au joueur pour lui donner lorsqu'un slot sera disponible
-						player.setMetadata("BoomcMMoRewardPendingItem", metadata);
-						return true;
-					}
-					
-				}
-				
-			}
-			
-		}
-		return true;
-		*/
 	}
 	
 	

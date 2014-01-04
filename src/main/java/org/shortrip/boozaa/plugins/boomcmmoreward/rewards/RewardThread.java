@@ -44,19 +44,6 @@ public class RewardThread implements Runnable  {
 	private final Commands ccmds 	= new Commands();
 	
 	
-	enum Message {
-		
-		MESSAGE("message"), MP("message.mp"), LOG("message.log"), BROADCAST("message.broadcast");
-		public String value;
-
-		Message(String value) {
-			this.value = value;
-		}
-		
-	}; 
-	
-	
-	
 	
 	public RewardThread(cReward reward){		
 		this.reward = reward;	
@@ -103,36 +90,21 @@ public class RewardThread implements Runnable  {
 						
 						// On donne money si demandé
 						historyMoney = cmoney.proceedRewards( reward, rewardsSection, cmess );
-						if( !historyMoney.isEmpty() ){
-							reward.processMessage(rewardsSection, Const.MONEY);
-						}
 						
 						// On donne perms si demandé
 						historyPerms = cperm.proceedRewards( reward, rewardsSection, cmess );
-						if( !historyPerms.isEmpty() ){
-							reward.processMessage( rewardsSection, Const.PERM );
-						}
 						
 						// On gere les groupes si demandé
 						historyGroups = cgroup.proceedRewards( reward, rewardsSection, cmess );
-						if( !historyGroups.isEmpty() ){
-							reward.processMessage( rewardsSection, Const.GROUP );
-						}
 						
 						// On gere les messages
 						cmess.proceedRewards(reward, rewardsSection);
 						
 						// On gere les commandes
 						historyCommands = ccmds.proceedRewards( reward, rewardsSection, cmess );
-						if( !historyCommands.isEmpty() ){
-							reward.processMessage( rewardsSection, Const.COMMAND );
-						}
 						
 						// On donne items si demandé
 						historyItems = citem.proceedRewards( reward, rewardsSection, cmess );
-						if( !historyItems.isEmpty() ){
-							reward.processMessage( rewardsSection, Const.ITEM );
-						}						
 						
 					} catch (Exception e) { }
 

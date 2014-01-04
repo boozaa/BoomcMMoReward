@@ -21,12 +21,6 @@ public class CommandParser {
 	}
 	
 	
-	@Command( name = "boomcmmoreward", aliases = { "boomcmmoreward" } )
-	public void bootreasure(CommandArgs args) {
-		args.getSender().sendMessage("This is bootreasure command");
-	}
-	
-	
 	@Command( name = "boomcmmoreward.debug", aliases = { "boomcmmoreward.debug" } )
 	public void consoleToggleDebug(CommandArgs args) {
 		if( !( args.getSender() instanceof Player ) ) {
