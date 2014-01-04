@@ -9,9 +9,11 @@ import org.shortrip.boozaa.plugins.boomcmmoreward.BoomcMMoReward;
 import org.shortrip.boozaa.plugins.boomcmmoreward.Log;
 import org.shortrip.boozaa.plugins.boomcmmoreward.persistence.Database.DatabaseException;
 import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.classes.Commands;
+import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.classes.Commands.RewardCommandException;
 import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.classes.Group;
 import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.classes.Group.RewardGroupException;
 import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.classes.Items;
+import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.classes.Items.RewardItemException;
 import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.classes.Messages;
 import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.classes.Money;
 import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.classes.Money.RewardMoneyException;
@@ -96,17 +98,27 @@ public class RewardThread implements Runnable  {
 						
 						// On gere les groupes si demandé
 						historyGroups = cgroup.proceedRewards( reward, rewardsSection, cmess );
-						
-						// On gere les messages
-						cmess.proceedRewards(reward, rewardsSection);
-						
+												
 						// On gere les commandes
 						historyCommands = ccmds.proceedRewards( reward, rewardsSection, cmess );
 						
 						// On donne items si demandé
-						historyItems = citem.proceedRewards( reward, rewardsSection, cmess );
+						//historyItems = citem.proceedRewards( reward, rewardsSection, cmess );
 						
-					} catch (Exception e) { }
+						// On gere les messages
+						cmess.proceedRewards(reward, rewardsSection);
+						
+					} catch (RewardMoneyException ex){
+						Log.warning(ex.getMessage());
+					} catch (RewardPermException ex2) {
+						Log.warning(ex2.getMessage());
+					} catch (RewardGroupException ex3) {
+						Log.warning(ex3.getMessage());
+					} catch (RewardCommandException ex4) {
+						Log.warning(ex4.getMessage());
+					} //catch (RewardItemException e) {
+					//	Log.warning(e.getMessage());
+					//}
 
 					Log.debug("-----End Rewards");
 					

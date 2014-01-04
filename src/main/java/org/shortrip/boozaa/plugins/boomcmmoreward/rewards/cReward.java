@@ -1,9 +1,7 @@
 package org.shortrip.boozaa.plugins.boomcmmoreward.rewards;
 
-import java.util.LinkedHashMap;
+
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -11,12 +9,9 @@ import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.shortrip.boozaa.plugins.boomcmmoreward.BoomcMMoReward;
 import org.shortrip.boozaa.plugins.boomcmmoreward.BukkitTasksLauncher;
 import org.shortrip.boozaa.plugins.boomcmmoreward.Log;
-import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.classes.Items;
 import org.shortrip.boozaa.plugins.boomcmmoreward.utils.Configuration;
 import org.shortrip.boozaa.plugins.boomcmmoreward.utils.Const;
 import com.gmail.nossr50.datatypes.skills.SkillType;
@@ -34,7 +29,6 @@ public class cReward {
 	private Boolean hasConditions 	= false;
 	private Boolean hasRewards 		= false;
 
-	private Map<String, List<String>> replacementMap = new LinkedHashMap<String, List<String>>();
 	
 	
 	
@@ -305,17 +299,9 @@ public class cReward {
 	 * Messages gestion
 	 */
 	public void sendMP(final List<String> messages){
-		// Synchrone task with bukkit
-		BukkitTasksLauncher.launch(
-				new Runnable() {					
-					@Override
-					public void run() {						
-						for( String msg : messages) {  	    			
-							player.sendMessage( variableReplace(msg) );
-						}									
-					}					
-				}
-		);		
+		for( String msg : messages) {  	    			
+			player.sendMessage( variableReplace(msg) );
+		}	
 	}
 	
 	public void sendBroadcast(final List<String> messages){
@@ -394,25 +380,13 @@ public class cReward {
 		
 	}
 	
-	
-	public void addReplacementVariable( String variable, List<String> replace ){
-		this.replacementMap.put(variable, replace);
-	}
+
 	
 	private String variableReplace(String msg){
 		
 		String message = "";		
 		// Replace pour les codes couleurs
 		message = msg.replace("&", "§");
-		
-		// Replace des pseudo variables
-		for( Entry<String, List<String>> entry : this.replacementMap.entrySet() ){
-			String variable = entry.getKey();
-			List<String> replacements = entry.getValue();
-			for( String o : replacements ){
-				message = message.replace(variable, o );
-			}			
-		}
 		
 		// Variables de ce cReward
 		message = message.replace("%player%", player.getName());		

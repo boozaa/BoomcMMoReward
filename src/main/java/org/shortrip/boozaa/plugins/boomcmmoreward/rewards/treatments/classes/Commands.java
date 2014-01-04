@@ -34,8 +34,6 @@ public class Commands extends AbstractReward {
 			listCommands = new ArrayList<String>();
 			list = new ArrayList<String>();
 
-			this.reward = reward;
-			this.reward.addReplacementVariable("%commands%", listCommands);
 			
 			try {
 				

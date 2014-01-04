@@ -31,17 +31,13 @@ public class Money extends AbstractReward {
 		
 		
 		// money
-		if( confSection.get(Const.MONEY) != null &&  confSection.get(Const.MONEY_AMOUNT) != null ) {
+		if( confSection.contains(Const.MONEY) &&  confSection.contains(Const.MONEY_AMOUNT) ) {
 			Log.debug("---Money node found on reward file ... processing" );
 			sendMoney(confSection.getConfigurationSection(Const.MONEY));
-			// Si il y a section message on la traite
-			if( confSection.get(Const.MONEY + "." + Const.MESSAGE) != null ) {
-				cmess.proceedRewards(reward, confSection.getConfigurationSection(Const.MONEY));					
-			}
 		}
 		
 		// lotteryMoney
-		if( confSection.get(Const.MONEY_LOTTERY) != null &&  confSection.get(Const.MONEY_LOTTERY_AMOUNT) != null ) {
+		if( confSection.contains(Const.MONEY_LOTTERY)  &&  confSection.contains(Const.MONEY_LOTTERY_AMOUNT) ) {
 			Log.debug("---lotteryMoney node found on reward file ... processing" );
 			giveLotteryMoney(confSection.getConfigurationSection(Const.MONEY_LOTTERY));
 			// Si il y a section message elle est traitée dans le giveLotteryMoney

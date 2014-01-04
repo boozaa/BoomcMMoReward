@@ -28,9 +28,6 @@ public class Group extends AbstractReward {
 			Log.debug("---Groups node found on reward file ... processing" );
 			
 			listGroups = new ArrayList<String>();
-
-			this.reward = reward;
-			this.reward.addReplacementVariable("%groups%", listGroups);
 			
 			
 			try {
