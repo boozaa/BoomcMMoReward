@@ -34,7 +34,10 @@ public class Money extends AbstractReward {
 		if( confSection.get(Const.MONEY) != null &&  confSection.get(Const.MONEY_AMOUNT) != null ) {
 			Log.debug("---Money node found on reward file ... processing" );
 			sendMoney(confSection.getConfigurationSection(Const.MONEY));
-			// Si il y a section message elle est traitée dans le sendMoney
+			// Si il y a section message on la traite
+			if( confSection.get(Const.MONEY + "." + Const.MESSAGE) != null ) {
+				cmess.proceedRewards(reward, confSection.getConfigurationSection(Const.MONEY));					
+			}
 		}
 		
 		// lotteryMoney
