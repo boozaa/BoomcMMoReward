@@ -2,27 +2,26 @@ package org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.classes;
 
 import java.util.List;
 import org.bukkit.configuration.ConfigurationSection;
-import org.shortrip.boozaa.plugins.boomcmmoreward.BoomcMMoReward;
+import org.shortrip.boozaa.plugins.boomcmmoreward.Log;
 import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.cReward;
-import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.Parent;
-import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.TreatmentEnum;
-import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.iConditions;
 import org.shortrip.boozaa.plugins.boomcmmoreward.utils.Const;
 
 
-public class Power extends Parent implements iConditions {
+public class Power extends AbstractReward {
+	
+		
 	
 	public Power() {
-		super(TreatmentEnum.POWER);				
+		super();				
 	}
 		
 
 	@Override
-	public Boolean isValid(cReward reward, ConfigurationSection confSection) {
+	public Boolean isValid(cReward reward, ConfigurationSection confSection) throws RewardPowerException {
 		
 		if(confSection.get(Const.POWER) != null) {
 			
-			BoomcMMoReward.debug("---Checking Power conditions");
+			Log.debug("---Checking Power conditions");
 			
 			try{
 
@@ -34,39 +33,28 @@ public class Power extends Parent implements iConditions {
 	    			int limit = Integer.parseInt( p.trim().substring(1).trim() );
 		    		
 		    		if( p.trim().startsWith("-")) {	    				
-		    			BoomcMMoReward.debug("-Testing if user's power < " + limit);	    					    				  
+		    			Log.debug("-Testing if user's power < " + limit);	    					    				  
 		    			if( !reward.isPowerMinorLimit(limit) ) {		    				
 	    					return false;
 		    			}
-		    			BoomcMMoReward.debug("-Ok");
-		    			/*
-	    				if( reward.getPlayerPower() >= limit ) {		    				
-	    					return false;
-		    			}
-		    			BoomcMMoReward.debug("-Ok");
-		    			*/
+		    			Log.debug("-Ok");
 	    					    				
 	    			}else if( p.trim().startsWith("+")) {	    				
-	    				BoomcMMoReward.debug("-Testing if user's power > " + limit);
+	    				Log.debug("-Testing if user's power > " + limit);
 	    				if( !reward.isPowerMajorLimit(limit) ) {		    				
 	    					return false;
 		    			}
-		    			BoomcMMoReward.debug("-Ok");
-	    				/*
-	    				if( reward.getPlayerPower() <= limit ) {
-	    					return false;
-		    			}
-	    				BoomcMMoReward.debug("-Ok");
-	    				*/	    				
+	    				Log.debug("-Ok");
+	    					    				
 	    			}else{
-	    				BoomcMMoReward.debug("-Not found operator '+' or '-' ... aborting");
+	    				Log.debug("-Not found operator '+' or '-' ... aborting");
 	    				return false;
 	    			}
 		    		
 		    	}
 		    	
 			}catch(Exception ex){
-    			return false;
+    			throw new RewardPowerException("", ex);
 			}
 			
 		}
@@ -74,4 +62,25 @@ public class Power extends Parent implements iConditions {
 		return true;
 	}
 
+
+	@Override
+	protected String variableReplace(String msg) {
+		return msg;
+	}
+
+	
+
+	public class RewardPowerException extends Exception {
+		private static final long serialVersionUID = 1L;
+		private Throwable throwable;
+		public RewardPowerException(String message, Throwable t) {
+	        super(message);
+	        this.throwable = t;
+	    }	
+		public Throwable get_Throwable(){
+			return this.throwable;
+		}
+	}
+	
+	
 }

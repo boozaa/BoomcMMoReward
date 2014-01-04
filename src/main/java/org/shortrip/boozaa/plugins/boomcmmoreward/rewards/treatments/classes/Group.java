@@ -1,33 +1,29 @@
 package org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.classes;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.bukkit.configuration.ConfigurationSection;
-import org.shortrip.boozaa.plugins.boomcmmoreward.BoomcMMoReward;
-import org.shortrip.boozaa.plugins.boomcmmoreward.exceptions.GroupException;
+import org.shortrip.boozaa.plugins.boomcmmoreward.Log;
 import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.cReward;
-import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.Parent;
-import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.TreatmentEnum;
-import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.iConditions;
 import org.shortrip.boozaa.plugins.boomcmmoreward.utils.Const;
 
 
-public class Group extends Parent implements iConditions {
+public class Group extends AbstractReward {
 
+	private List<String> listGroups = new ArrayList<String>();
+	
 	
 	public Group() {
-		super(TreatmentEnum.GROUP);
+		super();
 	}
 
-
-
-	private static List<String>listGroups;
 	
-	public List<String> proceedRewards(cReward reward, ConfigurationSection confSection, Messages cmess) throws GroupException{
+	public List<String> proceedRewards(cReward reward, ConfigurationSection confSection, Messages cmess) throws RewardGroupException{
 		
 		if( confSection.get(Const.GROUP) != null ) {
 			
-			BoomcMMoReward.debug("---Groups node found on reward file ... processing" );
+			Log.debug("---Groups node found on reward file ... processing" );
 			
 			listGroups = new ArrayList<String>();
 			
@@ -51,9 +47,9 @@ public class Group extends Parent implements iConditions {
 			    			if( !isInGroup ){
 			    				// On ajoute au groupe
 			    				reward.addToGroup(group);			    				
-			    				BoomcMMoReward.debug("-Player added to group " + group);
+			    				Log.debug("-Player added to group " + group);
 			    			}else{
-			    				BoomcMMoReward.debug("-Player is already on Group " + group + " -> no changes");
+			    				Log.debug("-Player is already on Group " + group + " -> no changes");
 			    			}
 			    			
 			    			
@@ -62,29 +58,24 @@ public class Group extends Parent implements iConditions {
 			    			if( isInGroup ){
 			    				// On ajoute au groupe
 			    				reward.removeFromGroup(group);			    				
-			    				BoomcMMoReward.debug("-Player removed from group " + group);
+			    				Log.debug("-Player removed from group " + group);
 			    			}else{
-			    				BoomcMMoReward.debug("-Player is not on Group " + group + " -> no changes");
+			    				Log.debug("-Player is not on Group " + group + " -> no changes");
 			    			}
 			    			
 			    		}
 		    			
 		    		}else{
-		    			BoomcMMoReward.debug("-The group " + group + " doesn't exist -> no changes");
+		    			Log.debug("-The group " + group + " doesn't exist -> no changes");
 		    		}
 		    		
 		    	}
 				
 				
 			} catch (Exception e) {
-				throw new GroupException("Error in the group section", e);
+				throw new RewardGroupException("Error in the group section", e);
 			}	
-			
-			// Si il y a section message on la traite
-			if( confSection.get(Const.GROUP + "." + Const.MESSAGE) != null ) {
-				cmess.proceedRewards(reward, confSection.getConfigurationSection(Const.GROUP));					
-			}
-			
+						
 		}
 		
 		return listGroups;
@@ -94,11 +85,11 @@ public class Group extends Parent implements iConditions {
 
 
 	@Override
-	public Boolean isValid(cReward reward, ConfigurationSection confSection) throws GroupException {
+	public Boolean isValid(cReward reward, ConfigurationSection confSection) throws RewardGroupException {
 
 		if(confSection.get(Const.GROUP) != null) {
 			
-			BoomcMMoReward.debug("---Checking Group conditions");
+			Log.debug("---Checking Group conditions");
 			
 			// Vérification
 			List<String> groupConditions = confSection.getStringList(Const.GROUP);    	
@@ -111,28 +102,28 @@ public class Group extends Parent implements iConditions {
 	    			
 	    			if( p.trim().startsWith("-")) {
 	    					    				
-	    				BoomcMMoReward.debug("-Testing if user isn't on group " + groupName);	    				
+	    				Log.debug("-Testing if user isn't on group " + groupName);	    				
 	    				if( isInGroup ) {		    				
 	    					return false;
 		    			}
-	    				BoomcMMoReward.debug("-Ok");
+	    				Log.debug("-Ok");
 	    				
 	    			}else if( p.trim().startsWith("+")) {
 	    				
-	    				BoomcMMoReward.debug("-Testing if user is on group " + groupName);	    				
+	    				Log.debug("-Testing if user is on group " + groupName);	    				
 	    				if( !isInGroup ) {	
 	    					return false;
 		    			}
-	    				BoomcMMoReward.debug("-Ok");
+	    				Log.debug("-Ok");
 	    				
 	    			}else{
-	    				BoomcMMoReward.debug("-Not found operator '+' or '-' ... aborting");
+	    				Log.debug("-Not found operator '+' or '-' ... aborting");
 	    				return false;
 	    			}
 	    			
 	    			
 	    		}catch(Exception ex){
-	    			throw new GroupException("Error in the group section", ex);
+	    			throw new RewardGroupException("Error in the group section", ex);
 				}			
 	    		
 	    	}
@@ -144,5 +135,34 @@ public class Group extends Parent implements iConditions {
 		return true;
 		
 	}
+	
+	
+	@Override
+	protected String variableReplace(String msg){
+		
+		String message = "";		
+		// Replace pour les codes couleurs
+		message = msg.replace("&", "§");
+		// Replace des pseudo variables
+		message = message.replace("%groups%", Arrays.toString(this.listGroups.toArray()));	
+		return message;
+		
+	}
+	
+	
+
+	public class RewardGroupException extends Exception {
+		private static final long serialVersionUID = 1L;
+		private Throwable throwable;
+		public RewardGroupException(String message, Throwable t) {
+	        super(message);
+	        this.throwable = t;
+	    }	
+		public Throwable get_Throwable(){
+			return this.throwable;
+		}
+	}
+	
+	
 	
 }

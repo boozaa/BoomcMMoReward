@@ -2,8 +2,7 @@ package org.shortrip.boozaa.plugins.boomcmmoreward.rewards;
 
 import java.util.LinkedList;
 import java.util.Queue;
-
-import org.shortrip.boozaa.plugins.boomcmmoreward.BoomcMMoReward;
+import org.shortrip.boozaa.plugins.boomcmmoreward.Log;
 
 
 public class RewardQueue {
@@ -22,7 +21,7 @@ public class RewardQueue {
     synchronized public void enqueue(cReward rew) {    	
     	if( rew != null){
     		queue.add(rew);
-        	BoomcMMoReward.debug("Added one reward file to process on the Queue");
+    		Log.debug("Added one reward file to process on the Queue");
             notify();
     	}    	 
     }   
@@ -33,9 +32,9 @@ public class RewardQueue {
             try {
                 //attente passive
                 //wait();
-            	BoomcMMoReward.debug("Queue head :" + queue.peek() );
-            	BoomcMMoReward.debug("Queue size :" + queue.size() );
-                BoomcMMoReward.debug("Processing reward file " + queue.peek().getName() + " on a new thread");        
+            	Log.debug("Queue head :" + queue.peek() );
+            	Log.debug("Queue size :" + queue.size() );
+            	Log.debug("Processing reward file " + queue.peek().getName() + " on a new thread");        
                 // On envoit le traitement du prochain cReward
                 new RewardThread(queue.poll());
             	

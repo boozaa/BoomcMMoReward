@@ -2,32 +2,28 @@ package org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.classes;
 
 import java.util.List;
 import org.bukkit.configuration.ConfigurationSection;
-import org.shortrip.boozaa.plugins.boomcmmoreward.BoomcMMoReward;
+import org.shortrip.boozaa.plugins.boomcmmoreward.Log;
 import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.cReward;
-import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.Parent;
-import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.TreatmentEnum;
-import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.iConditions;
 import org.shortrip.boozaa.plugins.boomcmmoreward.utils.Const;
-
 import com.gmail.nossr50.datatypes.skills.SkillType;
 
 
 
 
 
-public class Skill extends Parent implements iConditions {
+public class Skill extends AbstractReward {
 
 	
 	public Skill() {
-		super(TreatmentEnum.SKILL);
+		super();
 	}
 
 	@Override
-	public Boolean isValid(cReward reward, ConfigurationSection confSection) {
+	public Boolean isValid(cReward reward, ConfigurationSection confSection) throws RewardSkillException {
 		
 		if( confSection.get(Const.SKILL) != null ) {
 			
-			BoomcMMoReward.debug("---Checking Skill conditions");
+			Log.debug("---Checking Skill conditions");
 			
 			try{
 			
@@ -43,11 +39,11 @@ public class Skill extends Parent implements iConditions {
 				    		int level = Integer.parseInt( p.trim().substring(1).trim() );
 				    		
 				    		if( p.trim().startsWith("-")) {			    				
-				    			BoomcMMoReward.debug("-Testing if user's " + s.name() + " level is < " + level);	    				
+				    			Log.debug("-Testing if user's " + s.name() + " level is < " + level);	    				
 			    				if( !reward.isSkillLevelMinorLimit(s.name(), level) ){
 			    					return false;
 			    				}
-			    				BoomcMMoReward.debug("-Ok");
+			    				Log.debug("-Ok");
 				    			/*
 				    			if( reward.getPlayerSkillLevel(s) >= level ) {		    				
 			    					return false;
@@ -56,13 +52,13 @@ public class Skill extends Parent implements iConditions {
 			    				*/
 			    			}else if( p.trim().startsWith("+")) {
 			    				
-			    				BoomcMMoReward.debug("-Testing if user's " + s.name() + " level is > " + level);	    				
+			    				Log.debug("-Testing if user's " + s.name() + " level is > " + level);	    				
 			    				if( reward.getPlayerSkillLevel(s) <= level ) {
 			    					return false;
 				    			}
-			    				BoomcMMoReward.debug("-Ok");			    				
+			    				Log.debug("-Ok");			    				
 			    			}else{
-			    				BoomcMMoReward.debug("-Not found operator '+' or '-' ... aborting");
+			    				Log.debug("-Not found operator '+' or '-' ... aborting");
 			    				return false;
 			    			}
 				    		
@@ -73,7 +69,7 @@ public class Skill extends Parent implements iConditions {
 				}
 			
 			}catch(Exception ex){
-    			return false;
+    			throw new RewardSkillException("", ex);
 			}
 			
 			
@@ -83,6 +79,26 @@ public class Skill extends Parent implements iConditions {
 		
 		
 		return true;
+	}
+
+	
+	@Override
+	protected String variableReplace(String msg) {
+		return msg;
+	}
+	
+	
+
+	public class RewardSkillException extends Exception {
+		private static final long serialVersionUID = 1L;
+		private Throwable throwable;
+		public RewardSkillException(String message, Throwable t) {
+	        super(message);
+	        this.throwable = t;
+	    }	
+		public Throwable get_Throwable(){
+			return this.throwable;
+		}
 	}
 	
 

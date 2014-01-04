@@ -1,7 +1,6 @@
 package org.shortrip.boozaa.plugins.boomcmmoreward.rewards;
 
 import java.util.List;
-import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -12,9 +11,7 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.shortrip.boozaa.plugins.boomcmmoreward.BoomcMMoReward;
 import org.shortrip.boozaa.plugins.boomcmmoreward.BukkitTasksLauncher;
-import org.shortrip.boozaa.plugins.boomcmmoreward.exceptions.GroupException;
-import org.shortrip.boozaa.plugins.boomcmmoreward.exceptions.MoneyException;
-import org.shortrip.boozaa.plugins.boomcmmoreward.exceptions.PermissionException;
+import org.shortrip.boozaa.plugins.boomcmmoreward.Log;
 import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.classes.Items;
 import org.shortrip.boozaa.plugins.boomcmmoreward.utils.Configuration;
 import org.shortrip.boozaa.plugins.boomcmmoreward.utils.Const;
@@ -308,106 +305,71 @@ public class cReward {
 	}
 	
 	
-	public void giveMoney(final String sender, final Double amount) throws MoneyException{
-		try{			
+	public void giveMoney(final String sender, final Double amount){
+		
+		// Synchrone task with bukkit
+		BukkitTasksLauncher.launch(
+				new Runnable() {					
+					@Override
+					public void run() {						
+						// On prends le montant chez le sender
+						BoomcMMoReward.getEcon().withdrawPlayer(sender, amount);
+						// Que l'on donne au méritant
+						BoomcMMoReward.getEcon().depositPlayer(player.getName(), amount);							
+					}					
+				}
+		);	
 			
-			// Synchrone task with bukkit
-			BukkitTasksLauncher.launch(
-					new Runnable() {					
-						@Override
-						public void run() {						
-							// On prends le montant chez le sender
-							BoomcMMoReward.getEcon().withdrawPlayer(sender, amount);
-							// Que l'on donne au méritant
-							BoomcMMoReward.getEcon().depositPlayer(player.getName(), amount);							
-						}					
-					}
-			);	
-			
-			
-		}catch(Exception ex){
-			throw new MoneyException("cReward Economy problem ... abort operation",ex);
-		}		
 	}
 	
 	
 	/*
 	 * Permission gestion
 	 */
-	public void givePermissionInWorld(String permission, String worldName) throws PermissionException{
-		try{			
-			// Tentative d'ajout de permission spécifique au Monde
-			BoomcMMoReward.getPerms().playerAdd(player.getServer().getWorld(worldName), player.getName(), permission);			
-		}catch(Exception ex){
-			throw new PermissionException("cReward adding Permission in World problem ... abort operation",ex);
-		}			
+	public void givePermissionInWorld(String permission, String worldName){
+		
+		// Tentative d'ajout de permission spécifique au Monde
+		BoomcMMoReward.getPerms().playerAdd(player.getServer().getWorld(worldName), player.getName(), permission);			
+				
 	}
 	
-	public void givePermission(String permission) throws PermissionException{
-		try{			
-			// Tentative d'ajout de permission 
-			BoomcMMoReward.getPerms().playerAdd(player, permission);			
-		}catch(Exception ex){
-			throw new PermissionException("cReward adding Permission problem ... abort operation",ex);
-		}			
+	public void givePermission(String permission){			
+		// Tentative d'ajout de permission 
+		BoomcMMoReward.getPerms().playerAdd(player, permission);
 	}
 	
-	public void removePermissionInWorld(String permission, String worldName) throws PermissionException{
-		try{			
-			// Tentative de retrait de permission dans World
-			BoomcMMoReward.getPerms().playerRemove(player.getServer().getWorld(worldName), player.getName(), permission);			
-		}catch(Exception ex){
-			throw new PermissionException("cReward removing Permission in World problem ... abort operation",ex);
-		}			
+	public void removePermissionInWorld(String permission, String worldName){
+		// Tentative de retrait de permission dans World
+		BoomcMMoReward.getPerms().playerRemove(player.getServer().getWorld(worldName), player.getName(), permission);					
 	}
 		
-	public void removePermission(String permission) throws PermissionException{
-		try{			
-			// Tentative de retrait de permission 
-			BoomcMMoReward.getPerms().playerRemove(player, permission);			
-		}catch(Exception ex){
-			throw new PermissionException("cReward removing Permission problem ... abort operation",ex);
-		}			
+	public void removePermission(String permission){
+		// Tentative de retrait de permission 
+		BoomcMMoReward.getPerms().playerRemove(player, permission);
 	}
 	
 	
 	/*
 	 * Group gestion
 	 */
-	public void addToGroupInWorld(String groupName, String worldName) throws GroupException {
-		try{
-			// Tentative d'ajout du player au groupe dans Monde
-			BoomcMMoReward.getPerms().playerAddGroup(player.getServer().getWorld(worldName), player.getName(), groupName);
-		}catch(Exception ex){
-			throw new GroupException("cReward adding Group in World problem ... abort operation",ex);
-		}	
+	public void addToGroupInWorld(String groupName, String worldName) {
+		// Tentative d'ajout du player au groupe dans Monde
+		BoomcMMoReward.getPerms().playerAddGroup(player.getServer().getWorld(worldName), player.getName(), groupName);	
 	}
 	
-	public void addToGroup(String groupName) throws GroupException {
-		try{
-			// Tentative d'ajout du player au groupe
-			BoomcMMoReward.getPerms().playerAddGroup(player, groupName);
-		}catch(Exception ex){
-			throw new GroupException("cReward adding Group problem ... abort operation",ex);
-		}	
+	public void addToGroup(String groupName) {
+		// Tentative d'ajout du player au groupe
+		BoomcMMoReward.getPerms().playerAddGroup(player, groupName);
 	}
 		
-	public void removeFromGroupInWorld(String groupName, String worldName) throws GroupException{
-		try{
-			// Tentative de retrait de player au group dans Monde
-			BoomcMMoReward.getPerms().playerRemoveGroup(player.getServer().getWorld(worldName), player.getName(), groupName);
-		}catch(Exception ex){
-			throw new GroupException("cReward removing Group in World problem ... abort operation",ex);
-		}
+	public void removeFromGroupInWorld(String groupName, String worldName){
+		// Tentative de retrait de player au group dans Monde
+		BoomcMMoReward.getPerms().playerRemoveGroup(player.getServer().getWorld(worldName), player.getName(), groupName);
 	}
 		
-	public void removeFromGroup(String groupName) throws GroupException{
-		try{
-			// Tentative de retrait de player au group
-			BoomcMMoReward.getPerms().playerRemoveGroup(player, groupName);
-		}catch(Exception ex){
-			throw new GroupException("cReward removing Group problem ... abort operation",ex);
-		}
+	public void removeFromGroup(String groupName){
+		// Tentative de retrait de player au group
+		BoomcMMoReward.getPerms().playerRemoveGroup(player, groupName);
 	}
 	
 	
@@ -450,7 +412,7 @@ public class cReward {
 					@Override
 					public void run() {						
 						for( String msg : messages) {  	    			
-							BoomcMMoReward.log(Level.INFO, variableReplace( msg ) );
+							Log.info( variableReplace( msg ) );
 						}									
 					}					
 				}
@@ -466,7 +428,7 @@ public class cReward {
 					public void run() {						
 						for( String cmd : commands) {			
 							if( Bukkit.dispatchCommand(Bukkit.getConsoleSender(), variableReplace(cmd) ) ) {
-								BoomcMMoReward.log(Level.INFO, "-Command sent : " + variableReplace(cmd) );
+								Log.info( "-Command sent : " + variableReplace(cmd) );
 				    		}			
 						}										
 					}					

@@ -1,33 +1,29 @@
 package org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.classes;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import org.bukkit.configuration.ConfigurationSection;
 import org.shortrip.boozaa.plugins.boomcmmoreward.BoomcMMoReward;
-import org.shortrip.boozaa.plugins.boomcmmoreward.exceptions.MoneyException;
+import org.shortrip.boozaa.plugins.boomcmmoreward.Log;
 import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.cReward;
-import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.Parent;
-import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.TreatmentEnum;
-import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.iConditions;
 import org.shortrip.boozaa.plugins.boomcmmoreward.utils.Const;
 
 
-public class Money extends Parent implements iConditions {
-
-	
-	
-	public Money() {
-		super(TreatmentEnum.MONEY);
-	}
+public class Money extends AbstractReward {
 
 
 	private cReward reward;
-	private static List<Double>listMoney;
+	private List<Double>listMoney;
 	
 	
+	public Money() {
+		super();
+	}
 	
-	public List<Double> proceedRewards(cReward reward, ConfigurationSection confSection, Messages cmess) throws MoneyException{
+	
+	public List<Double> proceedRewards(cReward reward, ConfigurationSection confSection, Messages cmess) throws RewardMoneyException{
 		
 		this.reward = reward;
 		
@@ -36,14 +32,14 @@ public class Money extends Parent implements iConditions {
 		
 		// money
 		if( confSection.get(Const.MONEY) != null &&  confSection.get(Const.MONEY_AMOUNT) != null ) {
-			BoomcMMoReward.debug("---Money node found on reward file ... processing" );
+			Log.debug("---Money node found on reward file ... processing" );
 			sendMoney(confSection.getConfigurationSection(Const.MONEY));
 			// Si il y a section message elle est traitée dans le sendMoney
 		}
 		
 		// lotteryMoney
 		if( confSection.get(Const.MONEY_LOTTERY) != null &&  confSection.get(Const.MONEY_LOTTERY_AMOUNT) != null ) {
-			BoomcMMoReward.debug("---lotteryMoney node found on reward file ... processing" );
+			Log.debug("---lotteryMoney node found on reward file ... processing" );
 			giveLotteryMoney(confSection.getConfigurationSection(Const.MONEY_LOTTERY));
 			// Si il y a section message elle est traitée dans le giveLotteryMoney
 		}
@@ -53,7 +49,7 @@ public class Money extends Parent implements iConditions {
 	}
 	
 	
-	private void giveLotteryMoney(ConfigurationSection confSection){
+	private void giveLotteryMoney(ConfigurationSection confSection) throws RewardMoneyException{
 		
 		int max = 10;
 		int proba = 1;
@@ -78,7 +74,6 @@ public class Money extends Parent implements iConditions {
 			if( confSection.get(Const.MESSAGE) != null ) {
 				
 				ConfigurationSection msgConf = confSection.getConfigurationSection(Const.MESSAGE);
-				
 				
 				
 				if( msgConf.get(Const.MP) != null ) {
@@ -121,7 +116,7 @@ public class Money extends Parent implements iConditions {
 			}
 			
 		}else{
-			BoomcMMoReward.debug("-No luck" );
+			Log.debug("-No luck" );
 		}
 		
 		
@@ -132,7 +127,7 @@ public class Money extends Parent implements iConditions {
 	
 	
 	
-	private void sendMoney(ConfigurationSection confSection){
+	private void sendMoney(ConfigurationSection confSection) throws RewardMoneyException {
 		
 		try {
 			String sender = "server";			
@@ -144,14 +139,12 @@ public class Money extends Parent implements iConditions {
 			reward.giveMoney(sender, confSection.getDouble(Const.AMOUNT));
 			// On stocke en db
 			listMoney.add(confSection.getDouble(Const.AMOUNT));
-			BoomcMMoReward.debug("-Give " + confSection.getDouble(Const.AMOUNT) + " from " + sender);
+			Log.debug("-Give " + confSection.getDouble(Const.AMOUNT) + " from " + sender);
 			
 			// On traite la partie message
 			if( confSection.get(Const.MESSAGE) != null ) {
 				
 				ConfigurationSection msgConf = confSection.getConfigurationSection(Const.MESSAGE);
-				
-				
 				
 				if( msgConf.get(Const.MP) != null ) {
 					
@@ -196,7 +189,9 @@ public class Money extends Parent implements iConditions {
 			}
 						
 			
-		} catch (MoneyException e) { }
+		} catch (Exception e) { 
+			throw new RewardMoneyException("Money transfer  exception", e);
+		}
 		
 	}
 	
@@ -219,44 +214,38 @@ public class Money extends Parent implements iConditions {
 
 		if(confSection.get(Const.MONEY) != null) {
 			
-			BoomcMMoReward.debug("---Checking Money conditions"); 
+			Log.debug("---Checking Money conditions"); 
 			
 			// Vérification
 			List<String> moneyConditions = confSection.getStringList(Const.MONEY);    	
 	    	for( String p : moneyConditions) {
 	    		
-	    		try{
-	    			
-	    			//double account = this.econ.getBalance(player.getName());
-	    			Double limit = Double.parseDouble( p.trim().substring(1).trim() );
-	    			
-	    			if( p.trim().startsWith("-")) {
-	    				
-	    				BoomcMMoReward.debug("-Testing : < " + limit);	    				
-	    				if( !reward.isMoneyMinorLimit(limit) ) {		    				
-	    					return false;
-		    			}
-	    				BoomcMMoReward.debug("-Ok");
-	    				
-	    			}else if( p.trim().startsWith("+")) {
-	    				
-	    				BoomcMMoReward.debug("-Testing : > " + limit);	    				
-	    				if( !reward.isMoneyMajorLimit(limit) ) {	
-	    					return false;
-		    			}
-	    				BoomcMMoReward.debug("-Ok");
-	    				
-	    			}else{
-	    				BoomcMMoReward.debug("-Not found operator '+' or '-' ... aborting");
-	    				return false;
+    			//double account = this.econ.getBalance(player.getName());
+    			Double limit = Double.parseDouble( p.trim().substring(1).trim() );
+    			
+    			if( p.trim().startsWith("-")) {
+    				
+    				Log.debug("-Testing : < " + limit);	    				
+    				if( !reward.isMoneyMinorLimit(limit) ) {		    				
+    					return false;
 	    			}
-	    			
-	    			
-	    		} catch (Exception e) { }
+    				Log.debug("-Ok");
+    				
+    			}else if( p.trim().startsWith("+")) {
+    				
+    				Log.debug("-Testing : > " + limit);	    				
+    				if( !reward.isMoneyMajorLimit(limit) ) {	
+    					return false;
+	    			}
+    				Log.debug("-Ok");
+    				
+    			}else{
+    				Log.debug("-Not found operator '+' or '-' ... aborting");
+    				return false;
+    			}
 	    		
 	    		return false;
-							    		
-	    			    		
+						   		    			    		
 	    	}
 			
 		}
@@ -264,8 +253,31 @@ public class Money extends Parent implements iConditions {
 		// Pas ou plus de conditions donc toutes remplies
 		return true;
 	}
+
+
+	@Override
+	protected String variableReplace(String msg) {
+		String message = "";		
+		// Replace pour les codes couleurs
+		message = msg.replace("&", "§");
+		// Replace des pseudo variables
+		message = message.replace("%amount%", Arrays.toString(this.listMoney.toArray()));	
+		return message;
+	}
 	
 
+
+	public class RewardMoneyException extends Exception {
+		private static final long serialVersionUID = 1L;
+		private Throwable throwable;
+		public RewardMoneyException(String message, Throwable t) {
+	        super(message);
+	        this.throwable = t;
+	    }	
+		public Throwable get_Throwable(){
+			return this.throwable;
+		}
+	}
 	
 	
 }

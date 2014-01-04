@@ -5,6 +5,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.plugin.Plugin;
 import org.shortrip.boozaa.plugins.boomcmmoreward.BoomcMMoReward;
+import org.shortrip.boozaa.plugins.boomcmmoreward.Log;
 
 
 public class MyPlayerListener implements Listener {
@@ -16,7 +17,7 @@ public class MyPlayerListener implements Listener {
 	
 	public MyPlayerListener(Plugin plugin) {    	
     	this.plugin = plugin; 
-    	BoomcMMoReward.debug("MyPlayerListener registered");
+    	Log.debug("MyPlayerListener registered");
     }
 	
 	@EventHandler

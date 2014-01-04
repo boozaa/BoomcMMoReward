@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.logging.Level;
 
 import org.shortrip.boozaa.plugins.boomcmmoreward.BoomcMMoReward;
+import org.shortrip.boozaa.plugins.boomcmmoreward.Log;
 import org.shortrip.boozaa.plugins.boomcmmoreward.tables.HistoryTable;
 
 
@@ -171,7 +172,7 @@ public class Database extends SQLOperations {
 			
 			if(!this.doesTableExist("historyTable")){
 				
-			    BoomcMMoReward.log(Level.INFO, "Table 'historyTable' does not exist! Creating table...");
+			    Log.info("Table 'historyTable' does not exist! Creating table...");
 			    
 			    if( BoomcMMoReward.getYmlConf().getString("database.type").equalsIgnoreCase("sqlite")){
 			    	
@@ -199,7 +200,7 @@ public class Database extends SQLOperations {
 			    	
 			    }
 			    				
-				BoomcMMoReward.log(Level.INFO, "Table 'historyTable' created");
+			    Log.info("Table 'historyTable' created");
 			}
 		
 		} catch (SQLException e) {

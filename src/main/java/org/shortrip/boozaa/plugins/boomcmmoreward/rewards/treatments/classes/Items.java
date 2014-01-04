@@ -1,71 +1,34 @@
 package org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.classes;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.shortrip.boozaa.plugins.boomcmmoreward.BoomcMMoReward;
-import org.shortrip.boozaa.plugins.boomcmmoreward.exceptions.ItemException;
+import org.shortrip.boozaa.plugins.boomcmmoreward.Log;
 import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.cReward;
-import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.Parent;
-import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.TreatmentEnum;
-import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.iConditions;
 import org.shortrip.boozaa.plugins.boomcmmoreward.utils.Const;
 
 
-public class Items extends Parent implements iConditions {
+public class Items extends AbstractReward {
 
 	@SuppressWarnings("unused")
 	private Boolean isPending = false;
-	
-	
-	public Items() {
-		super(TreatmentEnum.ITEM);
-	}
-
-
-			/*
-			# Enchantment IDs:
-			# Enchantments cannot be paired with enchantments in [] brackets
-			# ID - MaxLevel - Name
-			# Armor
-			# 0 - 4 - Protection [1/3/4]
-			# 1 - 4 - Fire protection [0/3/4]
-			# 3 - 4 - Blast protection [0/1/4]
-			# 4 - 4 - Projectile protection [0/1/3]
-			## Boots
-			# 2 - 4 - Feather falling
-			## Helms
-			# 5 - 3 - Respiration
-			# 6 - 1 - Aqua affinity
-			# Tools
-			## Swords
-			# 16 - 5 - Sharpness [18/17]
-			# 17 - 5 - Smite [16/18]
-			# 18 - 5 - Bane of arthropods [16/17]
-			# 19 - 2 - Knockback
-			# 20 - 2 - Fire aspect
-			# 21 - 3 - Looting
-			## Pickaxes, Axes, Spades - No hoes/rods
-			# 32 - 5 - Efficiency
-			# 33 - 1 - Silk touch
-			# 34 - 3 - Unbreaking
-			# 35 - 3 - Fortune
-			## Bows
-			# 48 - 5 - Power
-			# 49 - 2 - Punch
-			# 50 - 1 - Flame
-			# 51 - 1 - Infinity
-			 */
-
 	private cReward reward;
 	private ConfigurationSection confSection;
 	private static List<String>listItems;
 	
 	
-	public List<String> proceedRewards(cReward reward, ConfigurationSection confSection, Messages cmess) throws ItemException{
+	
+	public Items() {
+		super();
+	}
+
+	
+	public List<String> proceedRewards(cReward reward, ConfigurationSection confSection, Messages cmess) throws RewardItemException{
 		
 		this.reward = reward;
 		this.confSection = confSection;
@@ -75,7 +38,7 @@ public class Items extends Parent implements iConditions {
 		
 		//Items
 		if( confSection.get(Const.ITEM) != null ) {
-			BoomcMMoReward.debug("---Items node found on reward file ... processing" );
+			Log.debug("---Items node found on reward file ... processing" );
 			giveItems();
 			// Si il y a section message on la traite
 			if( confSection.get(Const.ITEM + "." + Const.MESSAGE) != null ) {
@@ -85,7 +48,7 @@ public class Items extends Parent implements iConditions {
 		
 		// LotteryItems
 		if( confSection.get(Const.ITEM_LOTTERY) != null ) {
-			BoomcMMoReward.debug("---lotteryItems node found on reward file ... processing" );
+			Log.debug("---lotteryItems node found on reward file ... processing" );
 			giveLotteryItems();
 			// Si il y a section message on la traite
 			if( confSection.get(Const.ITEM_LOTTERY + "." + Const.MESSAGE) != null ) {
@@ -95,7 +58,7 @@ public class Items extends Parent implements iConditions {
 		
 		//LuckyItem
 		if( confSection.get(Const.ITEM_LUCKY) != null ) {
-			BoomcMMoReward.debug("---luckyItem node found on reward file ... processing" );
+			Log.debug("---luckyItem node found on reward file ... processing" );
 			giveLuckyItem();
 			// Si il y a section message on la traite
 			if( confSection.get(Const.ITEM_LUCKY + "." + Const.MESSAGE) != null ) {
@@ -105,7 +68,7 @@ public class Items extends Parent implements iConditions {
 		
 		//LuckyKit
 		if( confSection.get(Const.ITEM_LUCKYKIT) != null ) {
-			BoomcMMoReward.debug("---luckyKit node found on reward file ... processing" );
+			Log.debug("---luckyKit node found on reward file ... processing" );
 			giveLuckyKit();
 			// Si il y a section message on la traite
 			if( confSection.get(Const.ITEM_LUCKYKIT + "." + Const.MESSAGE) != null ) {
@@ -113,13 +76,12 @@ public class Items extends Parent implements iConditions {
 			}
 		}
 		
-		
-		
 		return listItems;
+		
 	}
 
 	
-	private void giveItems() throws ItemException{
+	private void giveItems() throws RewardItemException{
 		
 		ItemStack item;
 		
@@ -138,7 +100,7 @@ public class Items extends Parent implements iConditions {
     		}
     		
     		
-    		BoomcMMoReward.debug("-Giving item : " + p); 
+    		Log.debug("-Giving item : " + p); 
     		// On stocke en db
     		listItems.add(item.toString());
     	}
@@ -148,7 +110,7 @@ public class Items extends Parent implements iConditions {
 	
 	
 	
-	private void giveLotteryItems() throws ItemException{
+	private void giveLotteryItems() throws RewardItemException{
 		
 		ItemStack item;
 		
@@ -184,7 +146,7 @@ public class Items extends Parent implements iConditions {
 	        			return;
 	        		}
 	    			
-	        		BoomcMMoReward.debug("-Lottery: lucky guy giving item : " + p);
+	        		Log.debug("-Lottery: lucky guy giving item : " + p);
 	        		// On stocke en db
 	        		listItems.add(item.toString());	        		
 	        		int amount = item.getAmount();
@@ -225,11 +187,11 @@ public class Items extends Parent implements iConditions {
 	        			}
 	        		}
 	        		
-    			} catch (ItemException e) {}
+    			} catch (RewardItemException e) {}
         		
     			
     		}else{
-    			BoomcMMoReward.debug("-Lottery: no luck missed item : " + p); 
+    			Log.debug("-Lottery: no luck missed item : " + p); 
     		}
 
     	}
@@ -238,7 +200,7 @@ public class Items extends Parent implements iConditions {
 	}
 	
 	
-	private void giveLuckyItem() throws ItemException{
+	private void giveLuckyItem() throws RewardItemException{
 
 		ItemStack item;
 		
@@ -257,7 +219,7 @@ public class Items extends Parent implements iConditions {
 		}
 		
 		
-		BoomcMMoReward.debug("-luckyItem: the dice choose item : " + item.toString());	
+		Log.debug("-luckyItem: the dice choose item : " + item.toString());	
 		// On stocke en db
 		listItems.add(item.toString());
 		// On gere les messages
@@ -275,7 +237,7 @@ public class Items extends Parent implements iConditions {
 		List<String> newItems = confSection.getStringList(Const.ITEM_LUCKYKIT_ITEMS);
 		// Tirage au sort du gain		
 		String kit = newItems.get( (int)(Math.random()*newItems.size() ) );	
-		BoomcMMoReward.debug("-luckyKit: the dice choose item : " + kit);	
+		Log.debug("-luckyKit: the dice choose item : " + kit);	
 		// On décompose le kit
 		if( kit.contains("|")){
 			
@@ -283,9 +245,9 @@ public class Items extends Parent implements iConditions {
 			for( String p : items){
 				if( !p.isEmpty()){
 					try {						
-						BoomcMMoReward.debug("- deal with : " + p);
+						Log.debug("- deal with : " + p);
 						item = processItem(p);
-						BoomcMMoReward.debug("- given : " + p);
+						Log.debug("- given : " + p);
 						
 						
 						Boolean success = reward.giveItem(item);
@@ -298,7 +260,12 @@ public class Items extends Parent implements iConditions {
 						
 						// On stocke en db
 						listItems.add(item.toString());					
-					} catch (ItemException e) {}
+					} catch (RewardItemException e) {
+						
+						// TODO; exception to catch
+						
+					}
+					
 				}				
 			}
 			
@@ -346,7 +313,7 @@ public class Items extends Parent implements iConditions {
 	
 
 	@SuppressWarnings("deprecation")
-	private ItemStack processItem(String p) throws ItemException{
+	private ItemStack processItem(String p) throws RewardItemException{
 		
 		ItemStack item;
 		
@@ -379,34 +346,27 @@ public class Items extends Parent implements iConditions {
 	    			
 				}
 				
-				try{
-    				// Avec enchant
-	    			if( arr.length == 4) {
-	    				
-	    				int enchantId = Integer.parseInt(arr[2]); 
-			    		int multiplier = Integer.parseInt(arr[3]);
-	    				try{	    				
-		    				item.addEnchantment(Enchantment.getById(enchantId), multiplier);
-		    				// On donne l'item avec enchantement
-		    				return item;
-		    			}catch(Exception ex){	    				
-		    				throw new ItemException("-Enchant not valid for this item so cancel it : " +	p,ex);
-		    			}	
-		    			
-	    			}
-					
-	    			// On donne l'item
-	    			return item;
+				// Avec enchant
+    			if( arr.length == 4) {
+    				
+    				int enchantId = Integer.parseInt(arr[2]); 
+		    		int multiplier = Integer.parseInt(arr[3]);
+    				try{	    				
+	    				item.addEnchantment(Enchantment.getById(enchantId), multiplier);
+	    				// On donne l'item avec enchantement
+	    				return item;
+	    			}catch(Exception ex){	    				
+	    				throw new RewardItemException("-Enchant not valid for this item so cancel it : " +	p,ex);
+	    			}	
 	    			
-				}catch(Exception ex){	    				
-					throw new ItemException("-Is this item exists ? : " +	p, ex);  
     			}
-    			
-    						
+				
+    			// On donne l'item
+    			return item;
+    				
     			
 			}
-				
-		
+						
 		}
 		
 		// item unique avec Damage ?
@@ -447,13 +407,36 @@ public class Items extends Parent implements iConditions {
 	
 	
 	
-		
-	
-	
 	@Override
 	public Boolean isValid(cReward reward, ConfigurationSection confSection) {
 		return true;
 	}
 	
+	
+
+	@Override
+	protected String variableReplace(String msg) {
+		String message = "";		
+		// Replace pour les codes couleurs
+		message = msg.replace("&", "§");
+		// Replace des pseudo variables
+		message = message.replace("%items%", Arrays.toString(this.listItems.toArray()));	
+		return message;
+	}
+
+	
+
+	public class RewardItemException extends Exception {
+		private static final long serialVersionUID = 1L;
+		private Throwable throwable;
+		public RewardItemException(String message, Throwable t) {
+	        super(message);
+	        this.throwable = t;
+	    }	
+		public Throwable get_Throwable(){
+			return this.throwable;
+		}
+	}
+
 
 }

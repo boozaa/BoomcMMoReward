@@ -7,6 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 //import org.perf4j.StopWatch;
 import org.shortrip.boozaa.plugins.boomcmmoreward.BoomcMMoReward;
+import org.shortrip.boozaa.plugins.boomcmmoreward.Log;
 import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.RewardQueue;
 import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.cReward;
 import org.shortrip.boozaa.plugins.boomcmmoreward.utils.Configuration;
@@ -53,8 +54,8 @@ public class McMMOListener implements Listener {
 			
 			if( rewardOneFile.exists() ){
 
-				BoomcMMoReward.debug("-----New player level : " + playerPower);
-				BoomcMMoReward.debug("-----POWER ONE reward file to process : " + rewardOneFile);
+				Log.debug("-----New player level : " + playerPower);
+				Log.debug("-----POWER ONE reward file to process : " + rewardOneFile);
 				
 				conf = new Configuration(rewardOneFile);
 				if (conf.exists()) {					
@@ -72,8 +73,8 @@ public class McMMOListener implements Listener {
 			
 			if( rewardskillOneFile.exists() ){
 				
-				BoomcMMoReward.debug("-----New player level : " + playerPower);
-				BoomcMMoReward.debug("-----" + skill + " ONE reward file to process : " + rewardskillOneFile);
+				Log.debug("-----New player level : " + playerPower);
+				Log.debug("-----" + skill + " ONE reward file to process : " + rewardskillOneFile);
 				
 				conf = new Configuration(rewardskillOneFile);
 				if (conf.exists()) {					
@@ -98,8 +99,8 @@ public class McMMOListener implements Listener {
 					// On traite ce fichier
 					File everyPowerFile = new File(powerReward + "EVERY" + File.separator + fichier );				
 					
-					BoomcMMoReward.debug("-----New player level : " + playerPower);
-					BoomcMMoReward.debug("-----EVERY POWER reward file to process : " + everyPowerFile);				
+					Log.debug("-----New player level : " + playerPower);
+					Log.debug("-----EVERY POWER reward file to process : " + everyPowerFile);				
 					
 					conf = new Configuration(everyPowerFile);
 					if (conf.exists()) {					
@@ -124,8 +125,8 @@ public class McMMOListener implements Listener {
 					// On traite ce fichier
 					File everySkillFile = new File(skillReward + "EVERY" + File.separator + fichier );				
 					
-					BoomcMMoReward.debug("-----New player skill level : " + skillLevel);
-					BoomcMMoReward.debug("-----EVERY SKILLS reward file to process : " + everySkillFile);				
+					Log.debug("-----New player skill level : " + skillLevel);
+					Log.debug("-----EVERY SKILLS reward file to process : " + everySkillFile);				
 					
 					conf = new Configuration(everySkillFile);
 					if (conf.exists()) {					

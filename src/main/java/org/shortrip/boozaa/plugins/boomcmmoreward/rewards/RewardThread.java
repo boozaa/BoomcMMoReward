@@ -6,6 +6,7 @@ import java.util.Set;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.shortrip.boozaa.plugins.boomcmmoreward.BoomcMMoReward;
+import org.shortrip.boozaa.plugins.boomcmmoreward.Log;
 import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.classes.Commands;
 import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.classes.Group;
 import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.classes.Items;
@@ -60,7 +61,7 @@ public class RewardThread implements Runnable  {
 	@Override
 	public void run() {
 		
-		BoomcMMoReward.debug("-----Reward file found -> " + reward.getName() + " ...processing");
+		Log.debug("-----Reward file found -> " + reward.getName() + " ...processing");
 		
 		// On prends tous les premiers noeuds enfants de all:
 		Configuration conf = reward.getConf();
@@ -76,7 +77,7 @@ public class RewardThread implements Runnable  {
 		// Les premiers noeuds enfants pour obtenir liste des scenarios
 		Set<String> enfants = all.getKeys(false);
 		for( String enf : enfants ){
-			BoomcMMoReward.debug("-----Deal with node: " + enf);
+			Log.debug("-----Deal with node: " + enf);
 			// Noeud complet
 			String node = "all." + enf;
 			String conditions = node + "." + Const.CONDITIONS;
@@ -90,7 +91,7 @@ public class RewardThread implements Runnable  {
 			if ( checkConditions(reward.getPlayer(), conditionsSection) ) {
 				// Si il y a une section rewards dans le yml
 				if( rewardsSection != null ){					
-					BoomcMMoReward.debug("-----Giving Rewards");					
+					Log.debug("-----Giving Rewards");					
 					
 					try {
 						
@@ -129,7 +130,7 @@ public class RewardThread implements Runnable  {
 						
 					} catch (Exception e) { }
 
-					BoomcMMoReward.debug("-----End Rewards");
+					Log.debug("-----End Rewards");
 					
 					// On stocke cet historique en base de données si true
 					if( BoomcMMoReward.getYmlConf().getBoolean("config.logInDatabase")) {					
@@ -146,7 +147,7 @@ public class RewardThread implements Runnable  {
 				        if( historyItems != null ){history.setItemsFromList(historyItems);}
 				        if( historyCommands != null ){history.setCommandsFromList(historyCommands);}
 						BoomcMMoReward.getDB().addHistory(history);
-						BoomcMMoReward.debug("---History saved in database");
+						Log.debug("---History saved in database");
 																	
 					}
 										
@@ -165,49 +166,49 @@ public class RewardThread implements Runnable  {
     	// Si il n'y a pas de conditions on retourne true
     	if( conf == null ) { return true;}
     	
-    	BoomcMMoReward.debug("-----Checking Conditions");
+    	Log.debug("-----Checking Conditions");
     	
     	try {
 
         	if( !this.cmoney.isValid(reward, conf ) ) { 
-        		BoomcMMoReward.debug("-Condition Money not fulfill or bad formatted");
+        		Log.debug("-Condition Money not fulfill or bad formatted");
     			return false; 
     		}
 
         	
     		if( !this.cgroup.isValid(reward, conf ) ) { 
-    			BoomcMMoReward.debug("-Condition Group not fulfill or bad formatted");
+    			Log.debug("-Condition Group not fulfill or bad formatted");
     			return false;
     		}
 
     		
     		if( !this.cpower.isValid(reward, conf ) ) { 
-    			BoomcMMoReward.debug("-Condition Power not fulfill or bad formatted");
+    			Log.debug("-Condition Power not fulfill or bad formatted");
     			return false;				
     		}
 
     		
     		if( !this.cskill.isValid(reward, conf ) ) { 
-    			BoomcMMoReward.debug("-Condition Skill not fulfill or bad formatted");
+    			Log.debug("-Condition Skill not fulfill or bad formatted");
     			return false;
     		}
 
     		
     		if( !this.cworld.isValid(reward, conf ) ) { 
-    			BoomcMMoReward.debug("-Condition World not fulfill or bad formatted");
+    			Log.debug("-Condition World not fulfill or bad formatted");
     			return false;
     		}
 
     		
     		if( !this.cperm.isValid(reward, conf ) ) { 
-    			BoomcMMoReward.debug("-Condition Permission not fulfill or bad formatted");
+    			Log.debug("-Condition Permission not fulfill or bad formatted");
     			return false; 
     		} 
     		    		
     		
     	} catch (Exception e) {}
     					
-		BoomcMMoReward.debug("-----End Conditions");
+    	Log.debug("-----End Conditions");
     	
     	// Tout est ok on renvoit true
 		return true;

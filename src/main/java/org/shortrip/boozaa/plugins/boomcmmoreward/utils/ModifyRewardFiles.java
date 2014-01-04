@@ -13,9 +13,9 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
 import org.bukkit.plugin.Plugin;
-import org.shortrip.boozaa.plugins.boomcmmoreward.BoomcMMoReward;
+import org.shortrip.boozaa.plugins.boomcmmoreward.Log;
+
 
 public class ModifyRewardFiles {
 
@@ -50,9 +50,9 @@ public class ModifyRewardFiles {
 	
 	private void ModifFromV11xToV2(){
 	
-		BoomcMMoReward.log(Level.INFO, "This new release needs some changes on your rewards files");
-		BoomcMMoReward.log(Level.INFO, "To be on a safe side a backup of your current rewards files will be in :");
-		BoomcMMoReward.log(Level.INFO, "your plugins/BoomcMMoReward/backups/" + oldVersion + "/ folder");
+		Log.info("This new release needs some changes on your rewards files");
+		Log.info("To be on a safe side a backup of your current rewards files will be in :");
+		Log.info("your plugins/BoomcMMoReward/backups/" + oldVersion + "/ folder");
 		
 		// <ancien terme, nouveau terme>
 		Map<String, String> maps = new HashMap<String, String>();
@@ -73,9 +73,9 @@ public class ModifyRewardFiles {
 	
 	private void ModifFromV200xToV201(){
 		
-		BoomcMMoReward.log(Level.INFO, "This new release corrected some changes on your rewards files on SKILLS folder");
-		BoomcMMoReward.log(Level.INFO, "To be on a safe side a backup of your current rewards files will be in :");
-		BoomcMMoReward.log(Level.INFO, "your plugins/BoomcMMoReward/backups/" + oldVersion + "/ folder");
+		Log.info("This new release corrected some changes on your rewards files on SKILLS folder");
+		Log.info("To be on a safe side a backup of your current rewards files will be in :");
+		Log.info("your plugins/BoomcMMoReward/backups/" + oldVersion + "/ folder");
 		
 		// <ancien terme, nouveau terme>
 		Map<String, String> maps = new HashMap<String, String>();
@@ -149,9 +149,9 @@ public class ModifyRewardFiles {
 							 	
 							 	
 						 	}catch(Exception e){	
-						 		BoomcMMoReward.log(Level.WARNING, "A problem occured on rewards refactoring process");
-								BoomcMMoReward.log(Level.WARNING, "Please send your errors.txt content on Boo mcMMO Reward dev.bukkit pages");
-								BoomcMMoReward.getStoreErrors().writeError("modifyFiles", e);
+						 		Log.warning("A problem occured on rewards refactoring process");
+						 		Log.warning("Please send your errors.txt content on Boo mcMMO Reward dev.bukkit pages");
+								Log.severe("modifyFiles", e);
 						 	}
 							
 						}											
@@ -188,7 +188,7 @@ public class ModifyRewardFiles {
 		String backupRoot = this.plugin.getDataFolder() + File.separator + "backups";
 		
 		if( !new File(originalRoot).exists()){
-			BoomcMMoReward.log(Level.WARNING, "Strange thing, you must have plugins/BoomcMMoReward but i can't find it");
+			Log.warning("Strange thing, you must have plugins/BoomcMMoReward but i can't find it");
 			return false;
 		}
 		
@@ -218,9 +218,9 @@ public class ModifyRewardFiles {
 			// On copie l'existant vers ce nouveau dossier
 			this.copyDirectory(originalSKILLSRoot, folderDirSkills);
 		} catch (IOException e) {
-			BoomcMMoReward.log(Level.WARNING, "A problem occured on backup reward files process");
-			BoomcMMoReward.log(Level.WARNING, "Please send your errors.txt content on Boo mcMMO Reward dev.bukkit pages");
-			BoomcMMoReward.getStoreErrors().writeError("makeBackup", e);
+			Log.warning("A problem occured on backup reward files process");
+			Log.warning("Please send your errors.txt content on Boo mcMMO Reward dev.bukkit pages");
+			Log.severe("makeBackup", e);
 			return false;
 		}
 		

@@ -3,94 +3,104 @@ package org.shortrip.boozaa.plugins.boomcmmoreward;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.shortrip.boozaa.plugins.boomcmmoreward.commands.BooCommands;
-import org.shortrip.boozaa.plugins.boomcmmoreward.commands.ConsoleCommands;
-import org.shortrip.boozaa.plugins.boomcmmoreward.exceptions.BooSystemException;
-import org.shortrip.boozaa.plugins.boomcmmoreward.exceptions.CommandException;
+import org.shortrip.boozaa.plugins.boomcmmoreward.CommandsExecutor.CommandNullException;
 import org.shortrip.boozaa.plugins.boomcmmoreward.listeners.McMMOListener;
 import org.shortrip.boozaa.plugins.boomcmmoreward.listeners.MyPlayerListener;
 import org.shortrip.boozaa.plugins.boomcmmoreward.persistence.Cache;
 import org.shortrip.boozaa.plugins.boomcmmoreward.persistence.Database;
 import org.shortrip.boozaa.plugins.boomcmmoreward.utils.Configuration;
-import org.shortrip.boozaa.plugins.boomcmmoreward.utils.Const;
 import org.shortrip.boozaa.plugins.boomcmmoreward.utils.ModifyRewardFiles;
-import org.shortrip.boozaa.plugins.boomcmmoreward.utils.StoreErrors;
 import com.gmail.nossr50.datatypes.skills.AbilityType;
 import com.gmail.nossr50.datatypes.skills.SkillType;
 
 
 public class BoomcMMoReward extends JavaPlugin {
     
+	private CommandsExecutor commandExecutor;
 	
 	private static Plugin _instance;
-	public static Plugin getInstance(){
-		return _instance;
-	}
-		
+	public static Plugin getInstance(){ return _instance; }
 	
-	// Base de données
-	/*
-	private static EbeanServer database;
-	public static EbeanServer getDb(){
-		return database;
-	}
-	*/
 	private static Database database;
-	public static Database getDB(){
-		return database;
-	}
+	public static Database getDB(){ return database; }
 	
 	private static Cache pendingCache;
-	public static Cache getPendingCache(){
-		return pendingCache;
-	}
+	public static Cache getPendingCache(){ return pendingCache; }
 	
 	// Fichier yml de config	
 	private static Configuration config;
-	public static Configuration getYmlConf(){
-		return config;
-	}
+	public static Configuration getYmlConf(){ return config; }
 	
 	// Vault economy
 	private static Economy econ = null;
-	public static Economy getEcon(){
-		return econ;
-	}
+	public static Economy getEcon(){ return econ; }
 	
 	// Vault perms
 	private static Permission perms = null;
-	public static Permission getPerms(){
-		return perms;
-	}
+	public static Permission getPerms(){ return perms; }
+
 
 	
-	// Logger
-	private static Logger logger = Logger.getLogger("Minecraft");
-	public static void log(Level level, String message) {
-		logger.log(level, Const.PLUGIN_NAME + message);
-	}
-	// Debug si activé
-	public static void debug(String message) {
-		
-		if( config.getBoolean("config.debugMode") ) {			
-			logger.log(Level.INFO, Const.PLUGIN_NAME + "- DEBUG - " + message);
+    @Override
+	public void onEnable() {
+    	        		
+        try {
+        	        	
+        	// Economy
+        	this.hookEconomy();
+        	
+        	// Permissions
+        	this.hookPermissions(); 
+        	
+        	// On charge la config initiale
+            this.loadMainConfig();
+            
+        	// Les listeners
+            getServer().getPluginManager().registerEvents(new McMMOListener(this), this);  
+            getServer().getPluginManager().registerEvents(new MyPlayerListener(this), this);       
+            
+            // Chargement ou creation database
+            Log.info("Connecting to database");
+                    
+            // Choix selon fichier config
+            if( config.getString("database.type").equalsIgnoreCase("sqlite")  ) {            	
+            	database = new Database(new File(this.getDataFolder() + File.separator + "BoomcMMoReward.db")); 	
+            }else if( config.getString("database.type").equalsIgnoreCase("mysql")  ){            	
+            	// Database(String host, String database, String username, String password)
+            	database = new Database(config.getString("database.mysql.server"),
+            							config.getString("database.mysql.base"),
+    					        		config.getString("database.mysql.user"),
+    					        		config.getString("database.mysql.pass") );            	
+            }
+            database.initialise();
+            
+            // Pending Cache
+            pendingCache = new Cache();
+            
+            // Commands executor
+			commandExecutor = new CommandsExecutor(this);
+			
+			// Singleton
+			_instance = this;
+			
+			
+		} catch (CommandNullException e) {
+			// SEVERE -> disable plugin
+			Log.severe("onCommand() fatal error: CommandNullException", e);
 		}
+        
+        
 		
-	}
+        
+    }
 
-	private static StoreErrors storeErrors;
-	public static StoreErrors getStoreErrors(){return storeErrors;}
-	
 	
 	@Override
 	public void onDisable() {
@@ -99,77 +109,22 @@ public class BoomcMMoReward extends JavaPlugin {
 		config = null;
 		econ = null;
 		perms = null;
-		logger = null;
-    }
-
-	
-	
-    @Override
-	public void onEnable() {
-    	
-    	// storeErrors
-        storeErrors = new StoreErrors(this);
-    	
-    	// Economy
-    	this.hookEconomy();
-    	
-    	// Permissions
-    	this.hookPermissions(); 
-    	
-    	// On charge la config initiale
-        try {
-			this.loadMainConfig();
-		} catch (BooSystemException e) { }
-        
-    	// Les listeners
-    	//getServer().getPluginManager().registerEvents(this, this);
-        getServer().getPluginManager().registerEvents(new McMMOListener(this), this);  
-        getServer().getPluginManager().registerEvents(new MyPlayerListener(this), this);       
-        
-        // Chargement ou creation database
-        log(Level.INFO, "Connecting to database");
-        
-        //this.setupDatabase();        
-        //database = this.getDatabase();
-        
-        // Choix selon fichier config
-        if( config.getString("database.type").equalsIgnoreCase("sqlite")  ) {
-        	
-        	database = new Database(new File(this.getDataFolder() + File.separator + "BoomcMMoReward.db"));
-        	
-        }else if( config.getString("database.type").equalsIgnoreCase("mysql")  ){
-        	
-        	// Database(String host, String database, String username, String password)
-        	database = new Database(config.getString("database.mysql.server"),
-        							config.getString("database.mysql.base"),
-					        		config.getString("database.mysql.user"),
-					        		config.getString("database.mysql.pass") );
-        	
-        }
-        database.initialise();
-        
-        // Pending Cache
-        pendingCache = new Cache();
-        		
-		// Singleton
-		_instance = this;
-        
     }
 
     
     private void hookEconomy(){
     	
     	if (getServer().getPluginManager().getPlugin("Vault") == null) {
-    		log(Level.WARNING, "Vault seems not here, you can't use money rewards");
+    		Log.warning("Vault seems not here, you can't use money rewards");
     		return;
         }
     	
     	RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(Economy.class);
         if (economyProvider != null) {
         	econ = economyProvider.getProvider();
-        	log(Level.INFO, "Economy providing by Vault");
+        	Log.info("Economy providing by Vault");
         }else{
-        	log(Level.WARNING, "Can't hooked Economy with Vault");
+        	Log.warning("Can't hooked Economy with Vault");
         }   
     	
     }
@@ -177,15 +132,15 @@ public class BoomcMMoReward extends JavaPlugin {
     private void hookPermissions(){
     	
     	if (getServer().getPluginManager().getPlugin("Vault") == null) {
-    		log(Level.WARNING, "Vault seems not here, you can't use permission rewards");
+    		Log.warning("Vault seems not here, you can't use permission rewards");
     		return;
         }
     	RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(Permission.class);
         if (permissionProvider != null) {
         	perms = permissionProvider.getProvider();
-        	log(Level.INFO, "Permissions providing by Vault");
+        	Log.info("Permissions providing by Vault");
         }else{
-        	log(Level.WARNING, "Can't hooked Permissions with Vault");        	
+        	Log.warning("Can't hooked Permissions with Vault");        	
         }   
         
     }
@@ -195,25 +150,19 @@ public class BoomcMMoReward extends JavaPlugin {
     
     @Override
 	public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args){
-    	// Pas d'arguments dans la commande on sort
-    	if( args.length == 0 ){return true;}    	
-    	try {   		
-    		if(command.getName().equalsIgnoreCase("boomcmmoreward")){	
-	    		
-		    		if( !( sender instanceof Player ) ) {    		
-			    		// Sends form console		    		
-							new ConsoleCommands(args);					
-			    	}
-			    	// Sends from game
-			    	new BooCommands(sender, command, commandLabel, args);		    	
-	    	}
-    	} catch (CommandException e) {}    	
-    	return true;
+    	Boolean result = true;
+		try {
+			result = commandExecutor.handleCommand(sender, command, commandLabel, args);
+		} catch (org.shortrip.boozaa.plugins.boomcmmoreward.CommandsExecutor.CommandHandlerException e) {
+			// SEVERE -> disable plugin
+			Log.severe("onCommand() fatal error: CommandHandlerException", e.get_Throwable());
+		}
+		return result;	
     }
     
 
     
-    private void loadMainConfig() throws BooSystemException {
+    private void loadMainConfig() {
 		
     	// Creation ou chargement config principale
     	makeConfig();
@@ -311,9 +260,9 @@ public class BoomcMMoReward extends JavaPlugin {
 		if( updated ) {	
 			config.save();
 			config.load();
-			log(Level.INFO, "v" + this.getDescription().getVersion() + " plugins/BoomcMMoReward/config.yml");				
+			Log.info("v" + this.getDescription().getVersion() + " plugins/BoomcMMoReward/config.yml");				
 			for(String str : messages){
-				log(Level.INFO, str);
+				Log.info(str);
 			}
 		
 		}
