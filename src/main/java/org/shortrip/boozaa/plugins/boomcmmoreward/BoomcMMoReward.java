@@ -29,8 +29,6 @@ import com.gmail.nossr50.datatypes.skills.AbilityType;
 import com.gmail.nossr50.datatypes.skills.SkillType;
 
 
-
-
 public class BoomcMMoReward extends JavaPlugin {
     
 	
