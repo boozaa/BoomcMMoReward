@@ -97,19 +97,19 @@ public class RewardThread implements Runnable  {
 						// On donne money si demandé
 						historyMoney = cmoney.proceedRewards( reward, rewardsSection, cmess );
 						if( !historyMoney.isEmpty() ){
-							processMessage(rewardsSection, Const.MONEY);
+							reward.processMessage(rewardsSection, Const.MONEY);
 						}
 						
 						// On donne perms si demandé
 						historyPerms = cperm.proceedRewards( reward, rewardsSection, cmess );
 						if( !historyPerms.isEmpty() ){
-							processMessage( rewardsSection, Const.PERM );
+							reward.processMessage( rewardsSection, Const.PERM );
 						}
 						
 						// On gere les groupes si demandé
 						historyGroups = cgroup.proceedRewards( reward, rewardsSection, cmess );
 						if( !historyGroups.isEmpty() ){
-							processMessage( rewardsSection, Const.GROUP );
+							reward.processMessage( rewardsSection, Const.GROUP );
 						}
 						
 						// On gere les messages
@@ -118,13 +118,13 @@ public class RewardThread implements Runnable  {
 						// On gere les commandes
 						historyCommands = ccmds.proceedRewards( reward, rewardsSection, cmess );
 						if( !historyCommands.isEmpty() ){
-							processMessage( rewardsSection, Const.COMMAND );
+							reward.processMessage( rewardsSection, Const.COMMAND );
 						}
 						
 						// On donne items si demandé
 						historyItems = citem.proceedRewards( reward, rewardsSection, cmess );
 						if( !historyItems.isEmpty() ){
-							processMessage( rewardsSection, Const.ITEM );
+							reward.processMessage( rewardsSection, Const.ITEM );
 						}						
 						
 					} catch (Exception e) { }
@@ -215,14 +215,6 @@ public class RewardThread implements Runnable  {
 	}
 	
 	
-	private void processMessage( ConfigurationSection section, String parentNode ) {
-		if( section.contains(parentNode + "." + Const.MESSAGE_MP) )
-			this.reward.sendMP(section.getStringList(parentNode + "." + Const.MESSAGE_MP));
-		if( section.contains(parentNode + "." + Const.MESSAGE_LOG) )
-			this.reward.sendMP(section.getStringList(parentNode + "." + Const.MESSAGE_LOG));
-		if( section.contains(parentNode + "." + Const.MESSAGE_BROADCAST) )
-			this.reward.sendMP(section.getStringList(parentNode + "." + Const.MESSAGE_BROADCAST));
-	}
 	
 	
 	

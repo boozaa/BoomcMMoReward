@@ -5,6 +5,7 @@ import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -473,6 +474,35 @@ public class cReward {
 		);			
 	}
 	
+
+	public void processMessage( ConfigurationSection section, String parentNode ) {
+		if( section.contains(parentNode + "." + Const.MESSAGE_MP) )
+			sendMP( variableReplace( section.getStringList(parentNode + "." + Const.MESSAGE_MP) ) );
+		if( section.contains(parentNode + "." + Const.MESSAGE_LOG) )
+			sendMP( variableReplace( section.getStringList(parentNode + "." + Const.MESSAGE_LOG) ));
+		if( section.contains(parentNode + "." + Const.MESSAGE_BROADCAST) )
+			sendMP( variableReplace( section.getStringList(parentNode + "." + Const.MESSAGE_BROADCAST) ));
+	}
+	
+	private List<String> variableReplace(List<String> msg){
+		
+		for( String str : msg ){
+			String message = "";		
+			// Replace pour les codes couleurs
+			message = str.replace("&", "§");
+			// Replace des pseudo variables
+			message = message.replace("%player%", player.getName());		
+			message = message.replace("%power%", Integer.toString(playerPower) );
+			message = message.replace("%skillName%", skill.name() );
+			message = message.replace("%skillLevel%", Integer.toString(skillLevelNow) );		
+			message = message.replace("%XLoc%", Integer.toString(player.getLocation().getBlockX()) );
+			message = message.replace("%YLoc%", Integer.toString(player.getLocation().getBlockY()) );
+			message = message.replace("%ZLoc%", Integer.toString(player.getLocation().getBlockZ()) );		
+			message = message.replace("%worldName%", player.getWorld().getName());
+			str = message;
+		}
+		return msg;
+	}
 	
 	
 	private String variableReplace(String msg){
