@@ -85,24 +85,24 @@ public class Items extends AbstractReward {
 		
 		ItemStack item;
 		
-		@SuppressWarnings("unchecked")
-		List<String> newItems = (List<String>)confSection.get(Const.ITEM);    	
+		List<String> newItems = confSection.getStringList(Const.ITEM);    	
     	for( String p : newItems) {
-    		item = processItem(p);
     		
+    		item = processItem(p);    		
     		
     		Boolean success = reward.giveItem(item);
     		if( !success ){
     			// On place en pending
     			this.isPending = true;
     			reward.addPendingItem(this);
-    			return;
+    			break;
     		}
     		
     		
     		Log.debug("-Giving item : " + p); 
     		// On stocke en db
     		listItems.add(item.toString());
+    		
     	}
     	
 		
@@ -316,8 +316,7 @@ public class Items extends AbstractReward {
 	private ItemStack processItem(String p) throws RewardItemException{
 		
 		ItemStack item;
-		
-		
+				
 		String[] arr = p.split(":");
 		
 		// Construction itemId/damage:qty:enchantId:multiplier

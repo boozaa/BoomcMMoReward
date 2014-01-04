@@ -250,11 +250,9 @@ public class cReward {
 	/*
 	 * Permission gestion
 	 */
-	public void givePermissionInWorld(String permission, String worldName){
-		
+	public void givePermissionInWorld(String permission, String worldName){		
 		// Tentative d'ajout de permission spécifique au Monde
-		BoomcMMoReward.getPerms().playerAdd(player.getServer().getWorld(worldName), player.getName(), permission);			
-				
+		BoomcMMoReward.getPerms().playerAdd(player.getServer().getWorld(worldName), player.getName(), permission);							
 	}
 	
 	public void givePermission(String permission){			
@@ -312,7 +310,6 @@ public class cReward {
 					}					
 				}
 		);		
-		
 	}
 	
 	public void sendBroadcast(final List<String> messages){
@@ -388,6 +385,7 @@ public class cReward {
 			str = message;
 		}
 		return msg;
+		
 	}
 	
 	
