@@ -210,44 +210,47 @@ public class Money extends AbstractReward {
 	
 	
 	@Override
-	public Boolean isValid(cReward reward, ConfigurationSection confSection) {
+	public Boolean isValid(cReward reward, ConfigurationSection confSection) throws RewardMoneyException {
 
 		if(confSection.get(Const.MONEY) != null) {
 			
-			Log.debug("---Checking Money conditions"); 
-			
-			// Vérification
-			List<String> moneyConditions = confSection.getStringList(Const.MONEY);    	
-	    	for( String p : moneyConditions) {
-	    		
-    			//double account = this.econ.getBalance(player.getName());
-    			Double limit = Double.parseDouble( p.trim().substring(1).trim() );
-    			
-    			if( p.trim().startsWith("-")) {
-    				
-    				Log.debug("-Testing : < " + limit);	    				
-    				if( !reward.isMoneyMinorLimit(limit) ) {		    				
-    					return false;
+			try {
+				Log.debug("---Checking Money conditions"); 
+				
+				// Vérification
+				List<String> moneyConditions = confSection.getStringList(Const.MONEY);    	
+		    	for( String p : moneyConditions) {
+		    		
+	    			//double account = this.econ.getBalance(player.getName());
+	    			Double limit = Double.parseDouble( p.trim().substring(1).trim() );
+	    			
+	    			if( p.trim().startsWith("-")) {
+	    				
+	    				Log.debug("-Testing : < " + limit);	    				
+	    				if( !reward.isMoneyMinorLimit(limit) ) {		    				
+	    					return false;
+		    			}
+	    				Log.debug("-Ok");
+	    				
+	    			}else if( p.trim().startsWith("+")) {
+	    				
+	    				Log.debug("-Testing : > " + limit);	    				
+	    				if( !reward.isMoneyMajorLimit(limit) ) {	
+	    					return false;
+		    			}
+	    				Log.debug("-Ok");
+	    				
+	    			}else{
+	    				Log.debug("-Not found operator '+' or '-' ... aborting");
+	    				return false;
 	    			}
-    				Log.debug("-Ok");
-    				
-    			}else if( p.trim().startsWith("+")) {
-    				
-    				Log.debug("-Testing : > " + limit);	    				
-    				if( !reward.isMoneyMajorLimit(limit) ) {	
-    					return false;
-	    			}
-    				Log.debug("-Ok");
-    				
-    			}else{
-    				Log.debug("-Not found operator '+' or '-' ... aborting");
-    				return false;
-    			}
-	    		
-	    		return false;
-						   		    			    		
-	    	}
-			
+		    		
+		    		return false;
+							   		    			    		
+		    	}
+			} catch (Exception e) { 
+				throw new RewardMoneyException("Money transfer  exception", e);
+			}
 		}
 		
 		// Pas ou plus de conditions donc toutes remplies

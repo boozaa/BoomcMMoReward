@@ -10,12 +10,17 @@ import org.shortrip.boozaa.plugins.boomcmmoreward.Log;
 import org.shortrip.boozaa.plugins.boomcmmoreward.persistence.Database.DatabaseException;
 import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.classes.Commands;
 import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.classes.Group;
+import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.classes.Group.RewardGroupException;
 import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.classes.Items;
 import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.classes.Messages;
 import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.classes.Money;
+import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.classes.Money.RewardMoneyException;
 import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.classes.Perm;
+import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.classes.Perm.RewardPermException;
 import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.classes.Power;
+import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.classes.Power.RewardPowerException;
 import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.classes.Skill;
+import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.classes.Skill.RewardSkillException;
 import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.classes.World;
 import org.shortrip.boozaa.plugins.boomcmmoreward.tables.HistoryTable;
 import org.shortrip.boozaa.plugins.boomcmmoreward.utils.Configuration;
@@ -211,7 +216,17 @@ public class RewardThread implements Runnable  {
     		} 
     		    		
     		
-    	} catch (Exception e) {}
+    	} catch (RewardMoneyException me) {
+    		Log.warning("A problem occured on RewardThread -> RewardMoneyException");
+    	} catch (RewardGroupException e) {
+    		Log.warning("A problem occured on RewardThread -> RewardGroupException");
+		} catch (RewardPowerException e) {
+    		Log.warning("A problem occured on RewardThread -> RewardPowerException");
+		} catch (RewardSkillException e) {
+    		Log.warning("A problem occured on RewardThread -> RewardSkillException");
+		} catch (RewardPermException e) {
+    		Log.warning("A problem occured on RewardThread -> RewardPermException");
+		}
     					
     	Log.debug("-----End Conditions");
     	
