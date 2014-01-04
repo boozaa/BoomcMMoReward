@@ -420,7 +420,7 @@ public class Items extends AbstractReward {
 		// Replace pour les codes couleurs
 		message = msg.replace("&", "§");
 		// Replace des pseudo variables
-		message = message.replace("%items%", Arrays.toString(this.listItems.toArray()));	
+		message = message.replace("%items%", Arrays.toString(Items.listItems.toArray()));	
 		return message;
 	}
 

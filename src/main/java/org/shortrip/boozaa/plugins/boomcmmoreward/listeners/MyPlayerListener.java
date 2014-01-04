@@ -4,7 +4,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.plugin.Plugin;
-import org.shortrip.boozaa.plugins.boomcmmoreward.BoomcMMoReward;
 import org.shortrip.boozaa.plugins.boomcmmoreward.Log;
 
 

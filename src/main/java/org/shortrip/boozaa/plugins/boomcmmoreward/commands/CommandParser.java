@@ -2,8 +2,6 @@ package org.shortrip.boozaa.plugins.boomcmmoreward.commands;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.shortrip.boozaa.plugins.boomcmmoreward.BoomcMMoReward;
@@ -15,6 +13,7 @@ import org.shortrip.boozaa.plugins.boomcmmoreward.commands.CommandFramework.Comp
 
 public class CommandParser {
 
+	@SuppressWarnings("unused")
 	private Plugin plugin;
 	
 	public CommandParser( Plugin plugin ){

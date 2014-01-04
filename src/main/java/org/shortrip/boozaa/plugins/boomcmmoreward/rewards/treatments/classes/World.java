@@ -1,12 +1,8 @@
 package org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.classes;
 
 import org.bukkit.configuration.ConfigurationSection;
-import org.shortrip.boozaa.plugins.boomcmmoreward.BoomcMMoReward;
 import org.shortrip.boozaa.plugins.boomcmmoreward.Log;
 import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.cReward;
-import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.Parent;
-import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.TreatmentEnum;
-import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.iConditions;
 import org.shortrip.boozaa.plugins.boomcmmoreward.utils.Const;
 
 

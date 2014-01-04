@@ -5,8 +5,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
-//import org.perf4j.StopWatch;
-import org.shortrip.boozaa.plugins.boomcmmoreward.BoomcMMoReward;
 import org.shortrip.boozaa.plugins.boomcmmoreward.Log;
 import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.RewardQueue;
 import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.cReward;
