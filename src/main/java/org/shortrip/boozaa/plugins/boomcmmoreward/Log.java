@@ -13,7 +13,7 @@ import org.bukkit.command.ConsoleCommandSender;
 
 public class Log {
 
-	private final static String prefix = "[BooTreasure] ";
+	private final static String prefix = "[BoomcMMoReward] ";
 	// Logger
 	private static ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
 	private static File errorFile;
