@@ -37,13 +37,13 @@ public class Items extends AbstractReward {
 
 		
 		//Items
-		if( confSection.get(Const.ITEM) != null ) {
+		if( confSection.contains(Const.ITEM) ) {
 			Log.debug("---Items node found on reward file ... processing" );
 			giveItems();
 		}
 		
 		// LotteryItems
-		if( confSection.get(Const.ITEM_LOTTERY) != null ) {
+		if( confSection.contains(Const.ITEM_LOTTERY) ) {
 			Log.debug("---lotteryItems node found on reward file ... processing" );
 			giveLotteryItems();
 			// Si il y a section message on la traite
@@ -53,7 +53,7 @@ public class Items extends AbstractReward {
 		}
 		
 		//LuckyItem
-		if( confSection.get(Const.ITEM_LUCKY) != null ) {
+		if( confSection.contains(Const.ITEM_LUCKY) ) {
 			Log.debug("---luckyItem node found on reward file ... processing" );
 			giveLuckyItem();
 			// Si il y a section message on la traite
@@ -63,7 +63,7 @@ public class Items extends AbstractReward {
 		}
 		
 		//LuckyKit
-		if( confSection.get(Const.ITEM_LUCKYKIT) != null ) {
+		if( confSection.contains(Const.ITEM_LUCKYKIT) ) {
 			Log.debug("---luckyKit node found on reward file ... processing" );
 			giveLuckyKit();
 			// Si il y a section message on la traite
@@ -86,6 +86,8 @@ public class Items extends AbstractReward {
     		
     		item = processItem(p);    		
     		Log.debug("-Giving item : " + p); 
+    		reward.giveItem(item);
+    		/*
     		Boolean success = reward.giveItem(item);
     		if( success == false ){
     			// On place en pending
@@ -93,9 +95,10 @@ public class Items extends AbstractReward {
     			reward.addPendingItem(item);    			
     		}else{
     			// On stocke en db
-    			listItems.add(item.toString());
+    			
     		}
-    		
+    		*/
+    		listItems.add(item.toString());
     	}
     	
 		

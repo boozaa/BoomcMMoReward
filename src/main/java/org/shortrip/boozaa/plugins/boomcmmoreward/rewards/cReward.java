@@ -202,10 +202,9 @@ public class cReward {
 					@Override
 					public void run() {	
 						
-						PlayerInventory inv = player.getInventory();		
 						
 						 int count = 0;
-						 for (ItemStack i : inv.getContents()) {
+						 for (ItemStack i : player.getInventory().getContents()) {
 							 if (i == null) {
 								 count++;
 							 } else if (i.getType() == Material.AIR) {
@@ -215,7 +214,7 @@ public class cReward {
 						 if (count == 0) {							 
 							 player.getWorld().dropItemNaturally(player.getEyeLocation(), item);							 
 						 } else {
-							 inv.addItem(item);
+							 player.getInventory().addItem(item);
 						 }
 						
 					}
