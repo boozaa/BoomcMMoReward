@@ -12,6 +12,7 @@ import org.shortrip.boozaa.plugins.boomcmmoreward.utils.Configuration;
 
 import com.gmail.nossr50.datatypes.skills.SkillType;
 import com.gmail.nossr50.events.experience.McMMOPlayerLevelUpEvent;
+import com.gmail.nossr50.events.skills.abilities.McMMOPlayerAbilityActivateEvent;
 
 
 public class McMMOListener implements Listener {
@@ -145,6 +146,12 @@ public class McMMOListener implements Listener {
 	}
 	
 	
-
+	@EventHandler
+	public void onPlayerAbilityActivated(final McMMOPlayerAbilityActivateEvent event) {	
+		
+		Log.debug( "Ability catched -> " + event.getAbilityType().name() );
+		
+		
+	}
 	
 }

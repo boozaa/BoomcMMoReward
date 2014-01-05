@@ -239,21 +239,7 @@ public class BoomcMMoReward extends JavaPlugin {
 				updated = true;
 				messages.add("config.debugMode - Set debug mode ON or OFF");
 			}
-			
-			// Allow Update notifier
-			if( config.get("config.informUpdate") == null ) {
-				config.set("config.informUpdate", true);
-				updated = true;
-				messages.add("config.informUpdate - Enable or not new update release on console");
-			}
-			
-			// allowMetricsStats
-			if( config.get("config.allowMetricsStats") == null ) {
-				config.set("config.allowMetricsStats", true);
-				updated = true;
-				messages.add("config.allowMetricsStats - Allow/Deny sending infos to http://mcstats.org for usage stats purpose only");
-			}
-			
+						
 			// diceFaces
 			if( config.get("config.diceFaces") == null  ) {
 				config.set("config.diceFaces", 10);

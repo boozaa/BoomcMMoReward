@@ -269,7 +269,8 @@ public class ModifyRewardFiles {
 		// Dossier REWARD
 		String originalRoot = this.plugin.getDataFolder() + File.separator;
 		File originalPOWERRoot = new File(this.plugin.getDataFolder() + File.separator + "POWER");
-		File originalSKILLSRoot = new File(this.plugin.getDataFolder() + File.separator + "SKILLS");		
+		File originalSKILLSRoot = new File(this.plugin.getDataFolder() + File.separator + "SKILLS");	
+		File originalABILITIESRoot = new File(this.plugin.getDataFolder() + File.separator + "ABILITIES");
 		String backupRoot = this.plugin.getDataFolder() + File.separator + "backups";
 		
 		if( !new File(originalRoot).exists()){
@@ -287,6 +288,9 @@ public class ModifyRewardFiles {
 		File folderDir = new File ( backupRoot + File.separator + folderName + File.separator );
 		File folderDirPower = new File ( backupRoot + File.separator + folderName + File.separator + "POWER" + File.separator );
 		File folderDirSkills = new File ( backupRoot + File.separator + folderName + File.separator + "SKILLS" + File.separator );
+		File folderDirAbilities = new File ( backupRoot + File.separator + folderName + File.separator + "ABILITIES" + File.separator );
+		
+		
 		if( !folderDir.exists() ){
 			folderDir.mkdirs();	
 			if( !folderDirPower.exists() ){
@@ -294,7 +298,11 @@ public class ModifyRewardFiles {
 			}
 			if( !folderDirSkills.exists() ){
 				folderDirSkills.mkdirs();
-			}				
+			}
+			if( !folderDirAbilities.exists() ){
+				folderDirAbilities.mkdirs();
+			}
+			
 		}
 	
 		try {
@@ -302,6 +310,10 @@ public class ModifyRewardFiles {
 			this.copyDirectory(originalPOWERRoot, folderDirPower);
 			// On copie l'existant vers ce nouveau dossier
 			this.copyDirectory(originalSKILLSRoot, folderDirSkills);
+			
+			if( originalABILITIESRoot.exists()  )
+				this.copyDirectory(originalABILITIESRoot, folderDirAbilities);
+			
 		} catch (IOException e) {
 			Log.warning("A problem occured on backup reward files process");
 			Log.warning("Please send your errors.txt content on Boo mcMMO Reward dev.bukkit pages");
