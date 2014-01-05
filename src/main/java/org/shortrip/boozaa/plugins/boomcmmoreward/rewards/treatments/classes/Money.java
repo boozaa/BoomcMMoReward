@@ -33,13 +33,20 @@ public class Money extends AbstractReward {
 		if( confSection.contains(Const.MONEY) &&  confSection.contains(Const.MONEY_AMOUNT) ) {
 			Log.debug("---Money node found on reward file ... processing" );
 			sendMoney(confSection.getConfigurationSection(Const.MONEY));
+			// Si il y a section message on la traite
+			if( confSection.get(Const.MONEY + "." + Const.MESSAGE) != null ) {
+				cmess.proceedRewards(reward, confSection.getConfigurationSection(Const.MONEY));					
+			}
 		}
 		
 		// lotteryMoney
 		if( confSection.contains(Const.MONEY_LOTTERY)  &&  confSection.contains(Const.MONEY_LOTTERY_AMOUNT) ) {
 			Log.debug("---lotteryMoney node found on reward file ... processing" );
 			giveLotteryMoney(confSection.getConfigurationSection(Const.MONEY_LOTTERY));
-			// Si il y a section message elle est traitée dans le giveLotteryMoney
+			// Si il y a section message on la traite
+			if( confSection.get(Const.MONEY_LOTTERY + "." + Const.MESSAGE) != null ) {
+				cmess.proceedRewards(reward, confSection.getConfigurationSection(Const.MONEY_LOTTERY));					
+			}
 		}
 				
 		return listMoney;		
@@ -65,55 +72,10 @@ public class Money extends AbstractReward {
 		
 		// Lance le dé
 		if( launchTheDice(max, proba) ){			
+			
 			// Gagnant on envoit les ronds
 			sendMoney(confSection);		
 			
-			/*
-			// On traite la partie message
-			if( confSection.get(Const.MESSAGE) != null ) {
-				
-				ConfigurationSection msgConf = confSection.getConfigurationSection(Const.MESSAGE);
-				
-				
-				if( msgConf.get(Const.MP) != null ) {
-					
-					List<String> nouveaux = new ArrayList<String>();
-					List<String> m = msgConf.getStringList(Const.MP);
-    				for( String s : m ){    					
-    					// On remplace %amount% par le montant gagné
-    					s = s.replace("%amount%", amount);
-    					nouveaux.add(s);
-    				}
-    				reward.sendMP(nouveaux); 					
-					
-				}
-				if( msgConf.get(Const.BROADCAST) != null ) {
-					
-					List<String> nouveaux = new ArrayList<String>();
-					List<String> m = msgConf.getStringList(Const.BROADCAST);
-    				for( String s : m ){    					
-    					// On remplace %amount% par le montant gagné
-    					s = s.replace("%amount%", amount);
-    					nouveaux.add(s);
-    				}
-    				reward.sendBroadcast(nouveaux); 
-					
-				}
-				if( msgConf.get(Const.LOG) != null ) {
-	
-					List<String> nouveaux = new ArrayList<String>();
-					List<String> m = msgConf.getStringList(Const.LOG);
-    				for( String s : m ){    					
-    					// On remplace %amount% par le montant gagné
-    					s = s.replace("%amount%", amount);
-    					nouveaux.add(s);
-    				}
-    				reward.sendLog(nouveaux); 
-	
-				}
-				
-			}
-			*/
 		}else{
 			Log.debug("-No luck" );
 		}
@@ -139,59 +101,6 @@ public class Money extends AbstractReward {
 			// On stocke en db
 			listMoney.add(confSection.getDouble(Const.AMOUNT));
 			Log.debug("-Give " + confSection.getDouble(Const.AMOUNT) + " from " + sender);
-			
-			// On traite la partie message
-			if( confSection.get(Const.MESSAGE) != null ) {
-				
-				ConfigurationSection msgConf = confSection.getConfigurationSection(Const.MESSAGE);
-				
-				if( msgConf.get(Const.MP) != null ) {
-					
-					List<String> nouveaux = new ArrayList<String>();
-					List<String> m = msgConf.getStringList(Const.MP);
-    				for( String s : m ){    					
-    					// On remplace %amount% par le montant gagné
-    					s = s.replace("%amount%", confSection.getString(Const.AMOUNT));
-    					if( msgConf.get(Const.SENDER) != null ) {
-    						s = s.replace("%sender%", confSection.getString(Const.SENDER));
-    					}
-    					nouveaux.add(s);
-    				}
-    				reward.sendMP(nouveaux); 					
-					
-				}
-				if( msgConf.get(Const.BROADCAST) != null ) {
-					
-					List<String> nouveaux = new ArrayList<String>();
-					List<String> m = msgConf.getStringList(Const.BROADCAST);
-    				for( String s : m ){    					
-    					// On remplace %amount% par le montant gagné
-    					s = s.replace("%amount%", confSection.getString(Const.AMOUNT));
-    					if( msgConf.get(Const.SENDER) != null ) {
-    						s = s.replace("%sender%", confSection.getString(Const.SENDER));
-    					}
-    					nouveaux.add(s);
-    				}
-    				reward.sendBroadcast(nouveaux); 
-					
-				}
-				if( msgConf.get(Const.LOG) != null ) {
-	
-					List<String> nouveaux = new ArrayList<String>();
-					List<String> m = msgConf.getStringList(Const.LOG);
-    				for( String s : m ){    					
-    					// On remplace %amount% par le montant gagné
-    					s = s.replace("%amount%", confSection.getString(Const.AMOUNT));
-    					if( msgConf.get(Const.SENDER) != null ) {
-    						s = s.replace("%sender%", confSection.getString(Const.SENDER));
-    					}
-    					nouveaux.add(s);
-    				}
-    				reward.sendLog(nouveaux); 
-	
-				}
-				
-			}
 						
 			
 		} catch (Exception e) { 

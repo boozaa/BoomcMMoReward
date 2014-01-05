@@ -117,55 +117,17 @@ public class Items extends AbstractReward {
     		
     		// Lance le dé
     		if( launchTheDice(max, proba) ){
-    			// Ok gagnant
-    			//try {
-	    			item = processItem(p);
-	    			reward.giveItem(item);
-	    			
-	        		Log.debug("-Lottery: lucky guy giving item : " + p);
-	        		// On stocke en db
-	        		listItems.add(item.toString());	
-	        		
-	        		int amount = item.getAmount();
-	        		String itemName = item.getType().name() + " x " + amount;	 
-	        		
-	        		// Si il y a une section messages on la traite
-	        		if( confSection.contains(Const.ITEM_LOTTERY_MESSAGES) ){        			       			
-	        			
-	        			if( confSection.contains(Const.ITEM_LOTTERY_MESSAGES_MP) ) {        				
-	        				List<String> nouveaux = new ArrayList<String>();
-	        				List<String> m = confSection.getStringList(Const.ITEM_LOTTERY_MESSAGES_MP);
-	        				for( String s : m ){
-	        					// On remplace %item% par l'item gagné
-	        					s = s.replace("%item%", itemName);  
-	        					nouveaux.add(s);
-	        				}
-	        				reward.sendMP(nouveaux);        				
-	        			}
-	        			if( confSection.contains(Const.ITEM_LOTTERY_MESSAGES_BROADCAST) ) {        				
-	        				List<String> nouveaux = new ArrayList<String>();
-	        				List<String> m = confSection.getStringList(Const.ITEM_LOTTERY_MESSAGES_BROADCAST);
-	        				for( String s : m ){
-	        					// On remplace %item% par l'item gagné
-	        					s = s.replace("%item%", itemName);
-	        					nouveaux.add(s);
-	        				}
-	        				reward.sendBroadcast(nouveaux);        				
-	        			}
-	        			if( confSection.contains(Const.ITEM_LOTTERY_MESSAGES_LOG) ) {        				
-	        				List<String> nouveaux = new ArrayList<String>();
-	        				List<String> m = confSection.getStringList(Const.ITEM_LOTTERY_MESSAGES_LOG);
-	        				for( String s : m ){
-	        					// On remplace %item% par l'item gagné
-	        					s = s.replace("%item%", itemName );
-	        					nouveaux.add(s);
-	        				}
-	        				reward.sendLog(nouveaux);        				
-	        			}
-	        		}
-	        		
-    			//} catch (RewardItemException e) {}
+    			
+    			item = processItem(p);
+    			reward.giveItem(item);
+    			
+        		Log.debug("-Lottery: lucky guy giving item : " + p);
+        		// On stocke en db
+        		listItems.add(item.toString());	
         		
+        		int amount = item.getAmount();
+        		String itemName = item.getType().name() + " x " + amount;	 
+	        		     		
     			
     		}else{
     			Log.debug("-Lottery: no luck missed item : " + p); 
@@ -192,9 +154,6 @@ public class Items extends AbstractReward {
 		Log.debug("-luckyItem: the dice choose item : " + item.toString());	
 		// On stocke en db
 		listItems.add(item.toString());
-		// On gere les messages
-		Messages cmess = new Messages();		
-		cmess.proceedRewards(reward, confSection.getConfigurationSection(Const.ITEM_LUCKY));
 				
 	}
 	
@@ -214,63 +173,21 @@ public class Items extends AbstractReward {
 			String[] items = kit.split("\\|");
 			for( String p : items){
 				if( !p.isEmpty()){
-					//try {						
-						Log.debug("- deal with : " + p);
-						item = processItem(p);
-						Log.debug("- given : " + p);
-						
-						
-						reward.giveItem(item);
-						
-						// On stocke en db
-						listItems.add(item.toString());					
-					//} catch (RewardItemException e) {
-						
-					//	// TODO; exception to catch
-						
-					//}
+									
+					Log.debug("- deal with : " + p);
+					item = processItem(p);
+					Log.debug("- given : " + p);					
 					
+					reward.giveItem(item);
+					
+					// On stocke en db
+					listItems.add(item.toString());					
+									
 				}				
 			}
 			
 		}
 		
-		// Si il y a une section messages on la traite
-		if( confSection.contains(Const.ITEM_LUCKYKIT_MESSAGES) ){			
-			
-			if( confSection.contains(Const.ITEM_LUCKYKIT_MESSAGES_MP) ) {        				
-				List<String> nouveaux = new ArrayList<String>();
-				List<String> m = confSection.getStringList(Const.ITEM_LUCKYKIT_MESSAGES_MP);
-				for( String s : m ){
-					// On remplace %item% par l'item gagné
-					s = s.replace("%item%", kit);  
-					nouveaux.add(s);
-				}
-				reward.sendMP(nouveaux);        				
-			}
-			if( confSection.contains(Const.ITEM_LUCKYKIT_MESSAGES_BROADCAST) ) {        				
-				List<String> nouveaux = new ArrayList<String>();
-				List<String> m = confSection.getStringList(Const.ITEM_LUCKYKIT_MESSAGES_BROADCAST);
-				for( String s : m ){
-					// On remplace %item% par l'item gagné
-					s = s.replace("%item%", kit);
-					nouveaux.add(s);
-				}
-				reward.sendBroadcast(nouveaux);        				
-			}
-			if( confSection.contains(Const.ITEM_LUCKYKIT_MESSAGES_LOG) ) {        				
-				List<String> nouveaux = new ArrayList<String>();
-				List<String> m = confSection.getStringList(Const.ITEM_LUCKYKIT_MESSAGES_LOG);
-				for( String s : m ){
-					// On remplace %item% par l'item gagné
-					s = s.replace("%item%", kit );
-					nouveaux.add(s);
-				}
-				reward.sendLog(nouveaux);        				
-			}
-			
-			
-		}		
 		
 	}
 	
