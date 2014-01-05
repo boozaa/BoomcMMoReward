@@ -33,7 +33,9 @@ public class ModifyRewardFiles {
 			
 			// On fait le backup
 			if( this.makeBackup(this.oldVersion) ){
-				this.ModifFromV11xToV2();
+				this.ModifFromV11xToV2();		// 1.1 to v2
+				this.ModifFromV200xToV201();	// 2.0.0 to v2.0.1
+				this.ModifFromV202xToV203();	// 2.0.2 to v2.0.3
 			}
 						
 		}
