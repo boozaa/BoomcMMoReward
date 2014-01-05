@@ -152,7 +152,9 @@ public class Money extends AbstractReward {
     				for( String s : m ){    					
     					// On remplace %amount% par le montant gagné
     					s = s.replace("%amount%", confSection.getString(Const.AMOUNT));
-    					s = s.replace("%sender%", confSection.getString(Const.SENDER));
+    					if( msgConf.get(Const.SENDER) != null ) {
+    						s = s.replace("%sender%", confSection.getString(Const.SENDER));
+    					}
     					nouveaux.add(s);
     				}
     				reward.sendMP(nouveaux); 					
@@ -165,7 +167,9 @@ public class Money extends AbstractReward {
     				for( String s : m ){    					
     					// On remplace %amount% par le montant gagné
     					s = s.replace("%amount%", confSection.getString(Const.AMOUNT));
-    					s = s.replace("%sender%", confSection.getString(Const.SENDER));
+    					if( msgConf.get(Const.SENDER) != null ) {
+    						s = s.replace("%sender%", confSection.getString(Const.SENDER));
+    					}
     					nouveaux.add(s);
     				}
     				reward.sendBroadcast(nouveaux); 
@@ -178,7 +182,9 @@ public class Money extends AbstractReward {
     				for( String s : m ){    					
     					// On remplace %amount% par le montant gagné
     					s = s.replace("%amount%", confSection.getString(Const.AMOUNT));
-    					s = s.replace("%sender%", confSection.getString(Const.SENDER));
+    					if( msgConf.get(Const.SENDER) != null ) {
+    						s = s.replace("%sender%", confSection.getString(Const.SENDER));
+    					}
     					nouveaux.add(s);
     				}
     				reward.sendLog(nouveaux); 
@@ -256,16 +262,6 @@ public class Money extends AbstractReward {
 		return true;
 	}
 
-
-	@Override
-	protected String variableReplace(String msg) {
-		String message = "";		
-		// Replace pour les codes couleurs
-		message = msg.replace("&", "§");
-		// Replace des pseudo variables
-		message = message.replace("%amount%", Arrays.toString(this.listMoney.toArray()));	
-		return message;
-	}
 	
 
 

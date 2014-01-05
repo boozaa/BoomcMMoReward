@@ -81,12 +81,7 @@ public class Skill extends AbstractReward {
 		return true;
 	}
 
-	
-	@Override
-	protected String variableReplace(String msg) {
-		return msg;
-	}
-	
+
 	
 
 	public class RewardSkillException extends Exception {

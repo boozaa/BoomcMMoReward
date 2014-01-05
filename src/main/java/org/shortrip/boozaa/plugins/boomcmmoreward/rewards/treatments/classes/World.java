@@ -32,10 +32,5 @@ public class World extends AbstractReward {
 	}
 
 
-	@Override
-	protected String variableReplace(String msg) {
-		return msg;
-	}
-
 	
 }

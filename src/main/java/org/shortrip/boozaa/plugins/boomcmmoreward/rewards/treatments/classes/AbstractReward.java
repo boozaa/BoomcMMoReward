@@ -15,6 +15,5 @@ public abstract class AbstractReward {
 	
 	
 	public abstract Boolean isValid(cReward reward, ConfigurationSection confSection) throws Exception;
-	protected abstract String variableReplace(String msg);
 	
 }

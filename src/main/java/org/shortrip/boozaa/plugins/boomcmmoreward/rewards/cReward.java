@@ -2,7 +2,6 @@ package org.shortrip.boozaa.plugins.boomcmmoreward.rewards;
 
 
 import java.util.List;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -10,7 +9,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.shortrip.boozaa.plugins.boomcmmoreward.BoomcMMoReward;
-import org.shortrip.boozaa.plugins.boomcmmoreward.BukkitTasksLauncher;
 import org.shortrip.boozaa.plugins.boomcmmoreward.Log;
 import org.shortrip.boozaa.plugins.boomcmmoreward.utils.Configuration;
 import org.shortrip.boozaa.plugins.boomcmmoreward.utils.Const;
@@ -189,32 +187,19 @@ public class cReward {
 	 */
 	public Boolean giveItem(final ItemStack item){
 		
-		// Synchrone task with bukkit
-		BukkitTasksLauncher.launch(
-				new Runnable() {					
-					
-					@Override
-					public void run() {	
-						
-						
-						 int count = 0;
-						 for (ItemStack i : player.getInventory().getContents()) {
-							 if (i == null) {
-								 count++;
-							 } else if (i.getType() == Material.AIR) {
-								 count++;
-							 }
-						 }
-						 if (count == 0) {							 
-							 player.getWorld().dropItemNaturally(player.getEyeLocation(), item);							 
-						 } else {
-							 player.getInventory().addItem(item);
-						 }
-						
-					}
-					
-				}
-		);		
+		int count = 0;
+		 for (ItemStack i : player.getInventory().getContents()) {
+			 if (i == null) {
+				 count++;
+			 } else if (i.getType() == Material.AIR) {
+				 count++;
+			 }
+		 }
+		 if (count == 0) {							 
+			 player.getWorld().dropItemNaturally(player.getEyeLocation(), item);							 
+		 } else {
+			 player.getInventory().addItem(item);
+		 }
 
 		return true;
 		
@@ -231,18 +216,10 @@ public class cReward {
 	
 	public void giveMoney(final String sender, final Double amount){
 		
-		// Synchrone task with bukkit
-		BukkitTasksLauncher.launch(
-				new Runnable() {					
-					@Override
-					public void run() {						
-						// On prends le montant chez le sender
-						BoomcMMoReward.getEcon().withdrawPlayer(sender, amount);
-						// Que l'on donne au méritant
-						BoomcMMoReward.getEcon().depositPlayer(player.getName(), amount);							
-					}					
-				}
-		);	
+		// On prends le montant chez le sender
+		BoomcMMoReward.getEcon().withdrawPlayer(sender, amount);
+		// Que l'on donne au méritant
+		BoomcMMoReward.getEcon().depositPlayer(player.getName(), amount);
 			
 	}
 	
@@ -305,48 +282,24 @@ public class cReward {
 	}
 	
 	public void sendBroadcast(final List<String> messages){
-		// Synchrone task with bukkit
-		BukkitTasksLauncher.launch(
-				new Runnable() {					
-					@Override
-					public void run() {						
-						for( String msg : messages) {  	    			
-							player.getServer().broadcastMessage( variableReplace( msg ));
-						}									
-					}					
-				}
-		);		
+		for( String msg : messages) {  	    			
+			player.getServer().broadcastMessage( variableReplace( msg ));
+		}		
 	}
 
 	public void sendLog(final List<String> messages){
-		// Synchrone task with bukkit
-		BukkitTasksLauncher.launch(
-				new Runnable() {					
-					@Override
-					public void run() {						
-						for( String msg : messages) {  	    			
-							Log.info( variableReplace( msg ) );
-						}									
-					}					
-				}
-		);		
+		for( String msg : messages) {  	    			
+			Log.info( variableReplace( msg ) );
+		}		
 	}
 	
 	
 	public void sendCommands(final List<String> commands){
-		// Synchrone task with bukkit
-		BukkitTasksLauncher.launch(
-				new Runnable() {					
-					@Override
-					public void run() {						
-						for( String cmd : commands) {			
-							if( Bukkit.dispatchCommand(Bukkit.getConsoleSender(), variableReplace(cmd) ) ) {
-								Log.info( "-Command sent : " + variableReplace(cmd) );
-				    		}			
-						}										
-					}					
-				}
-		);			
+		for( String cmd : commands) {			
+			if( Bukkit.dispatchCommand(Bukkit.getConsoleSender(), variableReplace(cmd) ) ) {
+				Log.info( "-Command sent : " + variableReplace(cmd) );
+    		}			
+		}			
 	}
 	
 

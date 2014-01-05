@@ -63,12 +63,7 @@ public class Power extends AbstractReward {
 	}
 
 
-	@Override
-	protected String variableReplace(String msg) {
-		return msg;
-	}
 
-	
 
 	public class RewardPowerException extends Exception {
 		private static final long serialVersionUID = 1L;

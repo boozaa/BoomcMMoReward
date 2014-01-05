@@ -137,19 +137,7 @@ public class Group extends AbstractReward {
 		return true;
 		
 	}
-	
-	
-	@Override
-	protected String variableReplace(String msg){
-		
-		String message = "";		
-		// Replace pour les codes couleurs
-		message = msg.replace("&", "§");
-		// Replace des pseudo variables
-		message = message.replace("%groups%", Arrays.toString(this.listGroups.toArray()));	
-		return message;
-		
-	}
+
 	
 	
 

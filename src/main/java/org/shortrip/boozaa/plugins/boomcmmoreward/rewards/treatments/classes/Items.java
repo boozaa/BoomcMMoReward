@@ -1,7 +1,6 @@
 package org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.classes;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import org.bukkit.configuration.ConfigurationSection;
@@ -15,11 +14,11 @@ import org.shortrip.boozaa.plugins.boomcmmoreward.utils.Const;
 
 public class Items extends AbstractReward {
 
-	@SuppressWarnings("unused")
-	private Boolean isPending = false;
+
 	private cReward reward;
 	private ConfigurationSection confSection;
 	private static List<String>listItems;
+	
 	
 	
 	
@@ -28,7 +27,7 @@ public class Items extends AbstractReward {
 	}
 
 	
-	public List<String> proceedRewards(cReward reward, ConfigurationSection confSection, Messages cmess) throws RewardItemException{
+	public List<String> proceedRewards(cReward reward, ConfigurationSection confSection, Messages cmess){
 		
 		
 		this.confSection = confSection;
@@ -77,28 +76,17 @@ public class Items extends AbstractReward {
 	}
 
 	
-	private void giveItems() throws RewardItemException{
+	private void giveItems(){
 		
 		ItemStack item;
 		
 		List<String> newItems = confSection.getStringList(Const.ITEM);    	
-    	for( String p : newItems) {
-    		
+    	for( String p : newItems) {    		
+    		Log.debug("-Parse item : " + p); 
     		item = processItem(p);    		
     		Log.debug("-Giving item : " + p); 
-    		reward.giveItem(item);
-    		/*
-    		Boolean success = reward.giveItem(item);
-    		if( success == false ){
-    			// On place en pending
-    			this.isPending = true;
-    			reward.addPendingItem(item);    			
-    		}else{
-    			// On stocke en db
-    			
-    		}
-    		*/
     		listItems.add(item.toString());
+    		reward.giveItem(item);    		
     	}
     	
 		
@@ -106,7 +94,7 @@ public class Items extends AbstractReward {
 	
 	
 	
-	private void giveLotteryItems() throws RewardItemException{
+	private void giveLotteryItems(){
 		
 		ItemStack item;
 		
@@ -114,11 +102,11 @@ public class Items extends AbstractReward {
 		int proba = 1;
 		
 		// Tirage au hasard pour chaque item de la liste
-		if( BoomcMMoReward.getYmlConf().get(Const.PLUGIN_DICEFACES) != null ) {
+		if( BoomcMMoReward.getYmlConf().contains(Const.PLUGIN_DICEFACES)  ) {
 			max = BoomcMMoReward.getYmlConf().getInt(Const.PLUGIN_DICEFACES);
 		}
 		// On récupere la probabilité
-		if( confSection.get(Const.ITEM_LOTTERY_PROBABILITY) != null ) {
+		if( confSection.contains(Const.ITEM_LOTTERY_PROBABILITY)  ) {
 			proba = confSection.getInt(Const.ITEM_LOTTERY_PROBABILITY);
 			if( proba > max){ proba=max;}
 		}
@@ -130,28 +118,21 @@ public class Items extends AbstractReward {
     		// Lance le dé
     		if( launchTheDice(max, proba) ){
     			// Ok gagnant
-    			try {
+    			//try {
 	    			item = processItem(p);
-	    			
-	    			
-	    			Boolean success = reward.giveItem(item);
-	    			if( !success ){
-	        			// On place en pending
-	        			this.isPending = true;
-	        			reward.addPendingItem(item);
-	        			return;
-	        		}
+	    			reward.giveItem(item);
 	    			
 	        		Log.debug("-Lottery: lucky guy giving item : " + p);
 	        		// On stocke en db
-	        		listItems.add(item.toString());	        		
+	        		listItems.add(item.toString());	
+	        		
 	        		int amount = item.getAmount();
 	        		String itemName = item.getType().name() + " x " + amount;	 
 	        		
 	        		// Si il y a une section messages on la traite
-	        		if( confSection.get(Const.ITEM_LOTTERY_MESSAGES) != null ){        			       			
+	        		if( confSection.contains(Const.ITEM_LOTTERY_MESSAGES) ){        			       			
 	        			
-	        			if( confSection.get(Const.ITEM_LOTTERY_MESSAGES_MP) != null ) {        				
+	        			if( confSection.contains(Const.ITEM_LOTTERY_MESSAGES_MP) ) {        				
 	        				List<String> nouveaux = new ArrayList<String>();
 	        				List<String> m = confSection.getStringList(Const.ITEM_LOTTERY_MESSAGES_MP);
 	        				for( String s : m ){
@@ -161,7 +142,7 @@ public class Items extends AbstractReward {
 	        				}
 	        				reward.sendMP(nouveaux);        				
 	        			}
-	        			if( confSection.get(Const.ITEM_LOTTERY_MESSAGES_BROADCAST) != null ) {        				
+	        			if( confSection.contains(Const.ITEM_LOTTERY_MESSAGES_BROADCAST) ) {        				
 	        				List<String> nouveaux = new ArrayList<String>();
 	        				List<String> m = confSection.getStringList(Const.ITEM_LOTTERY_MESSAGES_BROADCAST);
 	        				for( String s : m ){
@@ -171,7 +152,7 @@ public class Items extends AbstractReward {
 	        				}
 	        				reward.sendBroadcast(nouveaux);        				
 	        			}
-	        			if( confSection.get(Const.ITEM_LOTTERY_MESSAGES_LOG) != null ) {        				
+	        			if( confSection.contains(Const.ITEM_LOTTERY_MESSAGES_LOG) ) {        				
 	        				List<String> nouveaux = new ArrayList<String>();
 	        				List<String> m = confSection.getStringList(Const.ITEM_LOTTERY_MESSAGES_LOG);
 	        				for( String s : m ){
@@ -183,7 +164,7 @@ public class Items extends AbstractReward {
 	        			}
 	        		}
 	        		
-    			} catch (RewardItemException e) {}
+    			//} catch (RewardItemException e) {}
         		
     			
     		}else{
@@ -196,7 +177,7 @@ public class Items extends AbstractReward {
 	}
 	
 	
-	private void giveLuckyItem() throws RewardItemException{
+	private void giveLuckyItem(){
 
 		ItemStack item;
 		
@@ -206,14 +187,7 @@ public class Items extends AbstractReward {
 		item = processItem(newItems.get( (int)(Math.random()*newItems.size() ) ) );		
 		
 		
-		Boolean success = reward.giveItem(item);
-		if( !success ){
-			// On place en pending
-			this.isPending = true;
-			reward.addPendingItem(item);
-			return;
-		}
-		
+		reward.giveItem(item);		
 		
 		Log.debug("-luckyItem: the dice choose item : " + item.toString());	
 		// On stocke en db
@@ -240,27 +214,21 @@ public class Items extends AbstractReward {
 			String[] items = kit.split("\\|");
 			for( String p : items){
 				if( !p.isEmpty()){
-					try {						
+					//try {						
 						Log.debug("- deal with : " + p);
 						item = processItem(p);
 						Log.debug("- given : " + p);
 						
 						
-						Boolean success = reward.giveItem(item);
-						if( !success ){
-			    			// On place en pending
-			    			this.isPending = true;
-			    			reward.addPendingItem(item);
-			    			return;
-			    		}
+						reward.giveItem(item);
 						
 						// On stocke en db
 						listItems.add(item.toString());					
-					} catch (RewardItemException e) {
+					//} catch (RewardItemException e) {
 						
-						// TODO; exception to catch
+					//	// TODO; exception to catch
 						
-					}
+					//}
 					
 				}				
 			}
@@ -268,9 +236,9 @@ public class Items extends AbstractReward {
 		}
 		
 		// Si il y a une section messages on la traite
-		if( confSection.get(Const.ITEM_LUCKYKIT_MESSAGES) != null ){			
+		if( confSection.contains(Const.ITEM_LUCKYKIT_MESSAGES) ){			
 			
-			if( confSection.get(Const.ITEM_LUCKYKIT_MESSAGES_MP) != null ) {        				
+			if( confSection.contains(Const.ITEM_LUCKYKIT_MESSAGES_MP) ) {        				
 				List<String> nouveaux = new ArrayList<String>();
 				List<String> m = confSection.getStringList(Const.ITEM_LUCKYKIT_MESSAGES_MP);
 				for( String s : m ){
@@ -280,7 +248,7 @@ public class Items extends AbstractReward {
 				}
 				reward.sendMP(nouveaux);        				
 			}
-			if( confSection.get(Const.ITEM_LUCKYKIT_MESSAGES_BROADCAST) != null ) {        				
+			if( confSection.contains(Const.ITEM_LUCKYKIT_MESSAGES_BROADCAST) ) {        				
 				List<String> nouveaux = new ArrayList<String>();
 				List<String> m = confSection.getStringList(Const.ITEM_LUCKYKIT_MESSAGES_BROADCAST);
 				for( String s : m ){
@@ -290,7 +258,7 @@ public class Items extends AbstractReward {
 				}
 				reward.sendBroadcast(nouveaux);        				
 			}
-			if( confSection.get(Const.ITEM_LUCKYKIT_MESSAGES_LOG) != null ) {        				
+			if( confSection.contains(Const.ITEM_LUCKYKIT_MESSAGES_LOG) ) {        				
 				List<String> nouveaux = new ArrayList<String>();
 				List<String> m = confSection.getStringList(Const.ITEM_LUCKYKIT_MESSAGES_LOG);
 				for( String s : m ){
@@ -309,7 +277,7 @@ public class Items extends AbstractReward {
 	
 
 	@SuppressWarnings("deprecation")
-	private ItemStack processItem(String p) throws RewardItemException{
+	private ItemStack processItem(String p) {
 		
 		ItemStack item;
 				
@@ -346,13 +314,13 @@ public class Items extends AbstractReward {
     				
     				int enchantId = Integer.parseInt(arr[2]); 
 		    		int multiplier = Integer.parseInt(arr[3]);
-    				try{	    				
+    				//try{	    				
 	    				item.addEnchantment(Enchantment.getById(enchantId), multiplier);
 	    				// On donne l'item avec enchantement
 	    				return item;
-	    			}catch(Exception ex){	    				
-	    				throw new RewardItemException("-Enchant not valid for this item so cancel it : " +	p,ex);
-	    			}	
+	    			//}catch(Exception ex){	    				
+	    			//	throw new RewardItemException("-Enchant not valid for this item so cancel it : " +	p,ex);
+	    			//}	
 	    			
     			}
 				
@@ -407,17 +375,6 @@ public class Items extends AbstractReward {
 		return true;
 	}
 	
-	
-
-	@Override
-	protected String variableReplace(String msg) {
-		String message = "";		
-		// Replace pour les codes couleurs
-		message = msg.replace("&", "§");
-		// Replace des pseudo variables
-		message = message.replace("%items%", Arrays.toString(Items.listItems.toArray()));	
-		return message;
-	}
 
 	
 
@@ -427,6 +384,7 @@ public class Items extends AbstractReward {
 		public RewardItemException(String message, Throwable t) {
 	        super(message);
 	        this.throwable = t;
+	        Log.warning("RewardItemException occured " + t.getCause());
 	    }	
 		public Throwable get_Throwable(){
 			return this.throwable;

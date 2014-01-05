@@ -48,7 +48,7 @@ public class RewardThread implements Runnable  {
 	
 	
 	public RewardThread(cReward reward){		
-		this.reward = reward;	
+		this.reward = reward;
 		this.run();		
 	}
 	
@@ -103,7 +103,7 @@ public class RewardThread implements Runnable  {
 						historyCommands = ccmds.proceedRewards( reward, rewardsSection, cmess );
 						
 						// On donne items si demandé
-						//historyItems = citem.proceedRewards( reward, rewardsSection, cmess );
+						historyItems = citem.proceedRewards( reward, rewardsSection, cmess );
 						
 						// On gere les messages
 						cmess.proceedRewards(reward, rewardsSection);
@@ -116,7 +116,7 @@ public class RewardThread implements Runnable  {
 						Log.warning(ex3.getMessage());
 					} catch (RewardCommandException ex4) {
 						Log.warning(ex4.getMessage());
-					} //catch (RewardItemException e) {
+					}//catch (RewardItemException e) {
 					//	Log.warning(e.getMessage());
 					//}
 

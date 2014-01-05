@@ -53,12 +53,6 @@ public class Messages extends AbstractReward {
 		return true;
 	}
 
-	@Override
-	protected String variableReplace(String msg) {
-		return msg;
-	}
-
-
 	
 	
 	public class RewardMessageException extends Exception {

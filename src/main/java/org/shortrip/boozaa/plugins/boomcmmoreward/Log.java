@@ -24,7 +24,7 @@ public class Log {
 	}
 	
 	public static void warning(String message) {
-		console.sendMessage(prefix + "- WARNING - " +  message);
+		console.sendMessage(prefix + ChatColor.GOLD + "- WARNING - " +  message);
 	}
 	
 	public static void error(String message) {

@@ -70,17 +70,6 @@ public class Commands extends AbstractReward {
 
 
 
-	@Override
-	protected String variableReplace(String msg) {
-		String message = "";		
-		// Replace pour les codes couleurs
-		message = msg.replace("&", "§");
-		// Replace des pseudo variables
-		message = message.replace("%commands%", Arrays.toString(this.list.toArray()));	
-		return message;
-	}
-	
-
 
 	public class RewardCommandException extends Exception {
 		private static final long serialVersionUID = 1L;
