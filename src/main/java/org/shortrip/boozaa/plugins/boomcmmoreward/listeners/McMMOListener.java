@@ -3,13 +3,13 @@ package org.shortrip.boozaa.plugins.boomcmmoreward.listeners;
 import java.io.File;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.shortrip.boozaa.plugins.boomcmmoreward.Log;
 import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.RewardQueue;
 import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.cReward;
 import org.shortrip.boozaa.plugins.boomcmmoreward.utils.Configuration;
-
 import com.gmail.nossr50.datatypes.skills.SkillType;
 import com.gmail.nossr50.events.experience.McMMOPlayerLevelUpEvent;
 import com.gmail.nossr50.events.skills.abilities.McMMOPlayerAbilityActivateEvent;
@@ -146,12 +146,120 @@ public class McMMOListener implements Listener {
 	}
 	
 	
-	@EventHandler
+	@EventHandler( priority = EventPriority.LOW )
 	public void onPlayerAbilityActivated(final McMMOPlayerAbilityActivateEvent event) {	
 		
-		Log.debug( "Ability catched -> " + event.getAbilityType().name() );
-		
-		
+		try {
+			
+			final String abilityType = event.getAbility().name();
+			final Player player = event.getPlayer();
+			final int playerPower = com.gmail.nossr50.api.ExperienceAPI.getPowerLevel(event.getPlayer());
+			final SkillType skilltype = event.getSkill();
+			final int skillLevel = event.getSkillLevel();
+			
+			Log.debug( "Ability event available in your mcMMO's version" );
+			Log.debug( "Ability launched by " + player.getName() + " -> " + abilityType );
+			
+			// TRAITEMENT si plugins/BoomcMMoReward/ABILITIES/abilityType/POWER/EVERY/power.yml exists -> deal with it
+			String abilityFolder 	= plugin.getDataFolder() + File.separator + "ABILITIES" + File.separator + abilityType + File.separator;
+			String power 			= abilityFolder + "POWER" + File.separator;
+			String skills 			= abilityFolder + "SKILLS" + File.separator;
+			
+			// TRAITEMENT plugins/BoomcMMoReward/ABILITIES/BERSERK/POWER/ONE
+			final File powerOne = new File( power + "ONE" + File.separator +  playerPower + ".yml");
+			Log.debug( "powerOne -> " + powerOne );
+			if( powerOne.exists() ){
+				conf = new Configuration(powerOne);
+				if (conf.exists()) {	
+					Log.debug("-----New player power : " + playerPower);
+					Log.debug("-----Ability reward file to process : " + powerOne);
+					conf.load();
+					// On ajoute ce cReward à la Queue
+					queue.enqueue(new cReward(powerOne.toString(),conf,player,skilltype,playerPower,skillLevel) );				
+				}
+			}
+			
+			// TRAITEMENT plugins/BoomcMMoReward/ABILITIES/BERSERK/POWER/EVERY
+			final File powerEVERY = new File( power + "EVERY" + File.separator );
+			Log.debug( "powerEVERY -> " + powerEVERY );
+			String [] listeFichiers;
+			listeFichiers = powerEVERY.list();
+
+			for( String fichier : listeFichiers){
+				Log.debug( "Find file in EVERY -> " + fichier );
+				int level = Integer.parseInt(fichier.replace(".yml", ""));
+				// Si le modulo renvoit 0 alors multiple
+				if( (playerPower%level)==0 ){
+					// On traite ce fichier
+					File everyPowerFile = new File( powerEVERY + File.separator + fichier );	
+					Log.debug( "everyPowerFile -> " + everyPowerFile );			
+											
+					conf = new Configuration(everyPowerFile);
+					if (conf.exists()) {
+						Log.debug("-----New player power : " + playerPower);
+						Log.debug("-----EVERY POWER reward file to process : " + everyPowerFile);			
+						conf.load();
+						// On ajoute ce cReward à la Queue
+						queue.enqueue(new cReward(everyPowerFile.toString(),conf,player,skilltype,playerPower,skillLevel) );
+					}
+					
+				}
+				
+			}
+			
+			// TRAITEMENT plugins/BoomcMMoReward/ABILITIES/BERSERK/SKILLS/skillType/ONE
+			final File skillsONE = new File( skills + "ONE" + File.separator +  skillLevel + ".yml");
+			Log.debug( "skillsONE -> " + skillsONE );
+			if( skillsONE.exists() ){
+				conf = new Configuration(skillsONE);
+				if (conf.exists()) {	
+					Log.debug("-----New player skill level : " + skillLevel);
+					Log.debug("-----Ability reward file to process : " + skillsONE);
+					conf.load();
+					// On ajoute ce cReward à la Queue
+					queue.enqueue(new cReward(skillsONE.toString(),conf,player,skilltype,playerPower,skillLevel) );				
+				}
+			}
+			
+			
+			
+			
+
+			// TRAITEMENT plugins/BoomcMMoReward/ABILITIES/BERSERK/SKILLS/skillType/ONE
+			final File skillsEVERY = new File( skills + "EVERY" + File.separator);
+			Log.debug( "skillsEVERY -> " + skillsEVERY );
+			listeFichiers = skillsEVERY.list();
+
+			for( String fichier : listeFichiers){
+
+				Log.debug( "Find file in EVERY -> " + fichier );
+				int level = Integer.parseInt(fichier.replace(".yml", ""));
+				// Si le modulo renvoit 0 alors multiple
+				if( (skillLevel%level)==0 ){
+					// On traite ce fichier
+					File everySkillFile = new File( skillsEVERY + File.separator + fichier );
+					Log.debug( "everySkillFile -> " + everySkillFile );	
+					
+					conf = new Configuration(everySkillFile);
+					if (conf.exists()) {
+						Log.debug("-----New player skill level : " + skillLevel);
+						Log.debug("-----EVERY POWER reward file to process : " + everySkillFile);			
+						conf.load();
+						// On ajoute ce cReward à la Queue
+						queue.enqueue(new cReward(everySkillFile.toString(),conf,player,skilltype,playerPower,skillLevel) );
+					}
+					
+				}
+				
+			}
+			
+
+			// On lance la queue
+			queue.sendNextReward();
+			
+		} catch (NoSuchMethodError e) {
+			Log.debug( "Your version of mcMMO doesn't support Ability events, NoSuchMethodError -> " + e.getLocalizedMessage() );
+		}
 	}
 	
 }

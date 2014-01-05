@@ -32,7 +32,7 @@ public class RewardQueue {
             try {
                 //attente passive
                 //wait();
-            	Log.debug("Queue head :" + queue.peek() );
+            	Log.debug("Queue head :" + queue.peek().getName() );
             	Log.debug("Queue size :" + queue.size() );
             	Log.debug("Processing reward file " + queue.peek().getName() + " on a new thread");        
                 // On envoit le traitement du prochain cReward

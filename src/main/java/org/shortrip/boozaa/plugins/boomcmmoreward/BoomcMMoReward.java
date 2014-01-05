@@ -357,6 +357,40 @@ public class BoomcMMoReward extends JavaPlugin {
 				if( !dir.exists() ){
 					dir.mkdirs();
 				}
+				String powerFolder = ab + File.separator + "POWER" + File.separator;
+				dir = new File ( powerFolder);
+				if( !dir.exists() ){
+					dir.mkdirs();
+				}
+				String powerONEFolder = powerFolder + File.separator + "ONE" + File.separator ;
+				dir = new File ( powerONEFolder);
+				if( !dir.exists() ){
+					dir.mkdirs();
+				}
+				String powerEVERYFolder = powerFolder + File.separator + "EVERY" + File.separator ;
+				dir = new File ( powerEVERYFolder);
+				if( !dir.exists() ){
+					dir.mkdirs();
+				}
+				
+				
+				
+				String skillsFolder = ab + File.separator + "SKILLS" + File.separator;
+				dir = new File ( skillsFolder);
+				if( !dir.exists() ){
+					dir.mkdirs();
+				}
+				String skillsONEFolder = skillsFolder + File.separator + "ONE" + File.separator ;
+				dir = new File ( skillsONEFolder);
+				if( !dir.exists() ){
+					dir.mkdirs();
+				}
+				String skillsEVERYFolder = skillsFolder + File.separator + "EVERY" + File.separator ;
+				dir = new File ( skillsEVERYFolder);
+				if( !dir.exists() ){
+					dir.mkdirs();
+				}
+				
 			}
 
 		}catch(Exception ex){

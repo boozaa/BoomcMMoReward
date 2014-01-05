@@ -71,7 +71,7 @@
             <version>1.4.06-dev3-b1997</version>
             <type>jar</type>
             <scope>system</scope>
-  			<systemPath>${project.basedir}/lib/mcMMO-1997.jar</systemPath>
+  			<systemPath>${project.basedir}/lib/mcMMO-3431.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>net.milkbowl.vault</groupId>
