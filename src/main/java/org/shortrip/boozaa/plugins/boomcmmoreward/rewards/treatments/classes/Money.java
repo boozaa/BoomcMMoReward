@@ -68,6 +68,7 @@ public class Money extends AbstractReward {
 			// Gagnant on envoit les ronds
 			sendMoney(confSection);		
 			
+			/*
 			// On traite la partie message
 			if( confSection.get(Const.MESSAGE) != null ) {
 				
@@ -112,7 +113,7 @@ public class Money extends AbstractReward {
 				}
 				
 			}
-			
+			*/
 		}else{
 			Log.debug("-No luck" );
 		}
