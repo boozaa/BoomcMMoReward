@@ -45,9 +45,80 @@ public class ModifyRewardFiles {
 			}
 		}
 		
+
+		if( oldVersion.equalsIgnoreCase("2.0.2b") ){
+			// On fait le backup
+			if( this.makeBackup(this.oldVersion) ){
+				this.ModifFromV202xToV203();				
+			}
+		}
+		
 	}
 	
 	
+	private void ModifFromV202xToV203() {
+		Log.info("This new release needs some changes on your config file");
+		Log.info("To be on a safe side a backup of your current config file will be in :");
+		Log.info("your plugins/BoomcMMoReward/backups/" + oldVersion + "/config.yml");
+		
+				
+		try {
+			
+			File config = new File( this.plugin.getDataFolder() + File.separator + "config.yml" );
+			
+			if( config.exists() ){
+				
+				// Backup old file
+				File to = new File( this.plugin.getDataFolder() + File.separator + "backups" + File.separator + oldVersion + File.separator + "config.yml" );			
+				backupConfigFile( to );
+				
+				// Make changes
+				FileInputStream fis =  new FileInputStream(config);
+				File nouveau = new File(config + ".new");
+				FileOutputStream fos = new FileOutputStream(nouveau);				
+
+				BufferedReader in = new BufferedReader(new InputStreamReader(fis));
+				BufferedWriter out = new BufferedWriter( new OutputStreamWriter(fos));
+				
+				Boolean modified = false;
+				String retdata = null;
+				
+				// On parcours config.yml ligne par ligne
+				while((retdata = in.readLine())!= null){
+					
+					if( retdata.contains("informUpdate") || retdata.contains("allowMetricsStats") ){						
+						Log.info("Remove unecessary setting in config.yml: " + retdata);
+					}else{
+						out.write(retdata);
+						out.newLine();
+						modified = true;
+					}
+					
+				}																	 
+	 			in.close();
+			 	out.close();
+			 	
+			 	if( modified ){
+			 		// On supprime original
+			 		config.delete();
+				 	// On renomme copie
+				 	new File( config + ".new" ).renameTo(config);
+			 	}
+			 	
+			 	Log.info("Thank you for using BoomcMMoReward, have fun");
+			 	
+			}
+			
+			
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
+
 	private void ModifFromV11xToV2(){
 	
 		Log.info("This new release needs some changes on your rewards files");
@@ -179,6 +250,18 @@ public class ModifyRewardFiles {
 	}
 	
 	
+	private Boolean backupConfigFile(File destination) throws IOException{
+		
+		File originalConfigFile = new File(this.plugin.getDataFolder() + File.separator + "config.yml");
+		if( originalConfigFile.exists() ){
+			copyFile( originalConfigFile, destination);
+		}		
+		return true;
+		
+	}
+	
+	
+	
 	private Boolean makeBackup(String folderName){
 		
 		// Dossier REWARD
@@ -226,7 +309,7 @@ public class ModifyRewardFiles {
 		
 		return true;
 	}
-	
+
 	
 	private void copyDirectory(final File from, final File to) throws IOException {
 		 if (! to.exists()) {
