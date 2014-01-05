@@ -9,6 +9,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.shortrip.boozaa.plugins.boomcmmoreward.BoomcMMoReward;
+import org.shortrip.boozaa.plugins.boomcmmoreward.BukkitTasklauncher;
 import org.shortrip.boozaa.plugins.boomcmmoreward.Log;
 import org.shortrip.boozaa.plugins.boomcmmoreward.utils.Configuration;
 import org.shortrip.boozaa.plugins.boomcmmoreward.utils.Const;
@@ -281,30 +282,60 @@ public class cReward {
 	 * Messages gestion
 	 */
 	public void sendMP(final List<String> messages){
-		for( String msg : messages) {  	    			
-			player.sendMessage( variableReplace(msg) );
-		}	
+		
+		BukkitTasklauncher.launchTask( new Runnable() {
+
+			@Override
+			public void run() {
+				for( String msg : messages) {  	    			
+					player.sendMessage( variableReplace(msg) );
+				}	
+			}
+			
+		});
+		
 	}
 	
 	public void sendBroadcast(final List<String> messages){
-		for( String msg : messages) {  	    			
-			player.getServer().broadcastMessage( variableReplace( msg ));
-		}		
+		
+		BukkitTasklauncher.launchTask( new Runnable() {
+			@Override
+			public void run() {
+				for( String msg : messages) {  	    			
+					player.getServer().broadcastMessage( variableReplace( msg ));
+				}		
+			}			
+		});
+			
 	}
 
 	public void sendLog(final List<String> messages){
-		for( String msg : messages) {  	    			
-			Log.info( variableReplace( msg ) );
-		}		
+		
+		BukkitTasklauncher.launchTask( new Runnable() {
+			@Override
+			public void run() {
+				for( String msg : messages) {  	    			
+					Log.info( variableReplace( msg ) );
+				}	
+			}			
+		});	
+		
 	}
 	
 	
 	public void sendCommands(final List<String> commands){
-		for( String cmd : commands) {			
-			if( Bukkit.dispatchCommand(Bukkit.getConsoleSender(), variableReplace(cmd) ) ) {
-				Log.info( "-Command sent : " + variableReplace(cmd) );
-    		}			
-		}			
+		
+		BukkitTasklauncher.launchTask( new Runnable() {
+			@Override
+			public void run() {
+				for( String cmd : commands) {			
+					if( Bukkit.dispatchCommand(Bukkit.getConsoleSender(), variableReplace(cmd) ) ) {
+						Log.info( "-Command sent : " + variableReplace(cmd) );
+		    		}			
+				}
+			}			
+		});	
+				
 	}
 	
 
