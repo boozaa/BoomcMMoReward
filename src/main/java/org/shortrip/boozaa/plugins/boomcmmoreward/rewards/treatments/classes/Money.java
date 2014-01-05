@@ -95,13 +95,20 @@ public class Money extends AbstractReward {
 			// Vérification des noeuds
 			if( confSection.getString("sender") != null ) {
 				sender = confSection.getString(Const.SENDER);
+				List<String> s = new ArrayList<String>();
+				s.add(sender);
+				reward.addReplacement("%sender%", s);
 			}				
 			// On demande le paiement 
 			reward.giveMoney(sender, confSection.getDouble(Const.AMOUNT));
 			// On stocke en db
 			listMoney.add(confSection.getDouble(Const.AMOUNT));
 			Log.debug("-Give " + confSection.getDouble(Const.AMOUNT) + " from " + sender);
-						
+
+			// On donne les commandes lancées en variables de remplacement
+			List<String> a = new ArrayList<String>();
+			a.add(confSection.getString(Const.AMOUNT));
+			reward.addReplacement("%amount%", a);			
 			
 		} catch (Exception e) { 
 			throw new RewardMoneyException("Money transfer  exception", e);

@@ -71,7 +71,9 @@ public class Group extends AbstractReward {
 		    		}
 		    		
 		    	}
-				
+
+				// On donne les commandes lancées en variables de remplacement
+				reward.addReplacement("%groups%", listGroups);
 				
 			} catch (Exception e) {
 				throw new RewardGroupException("Error in the group section", e);

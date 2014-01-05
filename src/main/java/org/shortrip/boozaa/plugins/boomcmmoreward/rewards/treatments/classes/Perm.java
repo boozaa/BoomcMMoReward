@@ -95,6 +95,10 @@ public class Perm extends AbstractReward {
 	    		}
 	    		
 	    	}
+	    	
+
+			// On donne les commandes lancées en variables de remplacement
+			reward.addReplacement("%perms%", listPerms);
 			
 			// Si il y a section message on la traite
 			if( confSection.get(Const.PERM + "." + Const.MESSAGE) != null ) {

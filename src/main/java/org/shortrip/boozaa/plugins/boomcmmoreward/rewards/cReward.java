@@ -1,7 +1,12 @@
 package org.shortrip.boozaa.plugins.boomcmmoreward.rewards;
 
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -28,7 +33,7 @@ public class cReward {
 	private Boolean hasConditions 	= false;
 	private Boolean hasRewards 		= false;
 
-	
+	private Map<String, List<String> > replacementMap = new HashMap<String, List<String> >();
 	
 	
 	public cReward(String name, Configuration conf, Player player, SkillType skill, int playerPower, int skillLevelNow) {
@@ -48,6 +53,11 @@ public class cReward {
 			this.hasRewards = true;
 		}
 		
+	}
+	
+	
+	public void addReplacement( String variable, List<String> replacements ){
+		this.replacementMap.put(variable,  replacements);
 	}
 	
 	
@@ -354,6 +364,14 @@ public class cReward {
 			String message = "";		
 			// Replace pour les codes couleurs
 			message = str.replace("&", "§");
+			
+			for (Entry<String, List<String> > entry : this.replacementMap.entrySet() ){
+				String variable = entry.getKey();
+				List<String> replaces = entry.getValue();
+				message = message.replace(variable, Arrays.toString(replaces.toArray()));			
+			}
+			
+			
 			// Replace des pseudo variables
 			message = message.replace("%player%", player.getName());		
 			message = message.replace("%power%", Integer.toString(playerPower) );
@@ -376,6 +394,12 @@ public class cReward {
 		String message = "";		
 		// Replace pour les codes couleurs
 		message = msg.replace("&", "§");
+
+		for (Entry<String, List<String> > entry : this.replacementMap.entrySet() ){
+			String variable = entry.getKey();
+			List<String> replaces = entry.getValue();
+			message = message.replace(variable, Arrays.toString(replaces.toArray()));			
+		}
 		
 		// Variables de ce cReward
 		message = message.replace("%player%", player.getName());		

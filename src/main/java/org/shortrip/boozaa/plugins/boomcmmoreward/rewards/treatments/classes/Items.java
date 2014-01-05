@@ -88,7 +88,9 @@ public class Items extends AbstractReward {
     		listItems.add(item.toString());
     		reward.giveItem(item);    		
     	}
-    	
+
+		// On donne les commandes lancées en variables de remplacement
+		reward.addReplacement("%items%", listItems);
 		
 	}
 	
@@ -134,7 +136,9 @@ public class Items extends AbstractReward {
     		}
 
     	}
-    	
+
+		// On donne les commandes lancées en variables de remplacement
+		reward.addReplacement("%items%", listItems);
 		
 	}
 	
@@ -146,14 +150,16 @@ public class Items extends AbstractReward {
 		// Tirage au hasard d'un item de la liste
 		List<String> newItems = confSection.getStringList(Const.ITEM_LUCKY_ITEMS);
 		// Tirage au sort du gain
-		item = processItem(newItems.get( (int)(Math.random()*newItems.size() ) ) );		
-		
+		item = processItem(newItems.get( (int)(Math.random()*newItems.size() ) ) );	
 		
 		reward.giveItem(item);		
 		
 		Log.debug("-luckyItem: the dice choose item : " + item.toString());	
 		// On stocke en db
 		listItems.add(item.toString());
+
+		// On donne les commandes lancées en variables de remplacement
+		reward.addReplacement("%items%", listItems);
 				
 	}
 	
@@ -187,7 +193,9 @@ public class Items extends AbstractReward {
 			}
 			
 		}
-		
+
+		// On donne les commandes lancées en variables de remplacement
+		reward.addReplacement("%items%", listItems);
 		
 	}
 	
