@@ -27,9 +27,9 @@ public class Items extends AbstractReward {
 	}
 
 	
-	public List<String> proceedRewards(cReward reward, ConfigurationSection confSection, Messages cmess){
+	public List<String> proceedRewards(cReward reward, ConfigurationSection confSection, Messages cmess) throws RewardItemException{
 		
-		
+		this.reward = reward;
 		this.confSection = confSection;
 				
 		listItems = new ArrayList<String>();
@@ -76,7 +76,7 @@ public class Items extends AbstractReward {
 	}
 
 	
-	private void giveItems(){
+	private void giveItems() throws RewardItemException{
 		
 		ItemStack item;
 		
@@ -94,7 +94,7 @@ public class Items extends AbstractReward {
 	
 	
 	
-	private void giveLotteryItems(){
+	private void giveLotteryItems() throws RewardItemException{
 		
 		ItemStack item;
 		
@@ -177,7 +177,7 @@ public class Items extends AbstractReward {
 	}
 	
 	
-	private void giveLuckyItem(){
+	private void giveLuckyItem() throws RewardItemException{
 
 		ItemStack item;
 		
@@ -199,7 +199,7 @@ public class Items extends AbstractReward {
 	}
 	
 	
-	private void giveLuckyKit(){
+	private void giveLuckyKit() throws RewardItemException{
 		
 		ItemStack item;
 		
@@ -277,7 +277,7 @@ public class Items extends AbstractReward {
 	
 
 	@SuppressWarnings("deprecation")
-	private ItemStack processItem(String p) {
+	private ItemStack processItem(String p) throws RewardItemException {
 		
 		ItemStack item;
 				
@@ -314,13 +314,13 @@ public class Items extends AbstractReward {
     				
     				int enchantId = Integer.parseInt(arr[2]); 
 		    		int multiplier = Integer.parseInt(arr[3]);
-    				//try{	    				
+    				try{	    				
 	    				item.addEnchantment(Enchantment.getById(enchantId), multiplier);
 	    				// On donne l'item avec enchantement
 	    				return item;
-	    			//}catch(Exception ex){	    				
-	    			//	throw new RewardItemException("-Enchant not valid for this item so cancel it : " +	p,ex);
-	    			//}	
+	    			}catch(Exception ex){	    				
+	    				throw new RewardItemException("-Enchant not valid for this item so cancel it : " +	p,ex);
+	    			}	
 	    			
     			}
 				

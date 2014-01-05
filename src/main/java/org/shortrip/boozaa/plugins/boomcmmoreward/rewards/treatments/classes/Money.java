@@ -1,7 +1,6 @@
 package org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.classes;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import org.bukkit.configuration.ConfigurationSection;

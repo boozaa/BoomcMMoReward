@@ -187,21 +187,26 @@ public class cReward {
 	 */
 	public Boolean giveItem(final ItemStack item){
 		
-		int count = 0;
-		 for (ItemStack i : player.getInventory().getContents()) {
-			 if (i == null) {
-				 count++;
-			 } else if (i.getType() == Material.AIR) {
-				 count++;
+		if( item != null ){
+			
+			int count = 0;
+			 for (ItemStack i : this.player.getInventory().getContents()) {
+				 if (i == null) {
+					 count++;
+				 } else if (i.getType() == Material.AIR) {
+					 count++;
+				 }
 			 }
-		 }
-		 if (count == 0) {							 
-			 player.getWorld().dropItemNaturally(player.getEyeLocation(), item);							 
-		 } else {
-			 player.getInventory().addItem(item);
-		 }
+			 if (count == 0) {							 
+				 this.player.getWorld().dropItemNaturally(this.player.getEyeLocation(), item);							 
+			 } else {
+				 this.player.getInventory().addItem(item);
+			 }
 
-		return true;
+			return true;
+			
+		}
+		return false;
 		
 	}
 	

@@ -107,18 +107,19 @@ public class RewardThread implements Runnable  {
 						
 						// On gere les messages
 						cmess.proceedRewards(reward, rewardsSection);
-						
-					} catch (RewardMoneyException ex){
-						Log.warning(ex.getMessage());
-					} catch (RewardPermException ex2) {
-						Log.warning(ex2.getMessage());
-					} catch (RewardGroupException ex3) {
-						Log.warning(ex3.getMessage());
-					} catch (RewardCommandException ex4) {
-						Log.warning(ex4.getMessage());
-					}//catch (RewardItemException e) {
-					//	Log.warning(e.getMessage());
-					//}
+					
+					} catch (RewardMoneyException e){
+						Log.warning(e.getMessage());
+					} catch (RewardPermException e) {
+						Log.warning(e.getMessage());
+					} catch (RewardGroupException e) {
+						Log.warning(e.getMessage());
+					} catch (RewardCommandException e) {
+						Log.warning(e.getMessage());
+					}catch (RewardItemException e) {
+						Log.warning(e.getMessage());
+					}
+					
 
 					Log.debug("-----End Rewards");
 					
