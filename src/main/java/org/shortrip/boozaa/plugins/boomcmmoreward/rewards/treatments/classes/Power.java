@@ -9,7 +9,7 @@ import org.shortrip.boozaa.plugins.boomcmmoreward.utils.Const;
 
 public class Power extends AbstractReward {
 	
-		
+	private cReward reward;	
 	
 	public Power() {
 		super();				
@@ -23,6 +23,8 @@ public class Power extends AbstractReward {
 			
 			Log.debug("---Checking Power conditions");
 			
+			this.reward = reward;
+			
 			try{
 
 				// Vérification
@@ -34,14 +36,14 @@ public class Power extends AbstractReward {
 		    		
 		    		if( p.trim().startsWith("-")) {	    				
 		    			Log.debug("-Testing if user's power < " + limit);	    					    				  
-		    			if( !reward.isPowerMinorLimit(limit) ) {		    				
+		    			if( !isPowerMinorLimit(limit) ) {		    				
 	    					return false;
 		    			}
 		    			Log.debug("-Ok");
 	    					    				
 	    			}else if( p.trim().startsWith("+")) {	    				
 	    				Log.debug("-Testing if user's power > " + limit);
-	    				if( !reward.isPowerMajorLimit(limit) ) {		    				
+	    				if( !isPowerMajorLimit(limit) ) {		    				
 	    					return false;
 		    			}
 	    				Log.debug("-Ok");
@@ -62,6 +64,14 @@ public class Power extends AbstractReward {
 		return true;
 	}
 
+	
+	private Boolean isPowerMinorLimit(int limit){		
+		return (this.reward.getPlayerPower() < limit);		
+	}
+	
+	private Boolean isPowerMajorLimit(int limit) {		
+		return (this.reward.getPlayerPower() > limit);		
+	}
 
 
 

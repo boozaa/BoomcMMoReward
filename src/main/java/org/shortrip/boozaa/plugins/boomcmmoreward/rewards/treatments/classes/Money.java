@@ -58,7 +58,6 @@ public class Money extends AbstractReward {
 		
 		int max = 10;
 		int proba = 1;
-		String amount = confSection.getString(Const.AMOUNT);
 		
 		// Tirage au hasard pour chaque item de la liste
 		if( BoomcMMoReward.getYmlConf().get(Const.PLUGIN_DICEFACES) != null ) {
@@ -71,18 +70,13 @@ public class Money extends AbstractReward {
 		}
 		
 		// Lance le dé
-		if( launchTheDice(max, proba) ){			
-			
+		if( launchTheDice(max, proba) ){	
 			// Gagnant on envoit les ronds
 			sendMoney(confSection);		
-			
 		}else{
 			Log.debug("-No luck" );
 		}
-		
-		
-		
-		
+				
 	}
 	
 	
@@ -100,7 +94,7 @@ public class Money extends AbstractReward {
 				reward.addReplacement("%sender%", s);
 			}				
 			// On demande le paiement 
-			reward.giveMoney(sender, confSection.getDouble(Const.AMOUNT));
+			giveMoney(sender, confSection.getDouble(Const.AMOUNT));
 			// On stocke en db
 			listMoney.add(confSection.getDouble(Const.AMOUNT));
 			Log.debug("-Give " + confSection.getDouble(Const.AMOUNT) + " from " + sender);
@@ -148,7 +142,7 @@ public class Money extends AbstractReward {
 	    			if( p.trim().startsWith("-")) {
 	    				
 	    				Log.debug("-Testing : < " + limit);	    				
-	    				if( !reward.isMoneyMinorLimit(limit) ) {		    				
+	    				if( !isMoneyMinorLimit(limit) ) {		    				
 	    					return false;
 		    			}
 	    				Log.debug("-Ok");
@@ -156,7 +150,7 @@ public class Money extends AbstractReward {
 	    			}else if( p.trim().startsWith("+")) {
 	    				
 	    				Log.debug("-Testing : > " + limit);	    				
-	    				if( !reward.isMoneyMajorLimit(limit) ) {	
+	    				if( !isMoneyMajorLimit(limit) ) {	
 	    					return false;
 		    			}
 	    				Log.debug("-Ok");
@@ -179,6 +173,21 @@ public class Money extends AbstractReward {
 	}
 
 	
+	private Boolean isMoneyMinorLimit(Double limit) {
+		return ( BoomcMMoReward.getEcon().getBalance( this.reward.getPlayer().getName() ) < limit );		
+	}
+	
+	private Boolean isMoneyMajorLimit(Double limit) {
+		return ( BoomcMMoReward.getEcon().getBalance( this.reward.getPlayer().getName() ) > limit );		
+	}
+	
+	
+	private void giveMoney(final String sender, final Double amount){		
+		// On prends le montant chez le sender
+		BoomcMMoReward.getEcon().withdrawPlayer(sender, amount);
+		// Que l'on donne au méritant
+		BoomcMMoReward.getEcon().depositPlayer(this.reward.getPlayer().getName(), amount);			
+	}
 
 
 	public class RewardMoneyException extends Exception {

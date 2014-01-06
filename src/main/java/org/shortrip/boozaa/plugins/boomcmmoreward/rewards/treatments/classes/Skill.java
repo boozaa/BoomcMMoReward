@@ -13,6 +13,8 @@ import com.gmail.nossr50.datatypes.skills.SkillType;
 
 public class Skill extends AbstractReward {
 
+	private cReward reward;	
+	
 	
 	public Skill() {
 		super();
@@ -24,6 +26,8 @@ public class Skill extends AbstractReward {
 		if( confSection.get(Const.SKILL) != null ) {
 			
 			Log.debug("---Checking Skill conditions");
+
+			this.reward = reward;
 			
 			try{
 			
@@ -40,7 +44,7 @@ public class Skill extends AbstractReward {
 				    		
 				    		if( p.trim().startsWith("-")) {			    				
 				    			Log.debug("-Testing if user's " + s.name() + " level is < " + level);	    				
-			    				if( !reward.isSkillLevelMinorLimit(s.name(), level) ){
+			    				if( !isSkillLevelMinorLimit(s.name(), level) ){
 			    					return false;
 			    				}
 			    				Log.debug("-Ok");
@@ -82,6 +86,26 @@ public class Skill extends AbstractReward {
 	}
 
 
+	private Boolean isSkillExists(String skill) {
+		if( SkillType.valueOf(skill) != null ){
+			return true;
+		}
+		return false;
+	}
+	
+	private Boolean isSkillLevelMinorLimit(String skill, int limit){		
+		if( isSkillExists(skill) ){
+			return ( this.reward.getPlayerSkillLevel(skill) < limit );
+		}
+		return false;
+	}
+	
+	private Boolean isSkillLevelMajorLimit(String skill, int limit){		
+		if( isSkillExists(skill) ){
+			return ( this.reward.getPlayerSkillLevel(skill) > limit );
+		}
+		return false;
+	}
 	
 
 	public class RewardSkillException extends Exception {

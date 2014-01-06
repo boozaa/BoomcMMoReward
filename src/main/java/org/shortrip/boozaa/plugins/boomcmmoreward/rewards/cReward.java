@@ -9,7 +9,6 @@ import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -84,94 +83,12 @@ public class cReward {
 	public Boolean hasRewards() {
 		return hasRewards;		
 	}
-	
-	/*
-	 * Boolean mcMMO
-	 */
-	public Boolean isSkillExists(String skill) {
-		if( SkillType.valueOf(skill) != null ){
-			return true;
-		}
-		return false;
-	}
-	
-	public Boolean isPowerMinorLimit(int limit){		
-		return (getPlayerPower() < limit);		
-	}
-	
-	public Boolean isPowerMajorLimit(int limit) {		
-		return (getPlayerPower() > limit);		
-	}
-	
-	public Boolean isSkillLevelMinorLimit(String skill, int limit){		
-		if( isSkillExists(skill) ){
-			return ( getPlayerSkillLevel(skill) < limit );
-		}
-		return false;
-	}
-	
-	public Boolean isSkillLevelMajorLimit(String skill, int limit){		
-		if( isSkillExists(skill) ){
-			return ( getPlayerSkillLevel(skill) > limit );
-		}
-		return false;
-	}
-	
-	
-	/*
-	 * Boolean economy
-	 */
-	public Boolean isMoneyMinorLimit(Double limit) {
-		return ( BoomcMMoReward.getEcon().getBalance(player.getName()) < limit );		
-	}
-	
-	public Boolean isMoneyMajorLimit(Double limit) {
-		return ( BoomcMMoReward.getEcon().getBalance(player.getName()) > limit );		
-	}
-	
-	
-	/*
-	 * Boolean permission / group
-	 */
-	public Boolean isGroupExists(String groupName){		
-		for( String g : BoomcMMoReward.getPerms().getGroups() ){
-			if( g.equalsIgnoreCase(groupName)){ return true; }
-		}
-		return false;
-	}
-	
-	
-	public Boolean isInGroup(String groupName){
-		return ( BoomcMMoReward.getPerms().playerInGroup(player, groupName));		
-	}
-	
-	public Boolean hasPermission(String permission){
-		return BoomcMMoReward.getPerms().playerHas(player, permission);
-	}
-	
-	public Boolean hasPermissionInWorld(String permission, String worldName){
-		if( player.getServer().getWorld(worldName) != null) {
-			return BoomcMMoReward.getPerms().playerHas(player.getServer().getWorld(worldName), player.getName(), permission);
-		}	
-		return false;
-	}
-	
-	
-	/*
-	 * Boolean World
-	 */
-	public Boolean isInWorld(String worldName){
-		return player.getWorld().equals( player.getServer().getWorld(worldName) );
-	}
-	
-	public Boolean isInWorld(World world){
-		return player.getWorld().equals(world);
-	}
-	
+
 	
 	/*
 	 * mcMMO related
 	 */
+	
 	public int getPlayerPower(){
 		return com.gmail.nossr50.api.ExperienceAPI.getPowerLevel(this.player);
 				
@@ -222,69 +139,9 @@ public class cReward {
 	}
 	
 	
-	public void addPendingItem( ItemStack citems ){
-		
+	public void addPendingItem( ItemStack citems ){		
 		// Ici on recoit un item qui ne peut pas être placé dans l'inventaire du joueur
-		BoomcMMoReward.getPendingCache().addItemStack(player.getName(), citems);
-		
-	}
-	
-	
-	public void giveMoney(final String sender, final Double amount){
-		
-		// On prends le montant chez le sender
-		BoomcMMoReward.getEcon().withdrawPlayer(sender, amount);
-		// Que l'on donne au méritant
-		BoomcMMoReward.getEcon().depositPlayer(player.getName(), amount);
-			
-	}
-	
-	
-	/*
-	 * Permission gestion
-	 */
-	public void givePermissionInWorld(String permission, String worldName){		
-		// Tentative d'ajout de permission spécifique au Monde
-		BoomcMMoReward.getPerms().playerAdd(player.getServer().getWorld(worldName), player.getName(), permission);							
-	}
-	
-	public void givePermission(String permission){			
-		// Tentative d'ajout de permission 
-		BoomcMMoReward.getPerms().playerAdd(player, permission);
-	}
-	
-	public void removePermissionInWorld(String permission, String worldName){
-		// Tentative de retrait de permission dans World
-		BoomcMMoReward.getPerms().playerRemove(player.getServer().getWorld(worldName), player.getName(), permission);					
-	}
-		
-	public void removePermission(String permission){
-		// Tentative de retrait de permission 
-		BoomcMMoReward.getPerms().playerRemove(player, permission);
-	}
-	
-	
-	/*
-	 * Group gestion
-	 */
-	public void addToGroupInWorld(String groupName, String worldName) {
-		// Tentative d'ajout du player au groupe dans Monde
-		BoomcMMoReward.getPerms().playerAddGroup(player.getServer().getWorld(worldName), player.getName(), groupName);	
-	}
-	
-	public void addToGroup(String groupName) {
-		// Tentative d'ajout du player au groupe
-		BoomcMMoReward.getPerms().playerAddGroup(player, groupName);
-	}
-		
-	public void removeFromGroupInWorld(String groupName, String worldName){
-		// Tentative de retrait de player au group dans Monde
-		BoomcMMoReward.getPerms().playerRemoveGroup(player.getServer().getWorld(worldName), player.getName(), groupName);
-	}
-		
-	public void removeFromGroup(String groupName){
-		// Tentative de retrait de player au group
-		BoomcMMoReward.getPerms().playerRemoveGroup(player, groupName);
+		BoomcMMoReward.getPendingCache().addItemStack(player.getName(), citems);		
 	}
 	
 	

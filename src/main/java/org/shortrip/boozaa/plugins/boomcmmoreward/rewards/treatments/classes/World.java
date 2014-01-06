@@ -8,6 +8,10 @@ import org.shortrip.boozaa.plugins.boomcmmoreward.utils.Const;
 
 public class World extends AbstractReward {
 	
+
+	private cReward reward;
+	
+	
 	public World() {
 		super();
 	}
@@ -16,11 +20,13 @@ public class World extends AbstractReward {
 	@Override
 	public Boolean isValid(cReward reward, ConfigurationSection confSection) {
 	
+		this.reward = reward;
+		
 		if(confSection.get(Const.WORLD) != null) {
 			Log.debug("---Checking World conditions");
 			Log.debug("-Testing if in World -> " + confSection.get(Const.WORLD) );
 			// On testes si dans le bon Monde
-			if( reward.isInWorld(confSection.getString(Const.WORLD) )){
+			if( isInWorld(confSection.getString(Const.WORLD) )){
 				Log.debug("-Ok");
 				return true;
 			}else{
@@ -31,6 +37,14 @@ public class World extends AbstractReward {
 		
 	}
 
+	
+	private Boolean isInWorld(String worldName){
+		return this.reward.getPlayer().getWorld().equals( this.reward.getPlayer().getServer().getWorld(worldName) );
+	}
+	
+	private Boolean isInWorld(World world){
+		return this.reward.getPlayer().getWorld().equals(world);
+	}
 
 	
 }

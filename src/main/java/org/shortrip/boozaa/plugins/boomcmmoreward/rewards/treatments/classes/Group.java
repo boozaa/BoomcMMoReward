@@ -3,6 +3,7 @@ package org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.classes;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.configuration.ConfigurationSection;
+import org.shortrip.boozaa.plugins.boomcmmoreward.BoomcMMoReward;
 import org.shortrip.boozaa.plugins.boomcmmoreward.Log;
 import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.cReward;
 import org.shortrip.boozaa.plugins.boomcmmoreward.utils.Const;
@@ -35,10 +36,10 @@ public class Group extends AbstractReward {
 		    	for( String p : newGroups) {
 		    		
 		    		String group = p.substring(1);
-		    		Boolean isInGroup = reward.isInGroup(group);
+		    		Boolean isInGroup = isInGroup(group);
 		    		
 		    		// Vérification d'existence de ce groupe
-		    		if( reward.isGroupExists(group) ) {
+		    		if( isGroupExists(group) ) {
 		    			
 		    			// On stocke en db
 		    			listGroups.add(group);
@@ -47,7 +48,7 @@ public class Group extends AbstractReward {
 
 			    			if( !isInGroup ){
 			    				// On ajoute au groupe
-			    				reward.addToGroup(group);			    				
+			    				addToGroup(group);			    				
 			    				Log.debug("-Player added to group " + group);
 			    			}else{
 			    				Log.debug("-Player is already on Group " + group + " -> no changes");
@@ -58,7 +59,7 @@ public class Group extends AbstractReward {
 			    			
 			    			if( isInGroup ){
 			    				// On ajoute au groupe
-			    				reward.removeFromGroup(group);			    				
+			    				removeFromGroup(group);			    				
 			    				Log.debug("-Player removed from group " + group);
 			    			}else{
 			    				Log.debug("-Player is not on Group " + group + " -> no changes");
@@ -101,7 +102,7 @@ public class Group extends AbstractReward {
 	    		try{
 	    			
 	    			String groupName = p.trim().substring(1).trim();
-	    			Boolean isInGroup = reward.isInGroup(groupName);
+	    			Boolean isInGroup = isInGroup(groupName);
 	    			
 	    			if( p.trim().startsWith("-")) {
 	    					    				
@@ -139,6 +140,41 @@ public class Group extends AbstractReward {
 		
 	}
 
+	
+
+	private Boolean isGroupExists(String groupName){		
+		for( String g : BoomcMMoReward.getPerms().getGroups() ){
+			if( g.equalsIgnoreCase(groupName)){ return true; }
+		}
+		return false;
+	}
+	
+	
+	private Boolean isInGroup(String groupName){
+		return ( BoomcMMoReward.getPerms().playerInGroup(this.reward.getPlayer(), groupName));		
+	}
+	
+	
+	private void addToGroupInWorld(String groupName, String worldName) {
+		// Tentative d'ajout du player au groupe dans Monde
+		BoomcMMoReward.getPerms().playerAddGroup(this.reward.getPlayer().getServer().getWorld(worldName), this.reward.getPlayer().getName(), groupName);	
+	}
+	
+	private void addToGroup(String groupName) {
+		// Tentative d'ajout du player au groupe
+		BoomcMMoReward.getPerms().playerAddGroup(this.reward.getPlayer(), groupName);
+	}
+		
+	private void removeFromGroupInWorld(String groupName, String worldName){
+		// Tentative de retrait de player au group dans Monde
+		BoomcMMoReward.getPerms().playerRemoveGroup(this.reward.getPlayer().getServer().getWorld(worldName), this.reward.getPlayer().getName(), groupName);
+	}
+		
+	private void removeFromGroup(String groupName){
+		// Tentative de retrait de player au group
+		BoomcMMoReward.getPerms().playerRemoveGroup(this.reward.getPlayer(), groupName);
+	}
+	
 	
 	
 

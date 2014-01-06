@@ -3,6 +3,7 @@ package org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.classes;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.configuration.ConfigurationSection;
+import org.shortrip.boozaa.plugins.boomcmmoreward.BoomcMMoReward;
 import org.shortrip.boozaa.plugins.boomcmmoreward.Log;
 import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.cReward;
 import org.shortrip.boozaa.plugins.boomcmmoreward.utils.Const;
@@ -46,13 +47,13 @@ public class Perm extends AbstractReward {
 	    			int end = p.indexOf("]");
 	    			String worldName = p.substring(start+1, end);
 	    			String perm = p.substring(end+1);
-	    			Boolean hasThisPerm = reward.hasPermissionInWorld(perm, worldName);
+	    			Boolean hasThisPerm = hasPermissionInWorld(perm, worldName);
 	    			
 	    			// On demande d'ajouter cette perm
 	    			if( p.startsWith("+") ) {
 	    				if( !hasThisPerm ) {
 		    				// Ajout de permission pour un Monde spécifique
-		    				reward.givePermissionInWorld(perm, worldName);
+		    				givePermissionInWorld(perm, worldName);
 		    				Log.debug("-Added permission " + perm + " on World " + worldName);
 		    			}else{
 		    				Log.debug("-Player already has this permission :" + perm + " for World " + worldName + " -> no changes");
@@ -60,7 +61,7 @@ public class Perm extends AbstractReward {
 	    			}else if( p.startsWith("-") ) {
 	    				if( hasThisPerm ) {
 	    					// Suppression de cette permission
-	    					reward.removePermissionInWorld(perm, worldName);
+	    					removePermissionInWorld(perm, worldName);
 	    					Log.debug("-Removed permission " + perm + " on World " + worldName);
 	    				}else{
 	    					Log.debug("-Player don't have this permission :" + perm + " for World " + worldName + " -> no changes");
@@ -71,12 +72,12 @@ public class Perm extends AbstractReward {
 	    			
 	    		}else{
 	    			String perm = p.substring(1);
-	    			Boolean hasThisPerm = reward.hasPermission(perm);
+	    			Boolean hasThisPerm = hasPermission(perm);
 	    			
 	    			if( p.startsWith("+") ) {
 	    				if( !hasThisPerm ) {
 		    				// Ajout de permission pour un Monde spécifique
-		    				reward.givePermission(perm);
+		    				givePermission(perm);
 		    				Log.debug("-Added permission " + perm);
 		    			}else{
 		    				Log.debug("-Player already has this permission :" + perm + " -> no changes");
@@ -84,7 +85,7 @@ public class Perm extends AbstractReward {
 	    			}else if( p.startsWith("-") ) {
 	    				if( hasThisPerm ) {
 	    					// Suppression de cette permission
-	    					reward.removePermission(perm);
+	    					removePermission(perm);
 	    					Log.debug("-Removed permission " + perm );
 	    				}else{
 	    					Log.debug("-Player don't have this permission :" + perm + " -> no changes");
@@ -136,7 +137,7 @@ public class Perm extends AbstractReward {
 		    			String perm = p.substring(end+1);
 		    			
 		    			if( p.startsWith("+") ) {		    				
-		    				if(!reward.hasPermissionInWorld(perm, worldName) ) {
+		    				if(!hasPermissionInWorld(perm, worldName) ) {
 			    				// On informe et on sort
 		    					Log.debug("-Player don't have the permission " + perm + " based on World " + worldName);
 			    				return false;
@@ -144,7 +145,7 @@ public class Perm extends AbstractReward {
 			    				Log.debug("-Ok");
 			    			}
 		    			}else if( p.startsWith("-") ) {
-		    				if( reward.hasPermissionInWorld(perm, worldName) ) {
+		    				if( hasPermissionInWorld(perm, worldName) ) {
 		    					Log.debug("-Player has the permission " + perm + " for World " + worldName);
 		    					return false;
 		    				}else{
@@ -158,7 +159,7 @@ public class Perm extends AbstractReward {
 		    			String perm = p.substring(1);
 		    			
 		    			if( p.startsWith("+") ) {
-		    				if( !reward.hasPermission(perm) ) {
+		    				if( !hasPermission(perm) ) {
 			    				// Ajout de permission pour un Monde spécifique
 		    					Log.debug("-Player don't have the permission " + perm);
 				    			return false;
@@ -166,7 +167,7 @@ public class Perm extends AbstractReward {
 		    					Log.debug("-Ok");
 			    			}
 		    			}else if( p.startsWith("-") ) {
-		    				if( reward.hasPermission(perm) ) {
+		    				if( hasPermission(perm) ) {
 		    					// Suppression de cette permission
 		    					Log.debug("-Player has the permission " + perm);
 		    					return false;
@@ -190,7 +191,37 @@ public class Perm extends AbstractReward {
 		return true;
 	}
 
-
+	
+	private Boolean hasPermission(String permission){
+		return BoomcMMoReward.getPerms().playerHas(this.reward.getPlayer(), permission);
+	}
+	
+	private Boolean hasPermissionInWorld(String permission, String worldName){
+		if( this.reward.getPlayer().getServer().getWorld(worldName) != null) {
+			return BoomcMMoReward.getPerms().playerHas(this.reward.getPlayer().getServer().getWorld(worldName), this.reward.getPlayer().getName(), permission);
+		}	
+		return false;
+	}
+	
+	private void givePermissionInWorld(String permission, String worldName){		
+		// Tentative d'ajout de permission spécifique au Monde
+		BoomcMMoReward.getPerms().playerAdd(this.reward.getPlayer().getServer().getWorld(worldName), this.reward.getPlayer().getName(), permission);							
+	}
+	
+	private void givePermission(String permission){			
+		// Tentative d'ajout de permission 
+		BoomcMMoReward.getPerms().playerAdd(this.reward.getPlayer(), permission);
+	}
+	
+	private void removePermissionInWorld(String permission, String worldName){
+		// Tentative de retrait de permission dans World
+		BoomcMMoReward.getPerms().playerRemove(this.reward.getPlayer().getServer().getWorld(worldName), this.reward.getPlayer().getName(), permission);					
+	}
+		
+	private void removePermission(String permission){
+		// Tentative de retrait de permission 
+		BoomcMMoReward.getPerms().playerRemove(this.reward.getPlayer(), permission);
+	}
 
 
 
