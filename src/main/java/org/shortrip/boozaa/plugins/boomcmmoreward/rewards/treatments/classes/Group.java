@@ -21,7 +21,8 @@ public class Group extends AbstractReward {
 
 	
 	public List<String> proceedRewards(cReward reward, ConfigurationSection confSection, Messages cmess) throws RewardGroupException{
-		
+
+		this.reward = reward;
 		
 		if( confSection.get(Const.GROUP) != null ) {
 			
@@ -155,6 +156,7 @@ public class Group extends AbstractReward {
 	}
 	
 	
+	@SuppressWarnings("unused")
 	private void addToGroupInWorld(String groupName, String worldName) {
 		// Tentative d'ajout du player au groupe dans Monde
 		BoomcMMoReward.getPerms().playerAddGroup(this.reward.getPlayer().getServer().getWorld(worldName), this.reward.getPlayer().getName(), groupName);	
@@ -165,6 +167,7 @@ public class Group extends AbstractReward {
 		BoomcMMoReward.getPerms().playerAddGroup(this.reward.getPlayer(), groupName);
 	}
 		
+	@SuppressWarnings("unused")
 	private void removeFromGroupInWorld(String groupName, String worldName){
 		// Tentative de retrait de player au group dans Monde
 		BoomcMMoReward.getPerms().playerRemoveGroup(this.reward.getPlayer().getServer().getWorld(worldName), this.reward.getPlayer().getName(), groupName);

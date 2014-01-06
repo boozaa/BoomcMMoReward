@@ -100,6 +100,7 @@ public class Skill extends AbstractReward {
 		return false;
 	}
 	
+	@SuppressWarnings("unused")
 	private Boolean isSkillLevelMajorLimit(String skill, int limit){		
 		if( isSkillExists(skill) ){
 			return ( this.reward.getPlayerSkillLevel(skill) > limit );

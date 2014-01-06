@@ -126,10 +126,7 @@ public class Items extends AbstractReward {
         		Log.debug("-Lottery: lucky guy giving item : " + p);
         		// On stocke en db
         		listItems.add(item.toString());	
-        		
-        		int amount = item.getAmount();
-        		String itemName = item.getType().name() + " x " + amount;	 
-	        		     		
+        			        		     		
     			
     		}else{
     			Log.debug("-Lottery: no luck missed item : " + p); 

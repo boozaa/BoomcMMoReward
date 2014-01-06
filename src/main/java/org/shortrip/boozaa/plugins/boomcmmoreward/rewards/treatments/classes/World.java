@@ -42,6 +42,7 @@ public class World extends AbstractReward {
 		return this.reward.getPlayer().getWorld().equals( this.reward.getPlayer().getServer().getWorld(worldName) );
 	}
 	
+	@SuppressWarnings("unused")
 	private Boolean isInWorld(World world){
 		return this.reward.getPlayer().getWorld().equals(world);
 	}
