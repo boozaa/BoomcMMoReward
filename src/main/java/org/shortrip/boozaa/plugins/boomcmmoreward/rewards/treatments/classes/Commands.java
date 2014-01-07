@@ -37,12 +37,9 @@ public class Commands extends AbstractReward {
 			
 			try {
 				
-				List<String> commands = confSection.getStringList(Const.COMMAND);				
-				// On stocke en db
-				Collections.copy(listCommands, commands);
 				
 				// On fait traiter ces commandes par le cReward
-				reward.sendCommands(commands);
+				reward.sendCommands(listCommands);
 				
 				// On donne les commandes lancées en variables de remplacement
 				reward.addReplacement("%commands%", listCommands);
