@@ -193,9 +193,9 @@ public class cReward {
 	public void sendCommands(final List<String> commands){
 		
 		for( String cmd : commands) {
-			Log.info( "-Trying to launch command" );
+			Log.debug( "-Trying to launch command" + "\n" +  variableReplace(cmd) );
 			if( Bukkit.dispatchCommand(Bukkit.getConsoleSender(), variableReplace(cmd) ) ) {
-				Log.info( "-Command sent : " + variableReplace(cmd) );
+				Log.debug( "-Command sent : " + variableReplace(cmd) );
     		}			
 		}
 				

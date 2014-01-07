@@ -1,7 +1,6 @@
 package org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.classes;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import org.bukkit.configuration.ConfigurationSection;
 import org.shortrip.boozaa.plugins.boomcmmoreward.Log;
@@ -37,6 +36,7 @@ public class Commands extends AbstractReward {
 			
 			try {
 				
+				listCommands = confSection.getStringList(Const.COMMAND);	
 				
 				// On fait traiter ces commandes par le cReward
 				reward.sendCommands(listCommands);
