@@ -192,16 +192,12 @@ public class cReward {
 	
 	public void sendCommands(final List<String> commands){
 		
-		BukkitTasklauncher.launchTask( new Runnable() {
-			@Override
-			public void run() {
-				for( String cmd : commands) {			
-					if( Bukkit.dispatchCommand(Bukkit.getConsoleSender(), variableReplace(cmd) ) ) {
-						Log.info( "-Command sent : " + variableReplace(cmd) );
-		    		}			
-				}
-			}			
-		});	
+		for( String cmd : commands) {
+			Log.info( "-Trying to launch command" );
+			if( Bukkit.dispatchCommand(Bukkit.getConsoleSender(), variableReplace(cmd) ) ) {
+				Log.info( "-Command sent : " + variableReplace(cmd) );
+    		}			
+		}
 				
 	}
 	
