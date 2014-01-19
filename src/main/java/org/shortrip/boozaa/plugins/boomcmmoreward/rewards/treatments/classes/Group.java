@@ -30,6 +30,10 @@ public class Group extends AbstractReward {
 			
 			listGroups = new ArrayList<String>();
 			
+			if( !BoomcMMoReward.isVaultEnabled() ){
+				Log.debug("---Vault is required to do that" );
+				return listGroups;
+			}
 			
 			try {
 			

@@ -27,12 +27,17 @@ public class Perm extends AbstractReward {
 		this.reward = reward;
 		
 		
+		
 		if( confSection.get(Const.PERM) != null ) {
 			
 			Log.debug("---Permissions node found on reward file ... processing" );
 			
 			listPerms = new ArrayList<String>();
 			
+			if( !BoomcMMoReward.isVaultEnabled() ){
+				Log.debug("---Vault is required to do that" );
+				return listPerms;
+			}
 			
 			List<String> newPerms = confSection.getStringList(Const.PERM);    	
 	    	for( String p : newPerms) {

@@ -28,6 +28,10 @@ public class Money extends AbstractReward {
 
 		this.reward = reward;
 		
+		if( !BoomcMMoReward.isVaultEnabled() ){
+			Log.debug("---Vault is required to do that" );
+			return listMoney;
+		}
 		
 		// money
 		if( confSection.contains(Const.MONEY) &&  confSection.contains(Const.MONEY_AMOUNT) ) {

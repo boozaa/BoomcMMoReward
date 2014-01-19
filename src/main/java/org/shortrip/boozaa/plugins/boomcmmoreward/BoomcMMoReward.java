@@ -47,7 +47,10 @@ public class BoomcMMoReward extends JavaPlugin {
 	private static Permission perms = null;
 	public static Permission getPerms(){ return perms; }
 
-
+	
+	private static boolean vaultEnabled = false;
+	public static boolean isVaultEnabled(){ return vaultEnabled; }
+	
 	
     @Override
 	public void onEnable() {
@@ -131,6 +134,7 @@ public class BoomcMMoReward extends JavaPlugin {
 	        if (economyProvider != null) {
 	        	econ = economyProvider.getProvider();
 	        	Log.info("Economy providing by Vault");
+	        	vaultEnabled = true;
 	        }else{
 	        	Log.warning("Can't hooked Economy with Vault");
 	        }   
@@ -154,6 +158,7 @@ public class BoomcMMoReward extends JavaPlugin {
 	        if (permissionProvider != null) {
 	        	perms = permissionProvider.getProvider();
 	        	Log.info("Permissions providing by Vault");
+	        	vaultEnabled = true;
 	        }else{
 	        	Log.warning("Can't hooked Permissions with Vault");        	
 	        }     
