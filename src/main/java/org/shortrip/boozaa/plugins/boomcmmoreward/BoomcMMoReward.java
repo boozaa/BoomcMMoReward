@@ -21,7 +21,9 @@ import org.shortrip.boozaa.plugins.boomcmmoreward.utils.ModifyRewardFiles;
 import com.gmail.nossr50.datatypes.skills.AbilityType;
 import com.gmail.nossr50.datatypes.skills.SkillType;
 
-
+/*
+ * Plugin class
+ */
 public class BoomcMMoReward extends JavaPlugin {
     
 	private CommandsExecutor commandExecutor;
