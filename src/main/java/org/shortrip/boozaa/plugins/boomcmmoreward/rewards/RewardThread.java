@@ -109,7 +109,7 @@ public class RewardThread implements Runnable  {
 						cmess.proceedRewards(reward, rewardsSection);
 					
 					} catch (RewardMoneyException e){
-						Log.warning(e.getMessage());
+						Log.warning(e.getMessage(), e);
 					} catch (RewardPermException e) {
 						Log.warning(e.getMessage());
 					} catch (RewardGroupException e) {

@@ -3,6 +3,8 @@ package org.shortrip.boozaa.plugins.boomcmmoreward;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.command.Command;
@@ -26,6 +28,9 @@ import com.gmail.nossr50.datatypes.skills.SkillType;
  */
 public class BoomcMMoReward extends JavaPlugin {
     
+	public static final Random RANDOM = new Random();
+	
+	
 	private CommandsExecutor commandExecutor;
 	
 	private static Plugin _instance;

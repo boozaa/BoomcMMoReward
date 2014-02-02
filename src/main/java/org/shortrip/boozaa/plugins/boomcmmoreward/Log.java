@@ -27,6 +27,12 @@ public class Log {
 		console.sendMessage(prefix + ChatColor.GOLD + "- WARNING - " +  message);
 	}
 	
+
+	public static void warning(String error, Exception message) {
+		console.sendMessage(prefix + ChatColor.GOLD + "- WARNING - " +  message);
+		writeError(error, message);
+	}
+	
 	public static void error(String message) {
 		console.sendMessage(prefix + "- ERROR - " + message);
 	}
@@ -84,6 +90,7 @@ public class Log {
 		}
 		
 	}
+
 	
 	
 }

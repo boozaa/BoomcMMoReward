@@ -2,7 +2,6 @@ package org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.classes;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
@@ -278,14 +277,17 @@ public class Items extends AbstractReward {
 	
 
 	
-	private Boolean launchTheDice(int max, int proba){
+	private boolean launchTheDice(int max, int proba){
 
+		return BoomcMMoReward.RANDOM.nextFloat() < (proba / (float)max);
+		/*
 		Random rand = new Random();
-		int randomNumber = rand.nextInt(max); // un random  dans la limite de max
+		int randomNumber = rand.nextInt(max);
 		if(randomNumber <= proba){			
 			return true;
 		}
 		return false;
+		*/
 
 	}
 
