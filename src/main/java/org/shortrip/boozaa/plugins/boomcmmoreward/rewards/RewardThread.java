@@ -111,13 +111,13 @@ public class RewardThread implements Runnable  {
 					} catch (RewardMoneyException e){
 						Log.warning(e.getMessage(), e);
 					} catch (RewardPermException e) {
-						Log.warning(e.getMessage());
+						Log.warning(e.getMessage(), e);
 					} catch (RewardGroupException e) {
-						Log.warning(e.getMessage());
+						Log.warning(e.getMessage(), e);
 					} catch (RewardCommandException e) {
-						Log.warning(e.getMessage());
+						Log.warning(e.getMessage(), e);
 					}catch (RewardItemException e) {
-						Log.warning(e.getMessage());
+						Log.warning(e.getMessage(), e);
 					}
 					
 
@@ -156,7 +156,7 @@ public class RewardThread implements Runnable  {
 	
 	
 	
-	private Boolean checkConditions(Player player, ConfigurationSection conf) {
+	private boolean checkConditions(Player player, ConfigurationSection conf) {
 
     	// Si il n'y a pas de conditions on retourne true
     	if( conf == null ) { return true;}

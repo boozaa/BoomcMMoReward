@@ -295,7 +295,7 @@ public class Items extends AbstractReward {
 	
 	
 	@Override
-	public Boolean isValid(cReward reward, ConfigurationSection confSection) {
+	public boolean isValid(cReward reward, ConfigurationSection confSection) {
 		return true;
 	}
 	

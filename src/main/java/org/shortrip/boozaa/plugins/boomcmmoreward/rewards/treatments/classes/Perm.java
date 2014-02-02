@@ -52,7 +52,7 @@ public class Perm extends AbstractReward {
 	    			int end = p.indexOf("]");
 	    			String worldName = p.substring(start+1, end);
 	    			String perm = p.substring(end+1);
-	    			Boolean hasThisPerm = hasPermissionInWorld(perm, worldName);
+	    			boolean hasThisPerm = hasPermissionInWorld(perm, worldName);
 	    			
 	    			// On demande d'ajouter cette perm
 	    			if( p.startsWith("+") ) {
@@ -77,7 +77,7 @@ public class Perm extends AbstractReward {
 	    			
 	    		}else{
 	    			String perm = p.substring(1);
-	    			Boolean hasThisPerm = hasPermission(perm);
+	    			boolean hasThisPerm = hasPermission(perm);
 	    			
 	    			if( p.startsWith("+") ) {
 	    				if( !hasThisPerm ) {
@@ -122,7 +122,7 @@ public class Perm extends AbstractReward {
 
 	
 	@Override
-	public Boolean isValid(cReward reward, ConfigurationSection confSection) throws RewardPermException {
+	public boolean isValid(cReward reward, ConfigurationSection confSection) throws RewardPermException {
 		
 		if(confSection.get(Const.PERM) != null) {
 			
@@ -197,11 +197,11 @@ public class Perm extends AbstractReward {
 	}
 
 	
-	private Boolean hasPermission(String permission){
+	private boolean hasPermission(String permission){
 		return BoomcMMoReward.getPerms().playerHas(this.reward.getPlayer(), permission);
 	}
 	
-	private Boolean hasPermissionInWorld(String permission, String worldName){
+	private boolean hasPermissionInWorld(String permission, String worldName){
 		if( this.reward.getPlayer().getServer().getWorld(worldName) != null) {
 			return BoomcMMoReward.getPerms().playerHas(this.reward.getPlayer().getServer().getWorld(worldName), this.reward.getPlayer().getName(), permission);
 		}	

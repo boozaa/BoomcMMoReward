@@ -61,7 +61,7 @@ public class Commands extends AbstractReward {
 
 
 	@Override
-	public Boolean isValid(cReward reward, ConfigurationSection confSection)
+	public boolean isValid(cReward reward, ConfigurationSection confSection)
 			throws Exception {
 		return true;
 	}

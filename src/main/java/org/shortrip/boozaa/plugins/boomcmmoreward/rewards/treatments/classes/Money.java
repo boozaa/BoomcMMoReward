@@ -131,7 +131,7 @@ public class Money extends AbstractReward {
 	
 	
 	@Override
-	public Boolean isValid(cReward reward, ConfigurationSection confSection) throws RewardMoneyException {
+	public boolean isValid(cReward reward, ConfigurationSection confSection) throws RewardMoneyException {
 
 		if(confSection.get(Const.MONEY) != null) {
 			
@@ -179,11 +179,11 @@ public class Money extends AbstractReward {
 	}
 
 	
-	private Boolean isMoneyMinorLimit(Double limit) {
+	private boolean isMoneyMinorLimit(Double limit) {
 		return ( BoomcMMoReward.getEcon().getBalance( this.reward.getPlayer().getName() ) < limit );		
 	}
 	
-	private Boolean isMoneyMajorLimit(Double limit) {
+	private boolean isMoneyMajorLimit(Double limit) {
 		return ( BoomcMMoReward.getEcon().getBalance( this.reward.getPlayer().getName() ) > limit );		
 	}
 	

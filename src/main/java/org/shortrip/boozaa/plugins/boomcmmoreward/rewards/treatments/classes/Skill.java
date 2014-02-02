@@ -21,7 +21,7 @@ public class Skill extends AbstractReward {
 	}
 
 	@Override
-	public Boolean isValid(cReward reward, ConfigurationSection confSection) throws RewardSkillException {
+	public boolean isValid(cReward reward, ConfigurationSection confSection) throws RewardSkillException {
 		
 		if( confSection.get(Const.SKILL) != null ) {
 			
@@ -86,14 +86,14 @@ public class Skill extends AbstractReward {
 	}
 
 
-	private Boolean isSkillExists(String skill) {
+	private boolean isSkillExists(String skill) {
 		if( SkillType.valueOf(skill) != null ){
 			return true;
 		}
 		return false;
 	}
 	
-	private Boolean isSkillLevelMinorLimit(String skill, int limit){		
+	private boolean isSkillLevelMinorLimit(String skill, int limit){		
 		if( isSkillExists(skill) ){
 			return ( this.reward.getPlayerSkillLevel(skill) < limit );
 		}
@@ -101,7 +101,7 @@ public class Skill extends AbstractReward {
 	}
 	
 	@SuppressWarnings("unused")
-	private Boolean isSkillLevelMajorLimit(String skill, int limit){		
+	private boolean isSkillLevelMajorLimit(String skill, int limit){		
 		if( isSkillExists(skill) ){
 			return ( this.reward.getPlayerSkillLevel(skill) > limit );
 		}

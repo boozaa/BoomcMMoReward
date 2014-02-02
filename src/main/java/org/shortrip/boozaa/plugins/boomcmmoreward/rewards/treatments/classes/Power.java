@@ -17,7 +17,7 @@ public class Power extends AbstractReward {
 		
 
 	@Override
-	public Boolean isValid(cReward reward, ConfigurationSection confSection) throws RewardPowerException {
+	public boolean isValid(cReward reward, ConfigurationSection confSection) throws RewardPowerException {
 		
 		if(confSection.get(Const.POWER) != null) {
 			
@@ -65,11 +65,11 @@ public class Power extends AbstractReward {
 	}
 
 	
-	private Boolean isPowerMinorLimit(int limit){		
+	private boolean isPowerMinorLimit(int limit){		
 		return (this.reward.getPlayerPower() < limit);		
 	}
 	
-	private Boolean isPowerMajorLimit(int limit) {		
+	private boolean isPowerMajorLimit(int limit) {		
 		return (this.reward.getPlayerPower() > limit);		
 	}
 

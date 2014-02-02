@@ -29,8 +29,8 @@ public class cReward {
 	private SkillType skill;
 	private int playerPower;
 	private int skillLevelNow;	
-	private Boolean hasConditions 	= false;
-	private Boolean hasRewards 		= false;
+	private boolean hasConditions 	= false;
+	private boolean hasRewards 		= false;
 
 	private Map<String, List<String> > replacementMap = new HashMap<String, List<String> >();
 	
@@ -74,13 +74,13 @@ public class cReward {
 	}
 	
 	/*
-	 * Booleans
+	 * booleans
 	 */
-	public Boolean hasConditions(){
+	public boolean hasConditions(){
 		return this.hasConditions;
 	}	
 	
-	public Boolean hasRewards() {
+	public boolean hasRewards() {
 		return hasRewards;		
 	}
 
@@ -113,7 +113,7 @@ public class cReward {
 	 * If inventory is full store them on metadata
 	 * and recall them on inventory's event
 	 */
-	public Boolean giveItem(final ItemStack item){
+	public boolean giveItem(final ItemStack item){
 		
 		if( item != null ){
 			

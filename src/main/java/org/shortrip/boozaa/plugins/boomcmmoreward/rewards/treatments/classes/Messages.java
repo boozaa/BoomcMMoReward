@@ -48,7 +48,7 @@ public class Messages extends AbstractReward {
 	
 	
 	@Override
-	public Boolean isValid(cReward reward, ConfigurationSection confSection) {
+	public boolean isValid(cReward reward, ConfigurationSection confSection) {
 		// TODO Auto-generated method stub
 		return true;
 	}

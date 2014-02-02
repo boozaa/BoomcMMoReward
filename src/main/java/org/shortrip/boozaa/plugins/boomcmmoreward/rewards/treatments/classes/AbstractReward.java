@@ -14,6 +14,6 @@ public abstract class AbstractReward {
 	
 	
 	
-	public abstract Boolean isValid(cReward reward, ConfigurationSection confSection) throws Exception;
+	public abstract boolean isValid(cReward reward, ConfigurationSection confSection) throws Exception;
 	
 }

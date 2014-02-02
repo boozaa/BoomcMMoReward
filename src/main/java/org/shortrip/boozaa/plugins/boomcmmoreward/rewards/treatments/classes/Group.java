@@ -41,7 +41,7 @@ public class Group extends AbstractReward {
 		    	for( String p : newGroups) {
 		    		
 		    		String group = p.substring(1);
-		    		Boolean isInGroup = isInGroup(group);
+		    		boolean isInGroup = isInGroup(group);
 		    		
 		    		// Vérification d'existence de ce groupe
 		    		if( isGroupExists(group) ) {
@@ -94,7 +94,7 @@ public class Group extends AbstractReward {
 
 
 	@Override
-	public Boolean isValid(cReward reward, ConfigurationSection confSection) throws RewardGroupException {
+	public boolean isValid(cReward reward, ConfigurationSection confSection) throws RewardGroupException {
 
 		if(confSection.get(Const.GROUP) != null) {
 			
@@ -107,7 +107,7 @@ public class Group extends AbstractReward {
 	    		try{
 	    			
 	    			String groupName = p.trim().substring(1).trim();
-	    			Boolean isInGroup = isInGroup(groupName);
+	    			boolean isInGroup = isInGroup(groupName);
 	    			
 	    			if( p.trim().startsWith("-")) {
 	    					    				
@@ -147,7 +147,7 @@ public class Group extends AbstractReward {
 
 	
 
-	private Boolean isGroupExists(String groupName){		
+	private boolean isGroupExists(String groupName){		
 		for( String g : BoomcMMoReward.getPerms().getGroups() ){
 			if( g.equalsIgnoreCase(groupName)){ return true; }
 		}
@@ -155,7 +155,7 @@ public class Group extends AbstractReward {
 	}
 	
 	
-	private Boolean isInGroup(String groupName){
+	private boolean isInGroup(String groupName){
 		return ( BoomcMMoReward.getPerms().playerInGroup(this.reward.getPlayer(), groupName));		
 	}
 	

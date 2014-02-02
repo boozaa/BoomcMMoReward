@@ -18,7 +18,7 @@ public class World extends AbstractReward {
 	
 
 	@Override
-	public Boolean isValid(cReward reward, ConfigurationSection confSection) {
+	public boolean isValid(cReward reward, ConfigurationSection confSection) {
 	
 		this.reward = reward;
 		
@@ -38,12 +38,12 @@ public class World extends AbstractReward {
 	}
 
 	
-	private Boolean isInWorld(String worldName){
+	private boolean isInWorld(String worldName){
 		return this.reward.getPlayer().getWorld().equals( this.reward.getPlayer().getServer().getWorld(worldName) );
 	}
 	
 	@SuppressWarnings("unused")
-	private Boolean isInWorld(World world){
+	private boolean isInWorld(World world){
 		return this.reward.getPlayer().getWorld().equals(world);
 	}
 
