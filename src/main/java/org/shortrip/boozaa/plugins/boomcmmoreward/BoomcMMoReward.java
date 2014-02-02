@@ -122,7 +122,15 @@ public class BoomcMMoReward extends JavaPlugin {
 	@Override
 	public void onDisable() {
         // Cleanup statics
-		database = null;
+		try {
+			
+    		if( database.get_connectionSource().isOpen() )
+    			database.get_connectionSource().close();
+    		
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		config = null;
 		econ = null;
 		perms = null;

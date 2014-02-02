@@ -157,9 +157,11 @@ public class RewardThread implements Runnable  {
 							Log.debug("---History saved in database");
 							
 						} catch (DatabaseException e) {
-							Log.warning("A problem occured on Database, this reward might not be saved");
+							Log.warning("A problem occured on Database, this reward might not be saved", e);
+							e.printStackTrace();
 						} catch (Exception e) {
-							Log.warning("A problem occured on Database, this reward might not be saved");
+							Log.warning("A problem occured on Database, this reward might not be saved", e);
+							e.printStackTrace();
 						}
 																							
 					}

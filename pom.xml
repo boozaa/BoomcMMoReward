@@ -47,7 +47,8 @@
                     <phase>package</phase>
                     <goals>
                       <goal>shade</goal>
-                    </goals><configuration>
+                    </goals>
+                    <configuration>
                           <minimizeJar>true</minimizeJar>
                           <relocations>
                               <relocation>

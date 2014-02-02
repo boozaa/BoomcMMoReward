@@ -19,12 +19,11 @@ import com.j256.ormlite.table.TableUtils;
 
 public class ORMDatabase {
 
-	private final String TYPE 			= "config.database";
-	private final String MYSQL_HOST 	= "config.mysql.host";
-	private final String MYSQL_PORT 	= "config.mysql.port";
-	private final String MYSQL_DATABASE = "config.mysql.database";
-	private final String MYSQL_USER 	= "config.mysql.user";
-	private final String MYSQL_PASS 	= "config.mysql.pass";
+	private final String TYPE 			= "database.type";
+	private final String MYSQL_HOST 	= "database.mysql.server";
+	private final String MYSQL_DATABASE = "database.mysql.base";
+	private final String MYSQL_USER 	= "database.mysql.user";
+	private final String MYSQL_PASS 	= "database.mysql.pass";
 
 	@SuppressWarnings("unused")
 	private BoomcMMoReward plugin;
@@ -61,11 +60,12 @@ public class ORMDatabase {
 				_connectionSource = new JdbcConnectionSource(databaseUrl);				
 			}else if( dbType.equalsIgnoreCase("mysql") ){
 				String host = config.getString( MYSQL_HOST );
-				int port = config.getInt( MYSQL_PORT );
+				//int port = config.getInt( MYSQL_PORT );
 				String database = config.getString( MYSQL_DATABASE );
 				String user = config.getString( MYSQL_USER );
 				String pass = config.getString( MYSQL_PASS );
-				databaseUrl = "jdbc:mysql://"+ host + ":" + port + "/" + database;
+				//databaseUrl = "jdbc:mysql://"+ host + ":" + port + "/" + database;
+				databaseUrl = "jdbc:mysql://"+ host + "/" + database;
 				_connectionSource = new JdbcConnectionSource(databaseUrl,user,pass);				
 			}
 			
@@ -87,7 +87,7 @@ public class ORMDatabase {
 	public void saveORMHistory( ORMHistory history ) throws Exception{
 		Log.debug("Enter in saveORMHistory()");	
 		// Update in database
-		_history.update(history);		
+		_history.create(history);		
 	}
 	
 

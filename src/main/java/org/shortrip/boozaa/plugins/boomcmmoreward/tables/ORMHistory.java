@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
@@ -26,19 +27,19 @@ public class ORMHistory {
 	@DatabaseField(generatedId = true)
 	@Getter private int id;
 	
-	@DatabaseField(columnName = REWARDNAME, canBeNull = false)
+	@DatabaseField(columnName = REWARDNAME, dataType = DataType.LONG_STRING, canBeNull = false)
 	@Getter @Setter private String rewardName;	
 	@DatabaseField(columnName = PLAYERNAME, canBeNull = false)
 	@Getter @Setter private String playerName;	
 	@DatabaseField(columnName = AMOUNT, canBeNull = true)
 	@Getter @Setter private Double amount;	
-	@DatabaseField(columnName = PERMS, canBeNull = true)
+	@DatabaseField(columnName = PERMS, dataType = DataType.LONG_STRING, canBeNull = true)
 	@Getter @Setter private String perms;	
-	@DatabaseField(columnName = GROUPS, canBeNull = true)
+	@DatabaseField(columnName = GROUPS, dataType = DataType.LONG_STRING, canBeNull = true)
 	@Getter @Setter private String groups;	
-	@DatabaseField(columnName = ITEMS, canBeNull = true)
+	@DatabaseField(columnName = ITEMS, dataType = DataType.LONG_STRING, canBeNull = true)
 	@Getter @Setter private String items;	
-	@DatabaseField(columnName = COMMANDS, canBeNull = true)
+	@DatabaseField(columnName = COMMANDS, dataType = DataType.LONG_STRING, canBeNull = true)
 	@Getter @Setter private String commands;	
 	@DatabaseField(columnName = TIMESPAN, canBeNull = false)
 	@Getter @Setter private long timespan;
