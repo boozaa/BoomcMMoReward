@@ -1,10 +1,10 @@
 package org.shortrip.boozaa.plugins.boomcmmoreward;
 
 import java.io.File;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.command.Command;
@@ -16,8 +16,8 @@ import org.shortrip.boozaa.plugins.boomcmmoreward.CommandsExecutor.CommandNullEx
 import org.shortrip.boozaa.plugins.boomcmmoreward.listeners.McMMOListener;
 import org.shortrip.boozaa.plugins.boomcmmoreward.listeners.MyPlayerListener;
 import org.shortrip.boozaa.plugins.boomcmmoreward.persistence.Cache;
-import org.shortrip.boozaa.plugins.boomcmmoreward.persistence.Database;
 import org.shortrip.boozaa.plugins.boomcmmoreward.persistence.Database.DatabaseException;
+import org.shortrip.boozaa.plugins.boomcmmoreward.persistence.ORMDatabase;
 import org.shortrip.boozaa.plugins.boomcmmoreward.utils.Configuration;
 import org.shortrip.boozaa.plugins.boomcmmoreward.utils.ModifyRewardFiles;
 import com.gmail.nossr50.datatypes.skills.AbilityType;
@@ -36,8 +36,8 @@ public class BoomcMMoReward extends JavaPlugin {
 	private static Plugin _instance;
 	public static Plugin getInstance(){ return _instance; }
 	
-	private static Database database;
-	public static Database getDB(){ return database; }
+	private static ORMDatabase database;
+	public static ORMDatabase getDB(){ return database; }
 	
 	private static Cache pendingCache;
 	public static Cache getPendingCache(){ return pendingCache; }
@@ -108,6 +108,9 @@ public class BoomcMMoReward extends JavaPlugin {
 		} catch (HookException e) {
 			Log.warning("A problem occured when trying to hook on Vault");
 			Log.warning("The plugin is not disabled but problems with economy can occured");
+		} catch (SQLException e) {
+			Log.warning("A problem occured on database connection");
+			Log.severe("onEnable() fatal error: SQLException", e);
 		}
         
         
@@ -179,8 +182,14 @@ public class BoomcMMoReward extends JavaPlugin {
     /**
      * Take database settings from config.yml and initialize it
      * @throws DatabaseException
+     * @throws SQLException 
      */
-    private void setupDatabase() throws DatabaseException{
+    private void setupDatabase() throws DatabaseException, SQLException{
+    	
+    	
+    	database = new ORMDatabase(this);
+    	
+    	/*
     	// Database type depending on choice in config.yml
         if( config.getString("database.type").equalsIgnoreCase("sqlite")  ) {            	
         	database = new Database(new File(this.getDataFolder() + File.separator + "BoomcMMoReward.db")); 	
@@ -192,7 +201,8 @@ public class BoomcMMoReward extends JavaPlugin {
 					        		config.getString("database.mysql.pass") );            	
         }
         
-        database.initialise();                    
+        database.initialise(); 
+        */                   
         Log.info("Database ready");
     }
     

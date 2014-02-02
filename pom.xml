@@ -9,6 +9,10 @@
             <id>bukkit-repo</id>
             <url>http://repo.bukkit.org/content/groups/public</url>
         </repository>
+        <repository>
+            <id>home-repo</id>
+            <url>http://home.shortrip.org:8080/plugin/repository/everything</url>
+        </repository>
     </repositories>
     <build>
         <plugins>
@@ -43,7 +47,15 @@
                     <phase>package</phase>
                     <goals>
                       <goal>shade</goal>
-                    </goals>
+                    </goals><configuration>
+                          <minimizeJar>true</minimizeJar>
+                          <relocations>
+                              <relocation>
+                                  <pattern>com.j256.ormlite</pattern>
+                                  <shadedPattern>org.shortrip.boozaa.libs.ormlite</shadedPattern>
+                              </relocation>                       
+                          </relocations>
+                    </configuration>
                   </execution>
                 </executions>
                 <configuration>
@@ -66,6 +78,12 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>0.12.0</version>
+            <scope>provided</scope>
+        </dependency> 
+        <dependency>
             <groupId>com.gmail.nossr50</groupId>
             <artifactId>mcMMO</artifactId>
             <version>1.4.06-dev3-b1997</version>
@@ -80,6 +98,20 @@
             <type>jar</type>
             <scope>system</scope>
   			<systemPath>${project.basedir}/lib/Vault-1.2.25.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.j256.ormlite</groupId>
+            <artifactId>ormlite-core</artifactId>
+            <version>4.46</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.j256.ormlite</groupId>
+            <artifactId>ormlite-jdbc</artifactId>
+            <version>4.46</version>
+            <type>jar</type>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>

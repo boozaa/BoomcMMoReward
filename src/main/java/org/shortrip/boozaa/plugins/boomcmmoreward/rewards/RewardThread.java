@@ -24,7 +24,7 @@ import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.classes.Pow
 import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.classes.Skill;
 import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.classes.Skill.RewardSkillException;
 import org.shortrip.boozaa.plugins.boomcmmoreward.rewards.treatments.classes.World;
-import org.shortrip.boozaa.plugins.boomcmmoreward.tables.HistoryTable;
+import org.shortrip.boozaa.plugins.boomcmmoreward.tables.ORMHistory;
 import org.shortrip.boozaa.plugins.boomcmmoreward.utils.Configuration;
 import org.shortrip.boozaa.plugins.boomcmmoreward.utils.Const;
 
@@ -126,6 +126,17 @@ public class RewardThread implements Runnable  {
 					// On stocke cet historique en base de données si true
 					if( BoomcMMoReward.getYmlConf().getBoolean("config.logInDatabase")) {					
 						
+						Date today = new Date();
+						ORMHistory history = new ORMHistory(reward.getPlayer().getName());
+				        history.setRewardName(reward.getName());
+				        history.setTimespan(today.getTime());
+				        if( historyMoney != null ){history.setAmountFromList(historyMoney);}
+				        if( historyPerms != null ){history.setPermsFromList(historyPerms);}
+				        if( historyGroups != null ){history.setGroupsFromList(historyGroups);}
+				        if( historyItems != null ){history.setItemsFromList(historyItems);}
+				        if( historyCommands != null ){history.setCommandsFromList(historyCommands);}
+						
+						/*
 						// Date d'aujourd'hui
 				        Date today = new Date();																	        		       
 				        HistoryTable history = new HistoryTable();
@@ -137,10 +148,17 @@ public class RewardThread implements Runnable  {
 				        if( historyGroups != null ){history.setGroupsFromList(historyGroups);}
 				        if( historyItems != null ){history.setItemsFromList(historyItems);}
 				        if( historyCommands != null ){history.setCommandsFromList(historyCommands);}
-						try {
-							BoomcMMoReward.getDB().addHistory(history);
+						*/
+				        
+				        
+				        try {
+							BoomcMMoReward.getDB().saveORMHistory(history);
+							//BoomcMMoReward.getDB().addHistory(history);
 							Log.debug("---History saved in database");
+							
 						} catch (DatabaseException e) {
+							Log.warning("A problem occured on Database, this reward might not be saved");
+						} catch (Exception e) {
 							Log.warning("A problem occured on Database, this reward might not be saved");
 						}
 																							
