@@ -9,7 +9,8 @@ import org.shortrip.boozaa.plugins.boomcmmoreward.tables.ORMHistory;
 import org.shortrip.boozaa.plugins.boomcmmoreward.utils.Configuration;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
-import com.j256.ormlite.jdbc.JdbcConnectionSource;
+//import com.j256.ormlite.jdbc.JdbcConnectionSource;
+import com.j256.ormlite.jdbc.JdbcPooledConnectionSource;
 import com.j256.ormlite.logger.LocalLog;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.support.ConnectionSource;
@@ -57,7 +58,7 @@ public class ORMDatabase {
 			
 			if( dbType.equalsIgnoreCase("sqlite") ){
 				databaseUrl = "jdbc:sqlite:plugins/BoomcMMoReward/BoomcMMoReward.db";
-				_connectionSource = new JdbcConnectionSource(databaseUrl);				
+				_connectionSource = new JdbcPooledConnectionSource(databaseUrl);				
 			}else if( dbType.equalsIgnoreCase("mysql") ){
 				String host = config.getString( MYSQL_HOST );
 				//int port = config.getInt( MYSQL_PORT );
@@ -66,7 +67,7 @@ public class ORMDatabase {
 				String pass = config.getString( MYSQL_PASS );
 				//databaseUrl = "jdbc:mysql://"+ host + ":" + port + "/" + database;
 				databaseUrl = "jdbc:mysql://"+ host + "/" + database;
-				_connectionSource = new JdbcConnectionSource(databaseUrl,user,pass);				
+				_connectionSource = new JdbcPooledConnectionSource(databaseUrl,user,pass);				
 			}
 			
 		}		
