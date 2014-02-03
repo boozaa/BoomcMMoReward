@@ -96,6 +96,8 @@ public class Group extends AbstractReward {
 	@Override
 	public boolean isValid(cReward reward, ConfigurationSection confSection) throws RewardGroupException {
 
+		this.reward = reward;
+		
 		if(confSection.get(Const.GROUP) != null) {
 			
 			Log.debug("---Checking Group conditions");

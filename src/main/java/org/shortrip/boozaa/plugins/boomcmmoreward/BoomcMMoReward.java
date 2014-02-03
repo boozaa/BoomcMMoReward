@@ -127,6 +127,8 @@ public class BoomcMMoReward extends JavaPlugin {
     		if( database.get_connectionSource().isOpen() )
     			database.get_connectionSource().close();
     		
+    		database = null;
+    		
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

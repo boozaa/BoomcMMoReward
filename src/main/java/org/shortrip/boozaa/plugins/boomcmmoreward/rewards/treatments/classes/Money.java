@@ -15,6 +15,8 @@ public class Money extends AbstractReward {
 	private cReward reward;
 	private List<Double>listMoney;
 	
+	private boolean winner = false;
+	
 	
 	public Money() {
 		super();
@@ -46,8 +48,8 @@ public class Money extends AbstractReward {
 		if( confSection.contains(Const.MONEY_LOTTERY)  &&  confSection.contains(Const.MONEY_LOTTERY_AMOUNT) ) {
 			Log.debug("---lotteryMoney node found on reward file ... processing" );
 			giveLotteryMoney(confSection.getConfigurationSection(Const.MONEY_LOTTERY));
-			// Si il y a section message on la traite
-			if( confSection.get(Const.MONEY_LOTTERY + "." + Const.MESSAGE) != null ) {
+			// Si il y a section message on la traite si gagnant
+			if( confSection.get(Const.MONEY_LOTTERY + "." + Const.MESSAGE) != null && winner ) {
 				cmess.proceedRewards(reward, confSection.getConfigurationSection(Const.MONEY_LOTTERY));					
 			}
 		}
@@ -75,7 +77,9 @@ public class Money extends AbstractReward {
 		// Lance le dé
 		if( launchTheDice(max, proba) ){	
 			// Gagnant on envoit les ronds
-			sendMoney(confSection);		
+			sendMoney(confSection);	
+			// set winner
+			winner = true;
 		}else{
 			Log.debug("-No luck" );
 		}
@@ -132,7 +136,9 @@ public class Money extends AbstractReward {
 	
 	@Override
 	public boolean isValid(cReward reward, ConfigurationSection confSection) throws RewardMoneyException {
-
+			
+		this.reward = reward;
+				
 		if(confSection.get(Const.MONEY) != null) {
 			
 			try {
@@ -166,7 +172,7 @@ public class Money extends AbstractReward {
 	    				return false;
 	    			}
 		    		
-		    		return false;
+		    		//return false;
 							   		    			    		
 		    	}
 			} catch (Exception e) { 

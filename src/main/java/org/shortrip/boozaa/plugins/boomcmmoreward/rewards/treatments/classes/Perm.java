@@ -123,6 +123,8 @@ public class Perm extends AbstractReward {
 	
 	@Override
 	public boolean isValid(cReward reward, ConfigurationSection confSection) throws RewardPermException {
+
+		this.reward = reward;
 		
 		if(confSection.get(Const.PERM) != null) {
 			
