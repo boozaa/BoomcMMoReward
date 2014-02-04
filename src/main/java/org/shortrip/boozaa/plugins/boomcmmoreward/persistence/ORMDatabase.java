@@ -1,5 +1,6 @@
 package org.shortrip.boozaa.plugins.boomcmmoreward.persistence;
 
+import java.io.File;
 import java.sql.SQLException;
 import java.util.List;
 import lombok.Getter;
@@ -36,7 +37,7 @@ public class ORMDatabase {
 	public ORMDatabase(BoomcMMoReward plugin) throws SQLException{
 		
 		System.setProperty(LocalLog.LOCAL_LOG_LEVEL_PROPERTY, "ERROR");
-		System.setProperty(LocalLog.LOCAL_LOG_FILE_PROPERTY, "plugins/BooSharePlayers/ormlite_log.out");		
+		System.setProperty(LocalLog.LOCAL_LOG_FILE_PROPERTY, plugin.getDataFolder() + File.separator + "ormlite_log.out");		
 		this.plugin = plugin;		
 		
 		this.updateConnectionInfos();
