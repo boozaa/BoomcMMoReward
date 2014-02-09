@@ -24,7 +24,6 @@ dependency-reduced-pom.xml
 *.dmg
 *.gz
 *.iso
-*.jar
 *.rar
 *.tar
 *.zip
