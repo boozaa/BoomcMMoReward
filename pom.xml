@@ -9,10 +9,6 @@
             <id>bukkit-repo</id>
             <url>http://repo.bukkit.org/content/groups/public</url>
         </repository>
-        <repository>
-            <id>home-repo</id>
-            <url>http://home.shortrip.org:8080/plugin/repository/everything</url>
-        </repository>
     </repositories>
     <build>
         <plugins>
