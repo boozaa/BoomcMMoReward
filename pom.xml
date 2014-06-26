@@ -88,10 +88,10 @@
         <dependency>
             <groupId>com.gmail.nossr50</groupId>
             <artifactId>mcMMO</artifactId>
-            <version>1.4.06-dev3-b1997</version>
+            <version>1.5.00-b3547</version>
             <type>jar</type>
             <scope>system</scope>
-  			<systemPath>${project.basedir}/lib/mcMMO-3431.jar</systemPath>
+  			<systemPath>${project.basedir}/lib/mcMMO-1.5.0.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>net.milkbowl.vault</groupId>
