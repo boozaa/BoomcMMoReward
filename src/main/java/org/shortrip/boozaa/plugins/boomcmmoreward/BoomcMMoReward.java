@@ -197,23 +197,9 @@ public class BoomcMMoReward extends JavaPlugin {
     private void setupDatabase() throws DatabaseException, SQLException{
     	
     	
-    	database = new ORMDatabase(this);
-    	
-    	/*
-    	// Database type depending on choice in config.yml
-        if( config.getString("database.type").equalsIgnoreCase("sqlite")  ) {            	
-        	database = new Database(new File(this.getDataFolder() + File.separator + "BoomcMMoReward.db")); 	
-        }else if( config.getString("database.type").equalsIgnoreCase("mysql")  ){            	
-        	// Database(String host, String database, String username, String password)
-        	database = new Database(config.getString("database.mysql.server"),
-        							config.getString("database.mysql.base"),
-					        		config.getString("database.mysql.user"),
-					        		config.getString("database.mysql.pass") );            	
-        }
-        
-        database.initialise(); 
-        */                   
+    	database = new ORMDatabase(this);                 
         Log.info("Database ready");
+        
     }
     
     
