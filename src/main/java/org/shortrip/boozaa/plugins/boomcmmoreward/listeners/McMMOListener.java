@@ -167,7 +167,7 @@ public class McMMOListener implements Listener {
 			
 			// TRAITEMENT plugins/BoomcMMoReward/ABILITIES/BERSERK/POWER/ONE
 			final File powerOne = new File( power + "ONE" + File.separator +  playerPower + ".yml");
-			//Log.debug( "powerOne -> " + powerOne );
+			Log.debug( "powerOne -> " + powerOne );
 			if( powerOne.exists() ){
 				conf = new Configuration(powerOne);
 				if (conf.exists()) {	
@@ -181,7 +181,7 @@ public class McMMOListener implements Listener {
 			
 			// TRAITEMENT plugins/BoomcMMoReward/ABILITIES/BERSERK/POWER/EVERY
 			final File powerEVERY = new File( power + "EVERY" + File.separator );
-			//Log.debug( "powerEVERY -> " + powerEVERY );
+			Log.debug( "powerEVERY -> " + powerEVERY );
 			String [] listeFichiers;
 			listeFichiers = powerEVERY.list();
 
@@ -192,7 +192,7 @@ public class McMMOListener implements Listener {
 				if( (playerPower%level)==0 ){
 					// On traite ce fichier
 					File everyPowerFile = new File( powerEVERY + File.separator + fichier );	
-					//Log.debug( "everyPowerFile -> " + everyPowerFile );			
+					Log.debug( "everyPowerFile -> " + everyPowerFile );			
 											
 					conf = new Configuration(everyPowerFile);
 					if (conf.exists()) {
@@ -209,7 +209,7 @@ public class McMMOListener implements Listener {
 			
 			// TRAITEMENT plugins/BoomcMMoReward/ABILITIES/BERSERK/SKILLS/skillType/ONE
 			final File skillsONE = new File( skills + "ONE" + File.separator +  skillLevel + ".yml");
-			//Log.debug( "skillsONE -> " + skillsONE );
+			Log.debug( "skillsONE -> " + skillsONE );
 			if( skillsONE.exists() ){
 				conf = new Configuration(skillsONE);
 				if (conf.exists()) {	
@@ -227,18 +227,18 @@ public class McMMOListener implements Listener {
 
 			// TRAITEMENT plugins/BoomcMMoReward/ABILITIES/BERSERK/SKILLS/skillType/ONE
 			final File skillsEVERY = new File( skills + "EVERY" + File.separator);
-			//Log.debug( "skillsEVERY -> " + skillsEVERY );
+			Log.debug( "skillsEVERY -> " + skillsEVERY );
 			listeFichiers = skillsEVERY.list();
 
 			for( String fichier : listeFichiers){
 
-				//Log.debug( "Find file in EVERY -> " + fichier );
+				Log.debug( "Find file in EVERY -> " + fichier );
 				int level = Integer.parseInt(fichier.replace(".yml", ""));
 				// Si le modulo renvoit 0 alors multiple
 				if( (skillLevel%level)==0 ){
 					// On traite ce fichier
 					File everySkillFile = new File( skillsEVERY + File.separator + fichier );
-					//Log.debug( "everySkillFile -> " + everySkillFile );	
+					Log.debug( "everySkillFile -> " + everySkillFile );	
 					
 					conf = new Configuration(everySkillFile);
 					if (conf.exists()) {
