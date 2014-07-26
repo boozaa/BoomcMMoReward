@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.shortrip.boozaa.plugins.boomcmmoreward</groupId>
     <artifactId>BoomcMMoReward</artifactId>
-    <version>2.0.5b</version>
+    <version>2.0.6b</version>
     <name>BoomcMMoReward</name>
     <repositories>
         <repository>
